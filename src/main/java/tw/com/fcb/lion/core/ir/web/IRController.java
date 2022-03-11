@@ -1,5 +1,6 @@
 package tw.com.fcb.lion.core.ir.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import tw.com.fcb.lion.core.ir.service.IRService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRCriteriaCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
@@ -16,10 +18,14 @@ import tw.com.fcb.lion.core.ir.web.dto.IR;
 @RequestMapping("/ir")
 public class IRController {
 
+	
+	@Autowired
+	IRService service;
+	
 	@PostMapping("/swift")
 	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="儲存 swift")
 	public void receiveSwift(SwiftMessageSaveCmd message) {
-		
+		service.insert(message);
 	}
 	
 	@GetMapping("/swift/{id}")

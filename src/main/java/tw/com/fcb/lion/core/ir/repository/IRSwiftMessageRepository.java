@@ -1,5 +1,11 @@
 package tw.com.fcb.lion.core.ir.repository;
 
-public class IRSwiftMessageRepository {
+import org.springframework.stereotype.Repository;
+import tw.com.fcb.lion.core.ir.repository.entity.IRSwiftMessage;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+@Repository
+public interface IRSwiftMessageRepository extends JpaRepository<IRSwiftMessage,Long>{
+	
 
 }
