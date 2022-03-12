@@ -37,14 +37,11 @@ public class IRSwiftMessage {
 	@Column(name = "IR-AMT")
 	BigDecimal irAmt;
 
-	@Column(name = "senderReference")
+	@Column(name = "SENDER-REFERENCE")
 	String senderReference;
 
 	@Column(name = "ORDERING-INSTITUTION")
 	String orderingInstitution;
-
-	@Column(name = "ORDERING-INSTITUTION-AC")
-	String orderingInstitutionAccount;
 
 	@Column(name = "ORDERING-INSTITUTION-INFO-1")
 	String orderingInstitutionInfo1;
@@ -103,7 +100,7 @@ public class IRSwiftMessage {
 	@Column(name = "REMITTER-INFO-4")
 	String remitterInfo4;
 
-	@Column(name = "CHARGE-TYPE(SHR,OUR,BEN)")
+	@Column(name = "CHARGE-TYPE")
 	String chargeType;
 
 	@Column(name = "SENDER-CHARGE-CURRENCY-1")

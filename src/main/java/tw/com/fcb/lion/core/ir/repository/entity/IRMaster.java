@@ -33,8 +33,8 @@ public class IRMaster {
 	@Column(name = "PAID-STATS")        
 	String paidStats;
 	
-	@Column(name = "PRINT-ADV-MK")     
-	String printAdvMk;
+	@Column(name = "PRINT-ADVISING-MK")
+	String printAdvisingMk;
 	
 	@Column(name = "BE-ADVISING-BRANCH")
 	String beAdvisingBranch;
@@ -42,8 +42,8 @@ public class IRMaster {
 	@Column(name = "PROCESS-BRANCH")  
 	String processBranch;
 	
-	@Column(name = "OUR-CUST") 
-	String ourCust;
+	@Column(name = "OUR-CUSTOMER")
+	String ourCustomer;
 	
 	@Column(name = "CUSTOMER-ID")       
 	String customerId;
@@ -66,7 +66,7 @@ public class IRMaster {
 	@Column(name = "TO-US-FXRATE")    
 	String toUsFxrate;
 
-	@Column(name = "senderReference")
+	@Column(name = "SENDER-REFERENCE")
 	String senderReference;
 
 	@Column(name = "REMITTER-INFO-1")
