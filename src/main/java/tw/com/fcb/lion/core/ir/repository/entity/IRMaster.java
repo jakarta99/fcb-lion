@@ -24,17 +24,20 @@ public class IRMaster {
 	@Column(name = "IR-NO")
 	String irNo;
 	
-	@Column(name = "IR-MARK")
-	String irMark;
-	
+	@Column(name = "NATURE-OF-REMITTANCE")
+	String natureOfRemittance;
+
+	@Column(name = "NATURE-OF-REMITTANCE-SUB-CODE")
+	String natureOfRemittanceSubCode;
+
 	@Column(name = "PAID-STATS")        
 	String paidStats;
 	
 	@Column(name = "PRINT-ADV-MK")     
 	String printAdvMk;
 	
-	@Column(name = "BE-ADV-BRANCH")   
-	String beAdvBranch;
+	@Column(name = "BE-ADVISING-BRANCH")
+	String beAdvisingBranch;
 	
 	@Column(name = "PROCESS-BRANCH")  
 	String processBranch;
@@ -63,47 +66,53 @@ public class IRMaster {
 	@Column(name = "TO-US-FXRATE")    
 	String toUsFxrate;
 
-	@Column(name = "SW20")
-	String sw20;
+	@Column(name = "senderReference")
+	String senderReference;
 
-	@Column(name = "SW50-1")           
-	String sw501;
+	@Column(name = "REMITTER-INFO-1")
+	String remitterInfo1;
 
-	@Column(name = "SW50-2")         
-	String sw502;
+	@Column(name = "REMITTER-INFO-2")
+	String remitterInfo2;
 
-	@Column(name = "SW50-3")         
-	String sw503;
+	@Column(name = "REMITTER-INFO-3")
+	String remitterInfo3;
 
-	@Column(name = "SW50-4")         
-	String sw504;
+	@Column(name = "REMITTER-INFO-4")
+	String remitterInfo4;
 
-	@Column(name = "SW59-AC")         
-	String sw59Ac;
+	@Column(name = "BENEFICIARY-AC")
+	String beneficiaryAccount;
 
-	@Column(name = "SW59-1")        
-	String sw591;
+	@Column(name = "BENEFICIARY-INFO-1")
+	String beneficiaryInfo1;
 
-	@Column(name = "SW59-2")         
-	String sw592;
+	@Column(name = "BENEFICIARY-INFO-2")
+	String beneficiaryInfo2;
 
-	@Column(name = "SW59-3")         
-	String sw593;
+	@Column(name = "BENEFICIARY-INFO-3")
+	String beneficiaryInfo3;
 
-	@Column(name = "SW59-4")         
-	String sw594;
+	@Column(name = "BENEFICIARY-INFO-4")
+	String beneficiaryInfo4;
 
-	@Column(name = "SW71A")
-	String sw71a;
+	@Column(name = "CHARGE-TYPE(SHR,OUR,BEN)")
+	String chargeType;
 
 	@Column(name = "REMIT-BANK")
 	String remitBank;
 
-	@Column(name = "REMIT-BK-NAME1")     
-	String remitBkName1;
+	@Column(name = "REMIT-BANK-INFO1")
+	String remitBankInfo1;
 
-	@Column(name = "REMIT-BK-NAME2") 
-	String remitBkName2;
+	@Column(name = "REMIT-BANK-INFO2")
+	String remitBankInfo2;
+
+	@Column(name = "REMIT-BANK-INFO3")
+	String remitBankInfo3;
+
+	@Column(name = "REMIT-BANK-INFO4")
+	String remitBankInfo4;
 
 	@Column(name = "DEPOSIT-BANK") 
 	String depositBank;
@@ -111,50 +120,29 @@ public class IRMaster {
 	@Column(name = "VALUE-DATE")   
 	String valueDate;
 
-	@Column(name = "ADV-DATE")     
-	String advDate;
+	@Column(name = "ADVISING-DATE")
+	String advisingDate;
 
-	@Column(name = "PRINT-ADV-DATE")       
-	String printAdvDate;
+	@Column(name = "PRINT-ADVISING-DATE")
+	String printAdvisingDate;
 
-	@Column(name = "PPOCESS-DATE") 
-	String pocessDate;
+	@Column(name = "PROCESS-DATE")
+	String processDate;
 
-	@Column(name = "CUST-TEL-NO")   
-	String custTelNo;
+	@Column(name = "CUSTOMER-TEL-NO")
+	String customerTelNo;
 
-	@Column(name = "AC-NO")    
-	String acNo;
+	@Column(name = "ACCOUNT-NO")
+	String accountNo;
 
 	@Column(name = "EXCHANGE-RATE")          
 	String exchangeRate;
 
-	@Column(name = "SW71F-CUR-1")  
-	String sw71fCur1;
+	@Column(name = "BENEFICIARY-KIND")
+	String beneficiaryKind;
 
-	@Column(name = "SW71F-1")    
-	String sw71f1;
-
-	@Column(name = "SW71F-CUR-2")        
-	String sw71fCur2;
-
-	@Column(name = "SW71F-2")    
-	String sw71f2;
-
-	@Column(name = "SW71F-CUR-3")        
-	String sw71fCur3;
-
-	@Column(name = "SW71F-3")    
-	String sw71f3;
-
-	@Column(name = "BENE-KIND")        
-	String beneKind;
-
-	@Column(name = "690-SUB-CODE")      
-	String SubCode690;
-
-	@Column(name = "CUS-BIRTH-DATE")   
-	String cusBirthDate;
+	@Column(name = "CUSTOMER-BIRTH-DATE")
+	String customerBirthDate;
 
 	@Column(name = "NOTICE-1") 
 	String notice1;

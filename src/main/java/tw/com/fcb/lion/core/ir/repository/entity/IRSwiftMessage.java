@@ -37,89 +37,104 @@ public class IRSwiftMessage {
 	@Column(name = "IR-AMT")
 	BigDecimal irAmt;
 
-	@Column(name = "SW20")
-	String sw20;
+	@Column(name = "senderReference")
+	String senderReference;
 
-	@Column(name = "SW50-1-1-1")
-	String sw50111;
+	@Column(name = "REMITTER-INFO-1")
+	String remitterInfo1;
 
-	@Column(name = "SW50-1-1-2")
-	String sw50112;
+	@Column(name = "REMITTER-INFO-2")
+	String remitterInfo2;
 
-	@Column(name = "SW50-2")
-	String sw502;
+	@Column(name = "REMITTER-INFO-3")
+	String remitterInfo3;
 
-	@Column(name = "SW50-3")
-	String sw503;
+	@Column(name = "REMITTER-INFO-4")
+	String remitterInfo4;
 
-	@Column(name = "SW50-4")
-	String sw504;
+	@Column(name = "ORDERING-INSTITUTION")
+	String orderingInstitution;
 
-	@Column(name = "TAG-SW52")
-	String tagSw52;
+	@Column(name = "ORDERING-INSTITUTION-AC")
+	String orderingInstitutionAccount;
 
-	@Column(name = "SW52-AC")
-	String sw52ac;
+	@Column(name = "ORDERING-INSTITUTION-INFO-1")
+	String orderingInstitutionInfo1;
 
-	@Column(name = "SW52D-1")
-	String sw52d1;
+	@Column(name = "ORDERING-INSTITUTION-INFO-2")
+	String orderingInstitutionInfo2;
 
-	@Column(name = "SW52D-2")
-	String sw52d2;
+	@Column(name = "ORDERING-INSTITUTION-INFO-3")
+	String orderingInstitutionInfo3;
 
-	@Column(name = "SW52D-3")
-	String sw52d3;
+	@Column(name = "ORDERING-INSTITUTION-INFO-4")
+	String orderingInstitutionInfo4;
 
-	@Column(name = "SW52D-4")
-	String sw52d4;
+	@Column(name = "ACCOUNT-INSTITUTION")
+	String accountInstitution;
 
-	@Column(name = "TAG-SW57")
-	String tagsw57;
+	@Column(name = "ACCOUNT-INSTITUTION-AC")
+	String accountInstitutionAccount;
 
-	@Column(name = "SW57-AC")
-	String sw57ac;
+	@Column(name = "ACCOUNT-INSTITUTION-INFO-1")
+	String accountInstitutionInfo1;
 
-	@Column(name = "SW57D-1")
-	String sw57d1;
+	@Column(name = "ACCOUNT-INSTITUTION-INFO-2")
+	String accountInstitutionInfo2;
 
-	@Column(name = "SW57D-2")
-	String sw57d2;
+	@Column(name = "ACCOUNT-INSTITUTION-INFO-3")
+	String accountInstitutionInfo3;
 
-	@Column(name = "SW57D-3")
-	String sw57d3;
+	@Column(name = "ACCOUNT-INSTITUTION-INFO-4")
+	String accountInstitutionInfo4;
 
-	@Column(name = "SW57D-4")
-	String sw57d4;
+	@Column(name = "BENEFICIARY-AC")
+	String beneficiaryAccount;
 
-	@Column(name = "SW59-AC-1")
-	String sw59ac1;
+	@Column(name = "BENEFICIARY-INFO-1")
+	String beneficiaryInfo1;
 
-	@Column(name = "SW59-AC-2")
-	String sw59ac2;
+	@Column(name = "BENEFICIARY-INFO-2")
+	String beneficiaryInfo2;
 
-	@Column(name = "SW59-1")
-	String sw591;
+	@Column(name = "BENEFICIARY-INFO-3")
+	String beneficiaryInfo3;
 
-	@Column(name = "SW59-2")
-	String sw592;
+	@Column(name = "BENEFICIARY-INFO-4")
+	String beneficiaryInfo4;
 
-	@Column(name = "SW59-3")
-	String sw593;
+	@Column(name = "REMITTANCE-INFO-1")
+	String remittanceInfo1;
 
-	@Column(name = "SW59-4")
-	String sw594;
+	@Column(name = "REMITTANCE-INFO-2")
+	String remittanceInfo2;
 
-	@Column(name = "SW71A")
-	String sw71a;
+	@Column(name = "REMITTANCE-INFO-3")
+	String remittanceInfo3;
 
-	@Column(name = "SW72-1")
-	String sw721;
+	@Column(name = "REMITTANCE-INFO-4")
+	String remittanceInfo4;
 
-	@Column(name = "SW72-2")
-	String sw722;
+	@Column(name = "CHARGE-TYPE(SHR,OUR,BEN)")
+	String chargeType;
 
-	@Column(name = "SW72-3")
-	String sw723;
+	@Column(name = "SENDER-CHARGE-CURRENCY-1")
+	String senderChargeCurrency1;
+
+	@Column(name = "SENDER-CHARGE-1")
+	BigDecimal senderCharge1;
+
+	@Column(name = "SENDER-CHARGE-CURRENCY-2")
+	String senderChargeCurrency2;
+
+	@Column(name = "SENDER-CHARGE-2")
+	BigDecimal senderCharge2;
+
+	@Column(name = "SENDER-CHARGE-CURRENCY-3")
+	String senderChargeCurrency3;
+
+	@Column(name = "SENDER-CHARGE-3")
+	BigDecimal senderCharge3;
 
 	@Column(name = "NOTICE-1")
 	String notice1;
@@ -133,29 +148,26 @@ public class IRSwiftMessage {
 	@Column(name = "REMIT-BANK")
 	String remitBank;
 
-	@Column(name = "REMIT-BK-INFO1")
-	String remitBkInfo1;
+	@Column(name = "REMIT-BANK-INFO1")
+	String remitBankInfo1;
 
-	@Column(name = "REMIT-BK-INFO2")
-	String remitBkInfo2;
+	@Column(name = "REMIT-BANK-INFO2")
+	String remitBankInfo2;
 
-	@Column(name = "REMIT-BK-INFO3")
-	String remitBkInfo3;
+	@Column(name = "REMIT-BANK-INFO3")
+	String remitBankInfo3;
 
-	@Column(name = "REMIT-BK-INFO4")
-	String remitBkInfo4;
+	@Column(name = "REMIT-BANK-INFO4")
+	String remitBankInfo4;
 
-	@Column(name = "DEPOSIT-BANK-HEAD")
-	String depositBankHead;
-
-	@Column(name = "DEPOSIT-BANK-BRAN")
-	String depositBankBran;
+	@Column(name = "DEPOSIT-BANK")
+	String depositBank;
 
 	@Column(name = "VALUE-DATE")
 	String valueDate;
 
-	@Column(name = "RECV-DATE")
-	String recvDate;
+	@Column(name = "RECEIVE-DATE")
+	String receiveDate;
 
 	@Column(name = "NST-VST-MK")
 	String nstVstMk;
