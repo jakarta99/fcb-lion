@@ -32,17 +32,20 @@ public class IRController {
 	public Boolean getValidateResult(Long id) {
 		return true;
 	}
-	
-	@PostMapping
-	public void insert(IRSaveCmd ir) {
-		
-	}
 
 	@GetMapping("/count/{branch}")
 	@Operation(description = "傳入受通知單位查詢案件數", summary="查詢案件數")
 	public Integer getCount(String branch) {
 		return service.getIrCaseCount(branch);
 	}
+
+	@PostMapping
+	public void insert(IRSaveCmd ir) {
+		
+	}
+
+
+
 	@GetMapping("/{id}")
 	public IR getById(Long id) {
 		return new IR();

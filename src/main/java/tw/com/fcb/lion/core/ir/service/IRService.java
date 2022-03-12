@@ -17,6 +17,8 @@ public class IRService {
 
 	@Autowired
 	IRSwiftMessageRepository repository;
+
+	@Autowired
 	IRMasterRepository IRMasterRepository;
 	
 	public void insert(SwiftMessageSaveCmd saveCmd) {
@@ -33,7 +35,6 @@ public class IRService {
 	//傳入受通知單位查詢案件數
 	public Integer getIrCaseCount(String branch) {
 		Integer count = 0;
-
 		count = IRMasterRepository.findByBeAdvisingBranch(branch).size();
 		return count;
 	}
