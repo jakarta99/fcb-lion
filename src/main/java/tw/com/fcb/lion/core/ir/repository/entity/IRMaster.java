@@ -21,136 +21,136 @@ public class IRMaster {
 	@Column(name = "ID")
 	Long id;
 
-	@Column(name = "IR-NO")
+	@Column(name = "IR_NO")
 	String irNo;
 	
-	@Column(name = "NATURE-OF-REMITTANCE")
+	@Column(name = "NATURE_OF_REMITTANCE")
 	String natureOfRemittance;
 
-	@Column(name = "NATURE-OF-REMITTANCE-SUB-CODE")
+	@Column(name = "NATURE_OF_REMITTANCE_SUB_CODE")
 	String natureOfRemittanceSubCode;
 
-	@Column(name = "PAID-STATS")        
+	@Column(name = "PAID_STATS")
 	String paidStats;
 	
-	@Column(name = "PRINT-ADVISING-MK")
+	@Column(name = "PRINT_ADVISING_MK")
 	String printAdvisingMk;
 	
-	@Column(name = "BE-ADVISING-BRANCH")
+	@Column(name = "BE_ADVISING_BRANCH")
 	String beAdvisingBranch;
 	
-	@Column(name = "PROCESS-BRANCH")  
+	@Column(name = "PROCESS_BRANCH")
 	String processBranch;
 	
-	@Column(name = "OUR-CUSTOMER")
+	@Column(name = "OUR_CUSTOMER")
 	String ourCustomer;
 	
-	@Column(name = "CUSTOMER-ID")       
+	@Column(name = "CUSTOMER_ID")
 	String customerId;
 	
 	@Column(name = "CURRENCY")
 	String currency;
 	
-	@Column(name = "IR-AMT")        
+	@Column(name = "IR_AMT")
 	BigDecimal irAmt;
 	
-	@Column(name = "FX-DEPOSIT")         
+	@Column(name = "FX_DEPOSIT")
 	BigDecimal fxDeposit;
 	
-	@Column(name = "SPOT-SETTLED-FX")     
+	@Column(name = "SPOT_SETTLED_FX")
 	BigDecimal spotSettledFx;
 	
-	@Column(name = "COMM-CHARGE")
+	@Column(name = "COMM_CHARGE")
 	String commCharge;
 
-	@Column(name = "TO-US-FXRATE")    
+	@Column(name = "TO_US_FXRATE")
 	String toUsFxrate;
 
-	@Column(name = "SENDER-REFERENCE")
+	@Column(name = "SENDER_REFERENCE")
 	String senderReference;
 
-	@Column(name = "REMITTER-INFO-1")
+	@Column(name = "REMITTER_INFO_1")
 	String remitterInfo1;
 
-	@Column(name = "REMITTER-INFO-2")
+	@Column(name = "REMITTER_INFO_2")
 	String remitterInfo2;
 
-	@Column(name = "REMITTER-INFO-3")
+	@Column(name = "REMITTER_INFO_3")
 	String remitterInfo3;
 
-	@Column(name = "REMITTER-INFO-4")
+	@Column(name = "REMITTER_INFO_4")
 	String remitterInfo4;
 
-	@Column(name = "BENEFICIARY-AC")
+	@Column(name = "BENEFICIARY_AC")
 	String beneficiaryAccount;
 
-	@Column(name = "BENEFICIARY-INFO-1")
+	@Column(name = "BENEFICIARY_INFO_1")
 	String beneficiaryInfo1;
 
-	@Column(name = "BENEFICIARY-INFO-2")
+	@Column(name = "BENEFICIARY_INFO_2")
 	String beneficiaryInfo2;
 
-	@Column(name = "BENEFICIARY-INFO-3")
+	@Column(name = "BENEFICIARY_INFO_3")
 	String beneficiaryInfo3;
 
-	@Column(name = "BENEFICIARY-INFO-4")
+	@Column(name = "BENEFICIARY_INFO_4")
 	String beneficiaryInfo4;
 
-	@Column(name = "CHARGE-TYPE(SHR,OUR,BEN)")
+	@Column(name = "CHARGE_TYPE")
 	String chargeType;
 
-	@Column(name = "REMIT-BANK")
+	@Column(name = "REMIT_BANK")
 	String remitBank;
 
-	@Column(name = "REMIT-BANK-INFO1")
+	@Column(name = "REMIT_BANK-_INFO1")
 	String remitBankInfo1;
 
-	@Column(name = "REMIT-BANK-INFO2")
+	@Column(name = "REMIT_BANK_INFO2")
 	String remitBankInfo2;
 
-	@Column(name = "REMIT-BANK-INFO3")
+	@Column(name = "REMIT_BANK_INFO3")
 	String remitBankInfo3;
 
-	@Column(name = "REMIT-BANK-INFO4")
+	@Column(name = "REMIT_BANK_INFO4")
 	String remitBankInfo4;
 
-	@Column(name = "DEPOSIT-BANK") 
+	@Column(name = "DEPOSIT_BANK")
 	String depositBank;
 
-	@Column(name = "VALUE-DATE")   
+	@Column(name = "VALUE_DATE")
 	String valueDate;
 
-	@Column(name = "ADVISING-DATE")
+	@Column(name = "ADVISING_DATE")
 	String advisingDate;
 
-	@Column(name = "PRINT-ADVISING-DATE")
+	@Column(name = "PRINT_ADVISING_DATE")
 	String printAdvisingDate;
 
-	@Column(name = "PROCESS-DATE")
+	@Column(name = "PROCESS_DATE")
 	String processDate;
 
-	@Column(name = "CUSTOMER-TEL-NO")
+	@Column(name = "CUSTOMER_TEL_NO")
 	String customerTelNo;
 
-	@Column(name = "ACCOUNT-NO")
+	@Column(name = "ACCOUNT_NO")
 	String accountNo;
 
-	@Column(name = "EXCHANGE-RATE")          
+	@Column(name = "EXCHANGE_RATE")
 	String exchangeRate;
 
-	@Column(name = "BENEFICIARY-KIND")
+	@Column(name = "BENEFICIARY_KIND")
 	String beneficiaryKind;
 
-	@Column(name = "CUSTOMER-BIRTH-DATE")
+	@Column(name = "CUSTOMER_BIRTH_DATE")
 	String customerBirthDate;
 
-	@Column(name = "NOTICE-1") 
+	@Column(name = "NOTICE_1")
 	String notice1;
 
-	@Column(name = "NOTICE-2")       
+	@Column(name = "NOTICE_2")
 	String notice2;
 
-	@Column(name = "NOTICE-3")       
+	@Column(name = "NOTICE_3")
 	String notice3;
 
 
