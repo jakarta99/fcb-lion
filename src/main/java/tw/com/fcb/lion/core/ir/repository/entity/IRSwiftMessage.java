@@ -40,18 +40,6 @@ public class IRSwiftMessage {
 	@Column(name = "senderReference")
 	String senderReference;
 
-	@Column(name = "REMITTER-INFO-1")
-	String remitterInfo1;
-
-	@Column(name = "REMITTER-INFO-2")
-	String remitterInfo2;
-
-	@Column(name = "REMITTER-INFO-3")
-	String remitterInfo3;
-
-	@Column(name = "REMITTER-INFO-4")
-	String remitterInfo4;
-
 	@Column(name = "ORDERING-INSTITUTION")
 	String orderingInstitution;
 
@@ -103,17 +91,17 @@ public class IRSwiftMessage {
 	@Column(name = "BENEFICIARY-INFO-4")
 	String beneficiaryInfo4;
 
-	@Column(name = "REMITTANCE-INFO-1")
-	String remittanceInfo1;
+	@Column(name = "REMITTER-INFO-1")
+	String remitterInfo1;
 
-	@Column(name = "REMITTANCE-INFO-2")
-	String remittanceInfo2;
+	@Column(name = "REMITTER-INFO-2")
+	String remitterInfo2;
 
-	@Column(name = "REMITTANCE-INFO-3")
-	String remittanceInfo3;
+	@Column(name = "REMITTER-INFO-3")
+	String remitterInfo3;
 
-	@Column(name = "REMITTANCE-INFO-4")
-	String remittanceInfo4;
+	@Column(name = "REMITTER-INFO-4")
+	String remitterInfo4;
 
 	@Column(name = "CHARGE-TYPE(SHR,OUR,BEN)")
 	String chargeType;
