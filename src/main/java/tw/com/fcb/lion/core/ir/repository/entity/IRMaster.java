@@ -64,7 +64,7 @@ public class IRMaster {
 	String commCharge;
 
 	@Column(name = "TO_US_FXRATE")
-	String toUsFxrate;
+	String toUsFxRate;
 
 	@Column(name = "SENDER_REFERENCE")
 	String senderReference;
@@ -102,7 +102,7 @@ public class IRMaster {
 	@Column(name = "REMIT_BANK")
 	String remitBank;
 
-	@Column(name = "REMIT_BANK-_INFO1")
+	@Column(name = "REMIT_BANK_INFO1")
 	String remitBankInfo1;
 
 	@Column(name = "REMIT_BANK_INFO2")

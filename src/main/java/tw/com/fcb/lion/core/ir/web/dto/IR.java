@@ -54,7 +54,7 @@ public class IR {
     BigDecimal commCharge;
 
     @Schema(description = "折合美金匯率")
-    BigDecimal toUsFxrate;
+    BigDecimal toUsFxRate;
 
     @Schema(description = "匯款行匯出編號(匯票NO)")
     String senderReference;
