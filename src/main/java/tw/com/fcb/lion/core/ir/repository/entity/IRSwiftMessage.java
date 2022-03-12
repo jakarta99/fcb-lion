@@ -22,7 +22,7 @@ public class IRSwiftMessage {
 	@Column(name = "ID")
 	Long id;
 
-	@Column(name = "SEQ_NO")
+	@Column(name = "SEQ-NO")
 	String seqNo;
 
 	@Column(name = "STATS")

@@ -37,12 +37,12 @@ public class IRController {
 	public void insert(IRSaveCmd ir) {
 		
 	}
-	
-	@GetMapping("/count")
-	public Integer getCount(IRCriteriaCmd criteria) {
-		return 0;
+
+	@GetMapping("/count/{branch}")
+	@Operation(description = "傳入受通知單位查詢案件數", summary="查詢案件數")
+	public Integer getCount(String branch) {
+		return service.getIrCaseCount(branch);
 	}
-	
 	@GetMapping("/{id}")
 	public IR getById(Long id) {
 		return new IR();
