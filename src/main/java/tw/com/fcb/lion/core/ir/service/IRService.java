@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
 import tw.com.fcb.lion.core.ir.repository.IRSwiftMessageRepository;
+import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.repository.entity.IRSwiftMessage;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 
@@ -38,5 +39,11 @@ public class IRService {
 		count = IRMasterRepository.findByBeAdvisingBranch(branch).size();
 		return count;
 	}
-
+	//傳入外匯編號，執行匯入解款
+	public void settle(String irNo) {
+		IRMaster irMaster = new IRMaster();
+		irMaster = IRMasterRepository.findByirNo(irNo);
+		irMaster.setPaidStats("2");
+		IRMasterRepository.save(irMaster);
+	}
 }

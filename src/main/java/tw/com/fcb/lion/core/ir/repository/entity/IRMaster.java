@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "IR_SWIFT_MESSAGE")
+@Table(name = "IR_MASTER")
 @Data
 public class IRMaster {
 

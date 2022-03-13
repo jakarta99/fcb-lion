@@ -57,7 +57,8 @@ public class IRController {
 	}
 	
 	@PutMapping("/settle")
-	public void settle(Long id) {
-		
+	@Operation(description = "修改匯入主檔付款狀態", summary="匯入解款")
+	public void settle(String irNo) {
+		service.settle(irNo);
 	}
 }
