@@ -39,9 +39,11 @@ public class IRController {
 		return service.getIrCaseCount(branch);
 	}
 
+//	KAI - 驗證通過的電文，寫入匯入主檔(IRMaster)
 	@PostMapping
-	public void insert(IRSaveCmd ir) {
-		
+	@Operation(description = "驗證通過的電文，寫入匯入主檔(IRMaster)", summary="寫入匯入主檔")
+	public void insert(IRSaveCmd saveCmd) {
+		service.insertIrMaster(saveCmd);
 	}
 
 
