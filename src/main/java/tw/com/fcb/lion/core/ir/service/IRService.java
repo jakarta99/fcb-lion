@@ -86,11 +86,12 @@ public class IRService {
 	}
 	
 	//傳入ID查詢內容
-		public Optional<IRMaster> getById(Long id) {
-			Optional<IRMaster> iRMaster = IRMasterRepository.findById(id);
-			System.out.println(iRMaster);
-			return iRMaster;
-		}
+	public Optional<IRMaster> getById(Long id) {
+		Optional<IRMaster> iRMaster = IRMasterRepository.findById(id);
+		return iRMaster == null ? Optional.empty() : iRMaster;
+//		System.out.println(iRMaster);
+//		return iRMaster;
+	}
 	
 	//更新印製通知書記號
 	public void updatePrintAdviceMark(Long id) {
