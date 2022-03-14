@@ -1,5 +1,7 @@
 package tw.com.fcb.lion.core.ir.service;
 
+import java.util.Arrays;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -36,11 +38,49 @@ public class IRService {
 		return count;
 	}
 	
-	// 新增IRMASTER
-	public void insertIrMaster(IRSaveCmd saveCmd) {
-		IRMaster entityCmd = new IRMaster();
-		BeanUtils.copyProperties(saveCmd, entityCmd);
-		IRMasterRepository.save(entityCmd);
+	// 檢核成功，新增資料至IRMASTER
+	public void insertIrMaster(IRSaveCmd irSaveCmd) {
+		var checkIrMasterMk = checkIrMaster(irSaveCmd);
+		
+		if(checkIrMasterMk == "Y") {
+			IRMaster entityCmd = new IRMaster();
+			BeanUtils.copyProperties(irSaveCmd, entityCmd);
+			IRMasterRepository.save(entityCmd);
+		}
+	}
+	
+	// 檢核主檔資料
+	public String checkIrMaster(IRSaveCmd irSaveCmd) {
+		var checkIrMasterMk = "Y";
+		
+		String[] branchs = {"091", "093", "094"};
+		String[] currencys = {"USD", "GBP", "JPY"};
+		String[] customers = {"86483666", "05052322", "03218306"};
+		
+		try {
+			var adversingBranch = irSaveCmd.getBeAdvisingBranch();
+			if(!Arrays.asList(branchs).contains(adversingBranch)) {
+				throw new Exception("分行別錯誤");
+			}
+			
+			var currency  = irSaveCmd.getCurrency();
+			if(!Arrays.asList(currencys).contains(currency)) {
+				throw new Exception("幣別錯誤");
+			}
+			
+			var customerId = irSaveCmd.getCustomerId();
+			if(!Arrays.asList(customers).contains(customerId)) {
+				throw new Exception("統編錯誤");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			checkIrMasterMk = "N";
+		}
+		finally {
+		}
+		return checkIrMasterMk;
 	}
 	
 	
