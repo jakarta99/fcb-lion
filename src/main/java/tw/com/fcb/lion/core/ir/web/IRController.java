@@ -1,13 +1,18 @@
 package tw.com.fcb.lion.core.ir.web;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.service.IRService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRCriteriaCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
@@ -46,8 +51,9 @@ public class IRController {
 	}
 
 	@GetMapping("/{id}")
-	public IR getById(Long id) {
-		return new IR();
+	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
+	public Optional<IRMaster> getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
+		return service.getById(id);
 	}
 	
 	@PutMapping("/print")

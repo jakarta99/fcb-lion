@@ -1,6 +1,7 @@
 package tw.com.fcb.lion.core.ir.service;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +15,7 @@ import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.repository.entity.IRSwiftMessage;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
+import tw.com.fcb.lion.core.ir.web.dto.IR;
 
 @Transactional
 @Service
@@ -83,6 +85,12 @@ public class IRService {
 		return checkIrMasterMk;
 	}
 	
+	//傳入ID查詢內容
+		public Optional<IRMaster> getById(Long id) {
+			Optional<IRMaster> iRMaster = IRMasterRepository.findById(id);
+			System.out.println(iRMaster);
+			return iRMaster;
+		}
 	
 	//更新印製通知書記號
 	public void updatePrintAdviceMark(Long id) {
