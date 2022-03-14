@@ -1,6 +1,7 @@
 package tw.com.fcb.lion.core.ir.service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -9,8 +10,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tw.com.fcb.lion.core.ir.repository.FXRateRepository;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
 import tw.com.fcb.lion.core.ir.repository.IRSwiftMessageRepository;
+import tw.com.fcb.lion.core.ir.repository.entity.FXRateVo;
 import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.repository.entity.IRSwiftMessage;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
@@ -26,6 +29,18 @@ public class IRService {
 
 	@Autowired
 	IRMasterRepository IRMasterRepository;
+	
+	@Autowired
+	private FXRateRepository fxRateRepository;
+	
+	public IRService(FXRateRepository fxRateRepository) {
+		this.fxRateRepository = fxRateRepository;
+		
+		this.fxRateRepository.saveAll(List.of(
+				new FXRateVo("2022/03/14", "USD", "28.47600", "28.51800", "28.53400", "28.57600"),
+				new FXRateVo("2022/03/14", "JPY", "0.24000", "0.24170", "0.24250", "0.24400")
+		));
+	} 
 	
 	public void insert(SwiftMessageSaveCmd saveCmd) {
 		IRSwiftMessage entity = new IRSwiftMessage();
@@ -68,6 +83,10 @@ public class IRService {
 			var currency  = irSaveCmd.getCurrency();
 			if(!Arrays.asList(currencys).contains(currency)) {
 				throw new Exception("幣別錯誤");
+			}
+			else {
+				FXRateVo fxRateVo = fxRateRepository.findByCurrency(currency);
+				irSaveCmd.setExchangeRate(fxRateVo.getCostSpotBoughFxRate());
 			}
 			
 			var customerId = irSaveCmd.getCustomerId();
