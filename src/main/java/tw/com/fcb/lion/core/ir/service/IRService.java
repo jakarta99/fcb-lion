@@ -43,6 +43,15 @@ public class IRService {
 		IRMasterRepository.save(entityCmd);
 	}
 	
+	
+	//更新印製通知書記號
+	public void updatePrintAdviceMark(Long id) {
+		 var iRMaster = IRMasterRepository.findById(id).orElseThrow();
+		 System.out.println("iRMaster " +iRMaster);
+		 iRMaster.setPrintAdvisingMk("Y");
+		 IRMasterRepository.save(iRMaster);
+	}
+	
 	//傳入外匯編號，執行匯入解款
 	public void settle(String irNo) {
 		IRMaster irMaster = new IRMaster();

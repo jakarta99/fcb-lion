@@ -54,8 +54,9 @@ public class IRController {
 	}
 	
 	@PutMapping("/print")
+	@Operation(description = "更新印製通知書記號", summary="更新列印通知書狀態")
 	public void print(Long id) {
-		
+		service.updatePrintAdviceMark(id);
 	}
 	
 	@PutMapping("/settle")
