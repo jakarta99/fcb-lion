@@ -14,138 +14,138 @@ import lombok.Data;
 public class IRSaveCmd {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Schema(description = "ID")
+	@Schema(description = "序號")
 	Long id;
 
-	@Schema(description = "IR_NO")
+	@Schema(description = "匯入匯款編號")
 	String irNo;
 	
-	@Schema(description = "NATURE_OF_REMITTANCE")
+	@Schema(description = "匯款性質")
 	String natureOfRemittance;
 
-	@Schema(description = "NATURE_OF_REMITTANCE_SUB_CODE")
+	@Schema(description = "匯款性質細項分類")
 	String natureOfRemittanceSubCode;
 
-	@Schema(description = "PAID_STATS")
+	@Schema(description = "付款狀態")
 	String paidStats;
 	
-	@Schema(description = "PRINT_ADVISING_MK")
+	@Schema(description = "印製通知書記號")
 	String printAdvisingMk;
 	
-	@Schema(description = "BE_ADVISING_BRANCH")
+	@Schema(description = "受通知單位")
 	String beAdvisingBranch;
 	
-	@Schema(description = "PROCESS_BRANCH")
+	@Schema(description = "處理單位")
 	String processBranch;
 	
-	@Schema(description = "OUR_CUSTOMER")
+	@Schema(description = "是否為本行客戶")
 	String ourCustomer;
 	
-	@Schema(description = "CUSTOMER_ID")
+	@Schema(description = "客戶統編")
 	String customerId;
 	
-	@Schema(description = "CURRENCY")
+	@Schema(description = "幣別")
 	String currency;
 	
-	@Schema(description = "IR_AMT")
+	@Schema(description = "匯入匯款金額")
 	BigDecimal irAmt;
 	
-	@Schema(description = "FX_DEPOSIT")
+	@Schema(description = "外匯存款金額")
 	BigDecimal fxDeposit;
 	
-	@Schema(description = "SPOT_SETTLED_FX")
+	@Schema(description = "即期結匯金額")
 	BigDecimal spotSettledFx;
 	
-	@Schema(description = "COMM_CHARGE")
+	@Schema(description = "手續費支出(入帳差額為負數時)")
 	String commCharge;
 
-	@Schema(description = "TO_US_FXRATE")
+	@Schema(description = "折美匯率")
 	String toUsFxRate;
 
-	@Schema(description = "SENDER_REFERENCE")
+	@Schema(description = "匯款行匯出編號(匯票號碼)")
 	String senderReference;
 
-	@Schema(description = "REMITTER_INFO_1")
+	@Schema(description = "匯款人資訊一")
 	String remitterInfo1;
 
-	@Schema(description = "REMITTER_INFO_2")
+	@Schema(description = "匯款人資訊二")
 	String remitterInfo2;
 
-	@Schema(description = "REMITTER_INFO_3")
+	@Schema(description = "匯款人資訊三")
 	String remitterInfo3;
 
-	@Schema(description = "REMITTER_INFO_4")
+	@Schema(description = "匯款人資訊四")
 	String remitterInfo4;
 
-	@Schema(description = "BENEFICIARY_AC")
+	@Schema(description = "受款人帳號")
 	String beneficiaryAccount;
 
-	@Schema(description = "BENEFICIARY_INFO_1")
+	@Schema(description = "受款人資訊一")
 	String beneficiaryInfo1;
 
-	@Schema(description = "BENEFICIARY_INFO_2")
+	@Schema(description = "受款人資訊二")
 	String beneficiaryInfo2;
 
-	@Schema(description = "BENEFICIARY_INFO_3")
+	@Schema(description = "受款人資訊三")
 	String beneficiaryInfo3;
 
-	@Schema(description = "BENEFICIARY_INFO_4")
+	@Schema(description = "受款人資訊四")
 	String beneficiaryInfo4;
 
-	@Schema(description = "CHARGE_TYPE")
+	@Schema(description = "費用明細")
 	String chargeType;
 
-	@Schema(description = "REMIT_BANK")
+	@Schema(description = "匯款行SWIFT-TID")
 	String remitBank;
 
-	@Schema(description = "REMIT_BANK_INFO1")
+	@Schema(description = "匯款行資訊一")
 	String remitBankInfo1;
 
-	@Schema(description = "REMIT_BANK_INFO2")
+	@Schema(description = "匯款行資訊二")
 	String remitBankInfo2;
 
-	@Schema(description = "REMIT_BANK_INFO3")
+	@Schema(description = "匯款行資訊三")
 	String remitBankInfo3;
 
-	@Schema(description = "REMIT_BANK_INFO4")
+	@Schema(description = "匯款行資訊四")
 	String remitBankInfo4;
 
-	@Schema(description = "DEPOSIT_BANK")
+	@Schema(description = "存匯行SWIFT-TID")
 	String depositBank;
 
-	@Schema(description = "VALUE_DATE")
+	@Schema(description = "有效日")
 	String valueDate;
 
-	@Schema(description = "ADVISING_DATE")
+	@Schema(description = "通知日")
 	String advisingDate;
 
-	@Schema(description = "PRINT_ADVISING_DATE")
+	@Schema(description = "印製通知書日期")
 	String printAdvisingDate;
 
-	@Schema(description = "PROCESS_DATE")
+	@Schema(description = "處理日")
 	String processDate;
 
-	@Schema(description = "CUSTOMER_TEL_NO")
+	@Schema(description = "客戶電話號碼")
 	String customerTelNo;
 
-	@Schema(description = "ACCOUNT_NO")
+	@Schema(description = "受款人帳號(SW59-AC)")
 	String accountNo;
 
-	@Schema(description = "EXCHANGE_RATE")
+	@Schema(description = "匯率")
 	String exchangeRate;
 
-	@Schema(description = "BENEFICIARY_KIND")
+	@Schema(description = "受款人身分別")
 	String beneficiaryKind;
 
-	@Schema(description = "CUSTOMER_BIRTH_DATE")
+	@Schema(description = "受款人出生日期")
 	String customerBirthDate;
 
-	@Schema(description = "NOTICE_1")
+	@Schema(description = "分行注意事項一")
 	String notice1;
 
-	@Schema(description = "NOTICE_2")
+	@Schema(description = "分行注意事項二")
 	String notice2;
 
-	@Schema(description = "NOTICE_3")
+	@Schema(description = "分行注意事項三")
 	String notice3;
 }
