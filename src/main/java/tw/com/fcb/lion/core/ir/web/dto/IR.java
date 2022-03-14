@@ -15,13 +15,13 @@ public class IR {
     String irNo;
 
     @Schema(description = "匯款性質")
-    Integer natureOfRemittance;
+    String natureOfRemittance;
 
     @Schema(description = "匯款細分類")
-    Integer natureOfRemittanceSubCode;
+    String natureOfRemittanceSubCode;
 
     @Schema(description = "付款狀態")
-    Integer paidStats;
+    String paidStats;
 
     @Schema(description = "印製通知書記號")
     String printAdvisingMk;
@@ -108,19 +108,19 @@ public class IR {
     String depositBank;
 
     @Schema(description = "有效日")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyyMMdd")
     LocalDate valueDate;
 
     @Schema(description = "通知日")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyyMMdd")
     LocalDate advisingDate;
 
     @Schema(description = "印製通知書日期")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyyMMdd")
     LocalDate printAdvisingDate;
 
     @Schema(description = "付款日")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyyMMdd")
     LocalDate processDate;
 
     @Schema(description = "客戶電話號碼")
@@ -136,7 +136,7 @@ public class IR {
     String beneficiaryKind;
 
     @Schema(description = "受款人出生日期")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyyMMdd")
     LocalDate customerBirthDate;
 
     @Schema(description = "分行注意事項一")
