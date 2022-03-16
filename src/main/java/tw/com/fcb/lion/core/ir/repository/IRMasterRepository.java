@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface IRMasterRepository extends JpaRepository <IRMaster,Long> {
 
-    List<IRMaster> findByBeAdvisingBranch(String beAdvisingBranch);
-    
+	//查詢待列印筆數(受通知行,印製記號=N)
+	List<IRMaster> findByBeAdvisingBranchAndPrintAdvisingMk(String beAdvisingBranch,String printAdvMk);
 	//以外匯編號查詢匯入主檔
 	IRMaster findByIrNo(String irNo);
 }

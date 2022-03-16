@@ -39,8 +39,8 @@ public class IRController {
 
 	@GetMapping("/count/{branch}")
 	@Operation(description = "傳入受通知單位查詢案件數", summary="查詢案件數")
-	public Integer getCount(String branch) {
-		return service.getIrCaseCount(branch);
+	public Integer getCount(String branch,String printAdvMk) {
+		return service.getIrCaseCount(branch, printAdvMk);
 	}
 
 //	KAI - 驗證通過的電文，寫入匯入主檔(IRMaster)
