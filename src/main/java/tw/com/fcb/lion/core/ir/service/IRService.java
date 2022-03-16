@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import tw.com.fcb.lion.core.ir.repository.FXRateRepository;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
@@ -49,9 +50,9 @@ public class IRService {
 	}
 
 	//傳入受通知單位查詢案件數
-	public Integer getIrCaseCount(String branch) {
+	public Integer getIrCaseCount(String branch,String printAdvMk) {
 		Integer count = 0;
-		count = IRMasterRepository.findByBeAdvisingBranch(branch).size();
+		count = IRMasterRepository.findByBeAdvisingBranchAndPrintAdvisingMk(branch,printAdvMk).size();
 		return count;
 	}
 	
@@ -114,7 +115,8 @@ public class IRService {
 	
 	//更新印製通知書記號
 	public void updatePrintAdviceMark(Long id) {
-		 var iRMaster = IRMasterRepository.findById(id).orElseThrow();
+		 var iRMaster = IRMasterRepository.findById(id).
+				 orElseThrow(() -> new NotFoundException("查無ID" + id));
 		 System.out.println("iRMaster " +iRMaster);
 		 iRMaster.setPrintAdvisingMk("Y");
 		 IRMasterRepository.save(iRMaster);
@@ -123,7 +125,7 @@ public class IRService {
 	//傳入外匯編號，執行匯入解款
 	public void settle(String irNo) {
 		IRMaster irMaster = new IRMaster();
-		irMaster = IRMasterRepository.findByirNo(irNo);
+		irMaster = IRMasterRepository.findByIrNo(irNo);
 		irMaster.setPaidStats("2");
 		IRMasterRepository.save(irMaster);
 	}
