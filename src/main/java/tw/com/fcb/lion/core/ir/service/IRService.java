@@ -122,7 +122,7 @@ public class IRService {
 	//傳入外匯編號，執行匯入解款
 	public void settle(String irNo) {
 		IRMaster irMaster = new IRMaster();
-		irMaster = IRMasterRepository.findByirNo(irNo);
+		irMaster = IRMasterRepository.findByIrNo(irNo);
 		irMaster.setPaidStats("2");
 		IRMasterRepository.save(irMaster);
 	}
