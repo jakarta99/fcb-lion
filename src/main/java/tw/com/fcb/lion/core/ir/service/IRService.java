@@ -106,9 +106,10 @@ public class IRService {
 	}
 	
 	//傳入ID查詢內容
-	public Optional<IRMaster> getById(Long id) {
-		Optional<IRMaster> iRMaster = IRMasterRepository.findById(id);
-		return iRMaster == null ? Optional.empty() : iRMaster;
+	public IRMaster getById(Long id) {
+		IRMaster iRMaster = IRMasterRepository.findById(id).orElseThrow( () -> new RuntimeException("xxx") );
+//		Optional<IRMaster> iRMaster = IRMasterRepository.findById(id);
+		return iRMaster;
 //		System.out.println(iRMaster);
 //		return iRMaster;
 	}

@@ -54,7 +54,7 @@ public class IRController {
 	@GetMapping("/{id}")
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
 	public IR getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
-		return irMapper.toIR(service.getById(id).orElseThrow());
+		return new IR();
 	}
 	
 	@PutMapping("/print")
