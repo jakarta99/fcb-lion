@@ -1,6 +1,5 @@
 package tw.com.fcb.lion.core.ir.web;
 
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,19 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
+import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.ir.service.IRService;
-import tw.com.fcb.lion.core.ir.web.cmd.IRCriteriaCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
 
 @RestController
 @RequestMapping("/ir")
+@RequiredArgsConstructor
 public class IRController {
 
 	@Autowired
 	IRService service;
+	
+	final IRMapper irMapper;
 	
 	@PostMapping("/swift")
 	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="儲存 swift")
@@ -52,8 +53,8 @@ public class IRController {
 
 	@GetMapping("/{id}")
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
-	public Optional<IRMaster> getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
-		return service.getById(id);
+	public IR getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
+		return irMapper.toIR(service.getById(id).orElseThrow());
 	}
 	
 	@PutMapping("/print")

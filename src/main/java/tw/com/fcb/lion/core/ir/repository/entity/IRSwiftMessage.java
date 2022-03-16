@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Entity
@@ -149,10 +151,12 @@ public class IRSwiftMessage {
 	String depositBank;
 
 	@Column(name = "VALUE_DATE")
-	String valueDate;
+	@DateTimeFormat(pattern = "yyyyMMdd")
+	LocalDate valueDate;
 
 	@Column(name = "RECEIVE_DATE")
-	String receiveDate;
+	@DateTimeFormat(pattern = "yyyyMMdd")
+	LocalDate receiveDate;
 
 	@Column(name = "NST_VST_MK")
 	String nstVstMk;

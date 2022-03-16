@@ -1,12 +1,13 @@
 package tw.com.fcb.lion.core.ir.web.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import tw.com.fcb.lion.core.ir.ChargeType;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import tw.com.fcb.lion.core.ir.ChargeType;
 
 @Schema(description = "匯入匯款案件主檔")
 @Data
