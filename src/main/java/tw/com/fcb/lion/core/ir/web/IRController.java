@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
+import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.service.IRService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
@@ -20,6 +23,7 @@ import tw.com.fcb.lion.core.ir.web.dto.IR;
 @RestController
 @RequestMapping("/ir")
 @RequiredArgsConstructor
+@OpenAPIDefinition(info = @Info(title = "獅子王's  匯入  API", version = "v1.0.0"))
 public class IRController {
 
 	@Autowired
@@ -53,8 +57,16 @@ public class IRController {
 
 	@GetMapping("/{id}")
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
-	public IR getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
-		return new IR();
+	public IRMaster getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
+		IRMaster iRMaster = null;
+		try {
+			iRMaster = service.getById(id);
+        } catch (Exception e) {
+//        	求救~這裡資料怎麼丟到swagger上呈現
+        	System.out.println("請重新輸入");
+            e.printStackTrace();
+        }
+		return iRMaster;
 	}
 	
 	@PutMapping("/print")

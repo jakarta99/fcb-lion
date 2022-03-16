@@ -107,11 +107,11 @@ public class IRService {
 	
 	//傳入ID查詢內容
 	public IRMaster getById(Long id) {
-		IRMaster iRMaster = IRMasterRepository.findById(id).orElseThrow( () -> new RuntimeException("xxx") );
-//		Optional<IRMaster> iRMaster = IRMasterRepository.findById(id);
+		IRMaster iRMaster = IRMasterRepository.findById(id).orElseThrow( () -> new RuntimeException("errID") );
+//		IR ir = new IR();
+//		BeanUtils.copyProperties(iRMaster, ir);
+		System.out.println("TEST=" +iRMaster);
 		return iRMaster;
-//		System.out.println(iRMaster);
-//		return iRMaster;
 	}
 	
 	//更新印製通知書記號
