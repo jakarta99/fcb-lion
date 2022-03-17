@@ -106,12 +106,11 @@ public class IRService {
 	}
 	
 	//傳入ID查詢內容
-	public IRMaster getById(Long id) {
+	public IR getById(Long id) {
 		IRMaster iRMaster = IRMasterRepository.findById(id).orElseThrow( () -> new RuntimeException("errID") );
-//		IR ir = new IR();
-//		BeanUtils.copyProperties(iRMaster, ir);
-		System.out.println("TEST=" +iRMaster);
-		return iRMaster;
+		IR ir = new IR();
+		BeanUtils.copyProperties(iRMaster, ir);
+		return ir;
 	}
 	
 	//更新印製通知書記號

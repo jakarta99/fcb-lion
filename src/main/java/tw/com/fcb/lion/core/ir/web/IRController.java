@@ -57,16 +57,16 @@ public class IRController {
 
 	@GetMapping("/{id}")
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
-	public IRMaster getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
-		IRMaster iRMaster = null;
+	public IR getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
+		IR ir = null;
 		try {
-			iRMaster = service.getById(id);
+			ir = service.getById(id);
         } catch (Exception e) {
 //        	求救~這裡資料怎麼丟到swagger上呈現
         	System.out.println("請重新輸入");
             e.printStackTrace();
         }
-		return iRMaster;
+		return ir;
 	}
 	
 	@PutMapping("/print")
