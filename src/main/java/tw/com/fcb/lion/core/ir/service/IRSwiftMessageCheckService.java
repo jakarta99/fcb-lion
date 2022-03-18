@@ -2,10 +2,11 @@ package tw.com.fcb.lion.core.ir.service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import tw.com.fcb.lion.core.ir.web.dto.IR;
 
 @Transactional
 @Service
-public class IRService {
+public class IRSwiftMessageCheckService {
 
 	@Autowired
 	IRSwiftMessageRepository repository;
@@ -34,9 +35,10 @@ public class IRService {
 	@Autowired
 	private FXRateRepository fxRateRepository;
 	
-	public IRService(FXRateRepository fxRateRepository) {
+	Logger log = LoggerFactory.getLogger(getClass());
+	
+	public IRSwiftMessageCheckService(FXRateRepository fxRateRepository) {
 		this.fxRateRepository = fxRateRepository;
-		
 		this.fxRateRepository.saveAll(List.of(
 				new FXRateVo("2022/03/14", "USD", "28.47600", "28.51800", "28.53400", "28.57600"),
 				new FXRateVo("2022/03/14", "JPY", "0.24000", "0.24170", "0.24250", "0.24400")
@@ -117,7 +119,6 @@ public class IRService {
 	public void updatePrintAdviceMark(Long id) {
 		 var iRMaster = IRMasterRepository.findById(id).
 				 orElseThrow(() -> new NotFoundException("查無ID" + id));
-		 System.out.println("iRMaster " +iRMaster);
 		 iRMaster.setPrintAdvisingMk("Y");
 		 IRMasterRepository.save(iRMaster);
 	}

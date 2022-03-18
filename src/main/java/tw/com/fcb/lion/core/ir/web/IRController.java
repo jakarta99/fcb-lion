@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
-import tw.com.fcb.lion.core.ir.service.IRService;
+import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
@@ -27,7 +27,7 @@ import tw.com.fcb.lion.core.ir.web.dto.IR;
 public class IRController {
 
 	@Autowired
-	IRService service;
+	IRSwiftMessageCheckService service;
 	
 	final IRMapper irMapper;
 	
