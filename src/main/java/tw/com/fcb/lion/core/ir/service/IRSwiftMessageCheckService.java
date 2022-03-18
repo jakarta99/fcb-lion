@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import tw.com.fcb.lion.core.ir.repository.FXRateRepository;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
@@ -115,19 +114,4 @@ public class IRSwiftMessageCheckService {
 		return ir;
 	}
 	
-	//更新印製通知書記號
-	public void updatePrintAdviceMark(Long id) {
-		 var iRMaster = IRMasterRepository.findById(id).
-				 orElseThrow(() -> new NotFoundException("查無ID" + id));
-		 iRMaster.setPrintAdvisingMk("Y");
-		 IRMasterRepository.save(iRMaster);
-	}
-	
-	//傳入外匯編號，執行匯入解款
-	public void settle(String irNo) {
-		IRMaster irMaster = new IRMaster();
-		irMaster = IRMasterRepository.findByIrNo(irNo);
-		irMaster.setPaidStats("2");
-		IRMasterRepository.save(irMaster);
-	}
 }
