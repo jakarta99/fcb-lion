@@ -69,13 +69,13 @@ public class IRController {
 			response = new Response<IR>();
 			response.setCode(null);
 			response.setStatus(ResponseStatus.SUCCESS);
-			response.setMessage(null);
+			response.setMessage("交易成功");
 			response.setData(ir);
         } catch (Exception e) {
 			// 不明錯誤 : 9999
 			response.setStatus(ResponseStatus.ERROR);
 			response.setCode("9999");
-			response.setMessage("系統異常");
+			response.setMessage("交易失敗，請重新輸入");
             e.printStackTrace();
         }
 		return response;
