@@ -1,7 +1,6 @@
 package tw.com.fcb.lion.core.ir.service;
 
 import java.util.Arrays;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -35,14 +34,6 @@ public class IRSwiftMessageCheckService {
 	private FXRateRepository fxRateRepository;
 	
 	Logger log = LoggerFactory.getLogger(getClass());
-	
-	public IRSwiftMessageCheckService(FXRateRepository fxRateRepository) {
-		this.fxRateRepository = fxRateRepository;
-		this.fxRateRepository.saveAll(List.of(
-				new FXRateVo("2022/03/14", "USD", "28.47600", "28.51800", "28.53400", "28.57600"),
-				new FXRateVo("2022/03/14", "JPY", "0.24000", "0.24170", "0.24250", "0.24400")
-		));
-	} 
 	
 	public void insert(SwiftMessageSaveCmd saveCmd) {
 		IRSwiftMessage entity = new IRSwiftMessage();
