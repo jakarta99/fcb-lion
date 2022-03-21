@@ -12,7 +12,7 @@ import lombok.Data;
 @Entity
 @Table(name = "FXRATE_TABLE")
 @Data
-public class FXRateVo {
+public class FxRate {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")

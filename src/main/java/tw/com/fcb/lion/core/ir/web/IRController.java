@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import tw.com.fcb.lion.core.commons.enums.ResponseStatus;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.commons.mock.CommonController;
+import tw.com.fcb.lion.core.ir.service.CommonCheckService;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
@@ -35,6 +36,9 @@ public class IRController {
 	
 	@Autowired
 	IRPaymentService irPaymentService;
+	
+	@Autowired
+	CommonCheckService commonCheckService;
 	
 	@Autowired
 	CommonController commonController;
@@ -88,8 +92,11 @@ public class IRController {
 //			commonController.getBeAdvisingBranch(1L);
 //			commonController.getDepositBank(1L);
 //			commonController.getBankNameAndAddress(1L);
-//			commonController.IsRemittanceTransfer(1L);)
+//			commonController.IsRemittanceTransfer(1L);
 			
+			commonCheckService.checkCurrency(irSaveCmd.getCurrency());
+			commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
+			commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
 			irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
 			
 			response = new Response<IRSaveCmd>();

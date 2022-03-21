@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -19,10 +17,8 @@ import org.springframework.stereotype.Service;
 
 import tw.com.fcb.lion.core.commons.http.DateConverter;
 import tw.com.fcb.lion.core.ir.ChargeType;
-import tw.com.fcb.lion.core.ir.repository.FXRateRepository;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
 import tw.com.fcb.lion.core.ir.repository.IRSwiftMessageRepository;
-import tw.com.fcb.lion.core.ir.repository.entity.FXRateVo;
 import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.repository.entity.IRSwiftMessage;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
@@ -38,9 +34,6 @@ public class IRSwiftMessageCheckService {
 
 	@Autowired
 	IRMasterRepository IRMasterRepository;
-	
-	@Autowired
-	private FXRateRepository fxRateRepository;
 	
 	Logger log = LoggerFactory.getLogger(getClass());
 
@@ -96,37 +89,9 @@ public class IRSwiftMessageCheckService {
 	
 	// 檢核成功，新增資料至IRMASTER
 	public void insertIrMaster(IRSaveCmd irSaveCmd) throws Exception {	
-		checkIrMaster(irSaveCmd);
-		
 		IRMaster entityCmd = new IRMaster();
 		BeanUtils.copyProperties(irSaveCmd, entityCmd);
 		IRMasterRepository.save(entityCmd);
-	}
-	
-	// 檢核主檔資料
-	public void checkIrMaster(IRSaveCmd irSaveCmd) throws Exception{
-		String[] branchs = {"091", "093", "094"};
-		String[] currencys = {"USD", "GBP", "JPY"};
-		String[] customers = {"86483666", "05052322", "03218306"};
-
-		var adversingBranch = irSaveCmd.getBeAdvisingBranch();
-		if(!Arrays.asList(branchs).contains(adversingBranch)) {
-			throw new Exception("分行別錯誤");
-		}
-			
-		var currency  = irSaveCmd.getCurrency();
-		if(!Arrays.asList(currencys).contains(currency)) {
-			throw new Exception("幣別錯誤");
-		}
-		else {
-			FXRateVo fxRateVo = fxRateRepository.findByCurrency(currency);
-			irSaveCmd.setExchangeRate(fxRateVo.getCostSpotBoughFxRate());
-		}
-			
-		var customerId = irSaveCmd.getCustomerId();
-		if(!Arrays.asList(customers).contains(customerId)) {
-			throw new Exception("統編錯誤");
-		}
 	}
 	
 	//傳入ID查詢內容
