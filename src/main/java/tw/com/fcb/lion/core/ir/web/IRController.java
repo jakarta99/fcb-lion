@@ -87,9 +87,17 @@ public class IRController {
 		irPaymentService.updatePrintAdviceMark(id);
 	}
 	
+	@PutMapping("/query")
+	@Operation(description = "修改匯入主檔付款狀態", summary="匯入解款")
+	public IR queryIRmasterData(String irNo) {
+		return irPaymentService.queryIRmasterData(irNo);
+	}
+	
 	@PutMapping("/settle")
 	@Operation(description = "修改匯入主檔付款狀態", summary="匯入解款")
-	public void settle(String irNo) {
-		irPaymentService.settle(irNo);
+	public Response<IR> settle(IR ir) {
+		Response<IR> response = new Response<IR>();
+		irPaymentService.settle(ir);
+		return response;
 	}
 }

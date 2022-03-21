@@ -1,6 +1,7 @@
 package tw.com.fcb.lion.core.ir.repository.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
+import tw.com.fcb.lion.core.ir.ChargeType;
 
 @Entity
 @Table(name = "IR_MASTER")
@@ -21,7 +23,8 @@ public class IRMaster {
 	@Column(name = "ID")
 	Long id;
 
-	@Column(name = "IR_NO")
+	
+	@Column(name = "IR_NO",unique=true)
 	String irNo;
 	
 	@Column(name = "NATURE_OF_REMITTANCE")
@@ -61,10 +64,10 @@ public class IRMaster {
 	BigDecimal spotSettledFx;
 	
 	@Column(name = "COMM_CHARGE")
-	String commCharge;
+	BigDecimal commCharge;
 
 	@Column(name = "TO_US_FXRATE")
-	String toUsFxRate;
+	BigDecimal toUsFxRate;
 
 	@Column(name = "SENDER_REFERENCE")
 	String senderReference;
@@ -97,7 +100,7 @@ public class IRMaster {
 	String beneficiaryInfo4;
 
 	@Column(name = "CHARGE_TYPE")
-	String chargeType;
+	ChargeType chargeType;
 
 	@Column(name = "REMIT_BANK")
 	String remitBank;
@@ -118,16 +121,16 @@ public class IRMaster {
 	String depositBank;
 
 	@Column(name = "VALUE_DATE")
-    String valueDate;
+	LocalDate valueDate;
 
 	@Column(name = "ADVISING_DATE")
-    String advisingDate;
+	LocalDate advisingDate;
 
 	@Column(name = "PRINT_ADVISING_DATE")
-    String printAdvisingDate;
+	LocalDate printAdvisingDate;
 
 	@Column(name = "PROCESS_DATE")
-    String processDate;
+	LocalDate processDate;
 
 	@Column(name = "CUSTOMER_TEL_NO")
 	String customerTelNo;
@@ -136,13 +139,13 @@ public class IRMaster {
 	String accountNo;
 
 	@Column(name = "EXCHANGE_RATE")
-	String exchangeRate;
+	BigDecimal exchangeRate;
 
 	@Column(name = "BENEFICIARY_KIND")
 	String beneficiaryKind;
 
 	@Column(name = "CUSTOMER_BIRTH_DATE")
-    String customerBirthDate;
+	LocalDate customerBirthDate;
 
 	@Column(name = "NOTICE_1")
 	String notice1;
