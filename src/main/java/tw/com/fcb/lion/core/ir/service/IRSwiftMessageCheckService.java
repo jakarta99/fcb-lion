@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tw.com.fcb.lion.core.commons.http.DateConverter;
 import tw.com.fcb.lion.core.ir.ChargeType;
 import tw.com.fcb.lion.core.ir.repository.FXRateRepository;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
@@ -68,7 +69,7 @@ public class IRSwiftMessageCheckService {
 					messageSaveCmd.setSeqNo(data[0]);
 					messageSaveCmd.setSenderSwiftCode(data[1]);
 					messageSaveCmd.setReferenceNo(data[2]);
-					messageSaveCmd.setValueDate(LocalDate.parse(data[3]));
+					messageSaveCmd.setValueDate(new DateConverter().convert(data[3]));
 					messageSaveCmd.setChargeType(ChargeType.SHA);
 				}
 
