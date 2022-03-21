@@ -1,13 +1,10 @@
 package tw.com.fcb.lion.core.ir.web.cmd;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -117,20 +114,16 @@ public class IRSaveCmd {
 	String depositBank;
 
 	@Schema(description = "有效日")
-	@DateTimeFormat(pattern = "yyyyMMdd")
-	LocalDate valueDate;
+	String valueDate;
 
 	@Schema(description = "通知日")
-	@DateTimeFormat(pattern = "yyyyMMdd")
-	LocalDate advisingDate;
+	String advisingDate;
 
 	@Schema(description = "印製通知書日期")
-	@DateTimeFormat(pattern = "yyyyMMdd")
-	LocalDate printAdvisingDate;
+	String printAdvisingDate;
 
 	@Schema(description = "處理日")
-	@DateTimeFormat(pattern = "yyyyMMdd")
-	LocalDate processDate;
+	String processDate;
 
 	@Schema(description = "客戶電話號碼")
 	String customerTelNo;
@@ -145,8 +138,7 @@ public class IRSaveCmd {
 	String beneficiaryKind;
 
 	@Schema(description = "受款人出生日期")
-	@DateTimeFormat(pattern = "yyyyMMdd")
-	LocalDate customerBirthDate;
+	String customerBirthDate;
 
 	@Schema(description = "分行注意事項一")
 	String notice1;
