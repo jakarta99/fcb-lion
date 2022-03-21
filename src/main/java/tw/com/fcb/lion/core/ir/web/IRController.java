@@ -135,16 +135,29 @@ public class IRController {
 	}
 	
 	@PutMapping("/query")
-	@Operation(description = "修改匯入主檔付款狀態", summary="匯入解款")
+	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔查詢")
 	public IR queryIRmasterData(String irNo) {
 		return irPaymentService.queryIRmasterData(irNo);
 	}
 	
 	@PutMapping("/settle")
-	@Operation(description = "修改匯入主檔付款狀態", summary="匯入解款")
+	@Operation(description = "S211匯入解款", summary="匯入解款")
 	public Response<IR> settle(IR ir) {
 		Response<IR> response = new Response<IR>();
-		irPaymentService.settle(ir);
+		try {
+			ir.setCommCharge(irPaymentService.calculateFee());
+			irPaymentService.settle(ir);
+			response.setCode(null);
+			response.setStatus(ResponseStatus.SUCCESS);
+			response.setMessage("交易成功");
+			response.setData(ir);
+        } catch (Exception e) {
+			// 不明錯誤 : 9999
+			response.setStatus(ResponseStatus.ERROR);
+			response.setCode("9999");
+			response.setMessage("交易失敗，請重新輸入");
+            e.printStackTrace();
+        }
 		return response;
 	}
 }

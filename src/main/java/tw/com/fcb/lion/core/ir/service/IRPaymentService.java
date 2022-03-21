@@ -1,5 +1,7 @@
 package tw.com.fcb.lion.core.ir.service;
 
+import java.math.BigDecimal;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -32,6 +34,10 @@ public class IRPaymentService {
 		IR ir = new IR();
 		BeanUtils.copyProperties(irmaster,ir);
 		return ir;
+	}
+	//計算手續費
+	public BigDecimal calculateFee() {
+		return BigDecimal.valueOf(100);
 	}
 	//傳入外匯編號，執行匯入解款
 	public void settle(IR ir) {
