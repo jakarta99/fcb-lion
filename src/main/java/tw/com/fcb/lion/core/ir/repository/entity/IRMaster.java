@@ -1,6 +1,7 @@
 package tw.com.fcb.lion.core.ir.repository.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -118,16 +121,20 @@ public class IRMaster {
 	String depositBank;
 
 	@Column(name = "VALUE_DATE")
-    String valueDate;
+	@DateTimeFormat(pattern = "yyyyMMdd")
+	LocalDate valueDate;
 
 	@Column(name = "ADVISING_DATE")
-    String advisingDate;
+	@DateTimeFormat(pattern = "yyyyMMdd")
+	LocalDate advisingDate;
 
 	@Column(name = "PRINT_ADVISING_DATE")
-    String printAdvisingDate;
+	@DateTimeFormat(pattern = "yyyyMMdd")
+	LocalDate printAdvisingDate;
 
 	@Column(name = "PROCESS_DATE")
-    String processDate;
+	@DateTimeFormat(pattern = "yyyyMMdd")
+	LocalDate processDate;
 
 	@Column(name = "CUSTOMER_TEL_NO")
 	String customerTelNo;
@@ -142,7 +149,8 @@ public class IRMaster {
 	String beneficiaryKind;
 
 	@Column(name = "CUSTOMER_BIRTH_DATE")
-    String customerBirthDate;
+	@DateTimeFormat(pattern = "yyyyMMdd")
+	LocalDate customerBirthDate;
 
 	@Column(name = "NOTICE_1")
 	String notice1;
