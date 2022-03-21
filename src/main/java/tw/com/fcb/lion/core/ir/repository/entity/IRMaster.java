@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 import tw.com.fcb.lion.core.ir.ChargeType;
 
@@ -121,15 +123,20 @@ public class IRMaster {
 	String depositBank;
 
 	@Column(name = "VALUE_DATE")
+	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate valueDate;
 
 	@Column(name = "ADVISING_DATE")
+	@DateTimeFormat(pattern = "yyyyMMdd")
+
 	LocalDate advisingDate;
 
 	@Column(name = "PRINT_ADVISING_DATE")
+	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate printAdvisingDate;
 
 	@Column(name = "PROCESS_DATE")
+	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate processDate;
 
 	@Column(name = "CUSTOMER_TEL_NO")
@@ -145,6 +152,7 @@ public class IRMaster {
 	String beneficiaryKind;
 
 	@Column(name = "CUSTOMER_BIRTH_DATE")
+	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate customerBirthDate;
 
 	@Column(name = "NOTICE_1")
