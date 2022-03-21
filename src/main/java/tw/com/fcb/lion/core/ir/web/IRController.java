@@ -94,9 +94,11 @@ public class IRController {
 //			commonController.getBankNameAndAddress(1L);
 //			commonController.IsRemittanceTransfer(1L);
 			
-			commonCheckService.checkCurrency(irSaveCmd.getCurrency());
 			commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
 			commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
+			var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
+			irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
+			
 			irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
 			
 			response = new Response<IRSaveCmd>();

@@ -25,19 +25,21 @@ public class CommonCheckService {
 	@Autowired
 	CustomerRepository customerRepository;
 	
-	public void checkCurrency(String currencyCode) throws Exception {
+	public FxRate checkCurrency(String currencyCode) throws Exception {
 		FxRate fxRate = fxRateRepository.findByCurrency(currencyCode);
 		
-		if(fxRate.getCurrency() == null) {
+		if(fxRate == null) {
 			throw new Exception("幣別輸入錯誤");
+		}
+		else {
+			return fxRate;
 		}
 	}
 	
 	public void checkBranchCode(String branchCode) throws Exception {
 		Branch branch = branchRepository.findByBranchCode(branchCode);
-		System.out.println("bbbbbbbbbbbbbbbbbb" + branch);
 		
-		if(branch.getBranchCode() == null) {
+		if(branch == null) {
 			throw new Exception("分行輸入錯誤");
 		}
 	}
@@ -45,7 +47,7 @@ public class CommonCheckService {
 	public void checkCustomerId(String customerId) throws Exception {
 		Customer customer = customerRepository.findByCustomerId(customerId);
 		
-		if(customer.getCustomerId() == null) {
+		if(customer == null) {
 			throw new Exception("統編輸入錯誤");
 		}
 	}
