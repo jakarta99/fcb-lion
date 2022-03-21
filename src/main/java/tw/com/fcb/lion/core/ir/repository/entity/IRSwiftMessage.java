@@ -24,141 +24,182 @@ public class IRSwiftMessage {
 	@Column(name = "ID")
 	Long id;
 
-	@Column(name = "SEQ_NO")
+//	匯入 swift 序號
+	@Column(name = "SEQ_NO",length = 6,nullable = false)
 	String seqNo;
 
-	@Column(name = "STATS")
+//	處理狀態
+	@Column(name = "STATS",length = 1,nullable = true)
 	String stats;
 
-	@Column(name = "TX_TIME")
+//	處理時間
+	@Column(name = "TX_TIME",length = 7)
 	String txTime;
 
-	@Column(name = "CURRENCY")
+//	幣別
+	@Column(name = "CURRENCY",length = 2)
 	String currency;
-
-	@Column(name = "IR_AMT")
+	
+//	匯入匯款金額 - 長度待確認NUMERIC(15,2)
+	@Column(name = "IR_AMT",length = 17)
 	BigDecimal irAmt;
 
-	@Column(name = "SENDER_REFERENCE")
-	String senderReference;
+//	匯款行匯出編號(匯票NO) 20欄位
+	@Column(name = "REFERENCE_NO",length = 16)
+	String referenceNo;
 
-	@Column(name = "ORDERING_INSTITUTION")
-	String orderingInstitution;
+//	匯款人一
+	@Column(name = "SENDER_INFO_1",length = 35)
+	String senderInfo1;
 
-	@Column(name = "ORDERING_INSTITUTION_INFO_1")
-	String orderingInstitutionInfo1;
+//	匯款人二
+	@Column(name = "SENDER_INFO_2",length = 35)
+	String senderInfo2;
 
-	@Column(name = "ORDERING_INSTITUTION_INFO_2")
-	String orderingInstitutionInfo2;
+//	匯款人三
+	@Column(name = "SENDER_INFO_3",length = 35)
+	String senderInfo3;
 
-	@Column(name = "ORDERING_INSTITUTION_INFO_3")
-	String orderingInstitutionInfo3;
+//	匯款人四
+	@Column(name = "SENDER_INFO_4",length = 35)
+	String senderInfo4;
 
-	@Column(name = "ORDERING_INSTITUTION_INFO_4")
-	String orderingInstitutionInfo4;
-
-	@Column(name = "ACCOUNT_INSTITUTION")
+//	原始匯款行 TAG
+	@Column(name = "ACCOUNT_INSTITUTION",length = 1)
 	String accountInstitution;
 
-	@Column(name = "ACCOUNT_INSTITUTION_AC")
+//	原始匯款行帳號
+	@Column(name = "ACCOUNT_INSTITUTION_AC",length = 35)
 	String accountInstitutionAccount;
 
-	@Column(name = "ACCOUNT_INSTITUTION_INFO_1")
+//	原始匯款行一
+	@Column(name = "ACCOUNT_INSTITUTION_INFO_1",length = 35)
 	String accountInstitutionInfo1;
 
-	@Column(name = "ACCOUNT_INSTITUTION_INFO_2")
+//	原始匯款行二
+	@Column(name = "ACCOUNT_INSTITUTION_INFO_2",length = 35)
 	String accountInstitutionInfo2;
 
-	@Column(name = "ACCOUNT_INSTITUTION_INFO_3")
+//	原始匯款行三
+	@Column(name = "ACCOUNT_INSTITUTION_INFO_3",length = 35)
 	String accountInstitutionInfo3;
 
-	@Column(name = "ACCOUNT_INSTITUTION_INFO_4")
+//	原始匯款行四
+	@Column(name = "ACCOUNT_INSTITUTION_INFO_4",length = 35)
 	String accountInstitutionInfo4;
 
-	@Column(name = "BENEFICIARY_AC")
+//	受款人往來銀行帳號
+	@Column(name = "BENEFICIARY_AC",length = 35)
 	String beneficiaryAccount;
 
-	@Column(name = "BENEFICIARY_INFO_1")
+//	受款人往來銀行一
+	@Column(name = "BENEFICIARY_INFO_1",length = 35)
 	String beneficiaryInfo1;
 
-	@Column(name = "BENEFICIARY_INFO_2")
+//	受款人往來銀行二
+	@Column(name = "BENEFICIARY_INFO_2",length = 35)
 	String beneficiaryInfo2;
 
-	@Column(name = "BENEFICIARY_INFO_3")
+//	受款人往來銀行三
+	@Column(name = "BENEFICIARY_INFO_3",length = 35)
 	String beneficiaryInfo3;
 
-	@Column(name = "BENEFICIARY_INFO_4")
+//	受款人往來銀行四
+	@Column(name = "BENEFICIARY_INFO_4",length = 35)
 	String beneficiaryInfo4;
 
-	@Column(name = "REMITTER_INFO_1")
+//	受款人一
+	@Column(name = "REMITTER_INFO_1",length = 35)
 	String remitterInfo1;
 
-	@Column(name = "REMITTER_INFO_2")
+//	受款人二
+	@Column(name = "REMITTER_INFO_2",length = 35)
 	String remitterInfo2;
 
-	@Column(name = "REMITTER_INFO_3")
+//	受款人三
+	@Column(name = "REMITTER_INFO_3",length = 35)
 	String remitterInfo3;
 
-	@Column(name = "REMITTER_INFO_4")
+//	受款人四
+	@Column(name = "REMITTER_INFO_4",length = 35)
 	String remitterInfo4;
 
-	@Column(name = "CHARGE_TYPE")
+//	費用明細
+	@Column(name = "CHARGE_TYPE",length = 3)
 	String chargeType;
 
+//	中間行費用_幣別1
 	@Column(name = "SENDER_CHARGE_CURRENCY_1")
 	String senderChargeCurrency1;
 
+//	中間行費用_金額1
 	@Column(name = "SENDER_CHARGE_1")
 	BigDecimal senderCharge1;
 
+//	中間行費用_幣別2
 	@Column(name = "SENDER_CHARGE_CURRENCY_2")
 	String senderChargeCurrency2;
 
+//	中間行費用_金額2
 	@Column(name = "SENDER_CHARGE_2")
 	BigDecimal senderCharge2;
 
+//	中間行費用_幣別3
 	@Column(name = "SENDER_CHARGE_CURRENCY_3")
 	String senderChargeCurrency3;
 
+//	中間行費用_金額3
 	@Column(name = "SENDER_CHARGE_3")
 	BigDecimal senderCharge3;
 
-	@Column(name = "NOTICE_1")
+//	分行注意事項一
+	@Column(name = "NOTICE_1",length = 2)
 	String notice1;
 
-	@Column(name = "NOTICE_2")
+//	分行注意事項二
+	@Column(name = "NOTICE_2",length = 2)
 	String notice2;
 
-	@Column(name = "NOTICE_3")
+//	分行注意事項三
+	@Column(name = "NOTICE_3",length = 2)
 	String notice3;
 
-	@Column(name = "REMIT_BANK")
-	String remitBank;
+//	發電行 swift 代號
+	@Column(name = "SENDER_SWIFT_CODE",length = 11)
+	String senderSwiftCode;
 
-	@Column(name = "REMIT_BANK_INFO1")
+//	匯款行一
+	@Column(name = "REMIT_BANK_INFO1",length = 35)
 	String remitBankInfo1;
 
-	@Column(name = "REMIT_BANK_INFO2")
+//	匯款行二
+	@Column(name = "REMIT_BANK_INFO2",length = 35)
 	String remitBankInfo2;
 
-	@Column(name = "REMIT_BANK_INFO3")
+//	匯款行三
+	@Column(name = "REMIT_BANK_INFO3",length = 1)
 	String remitBankInfo3;
 
-	@Column(name = "REMIT_BANK_INFO4")
+//	匯款行四
+	@Column(name = "REMIT_BANK_INFO4",length = 3)
 	String remitBankInfo4;
 
-	@Column(name = "DEPOSIT_BANK")
+//	存匯行 SWIFT-TID
+	@Column(name = "DEPOSIT_BANK",length = 11)
 	String depositBank;
 
-	@Column(name = "VALUE_DATE")
+//	有效日
+	@Column(name = "VALUE_DATE",length = 8)
 	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate valueDate;
 
-	@Column(name = "RECEIVE_DATE")
+//	收件日做自動/單筆查詢印表時之日期
+	@Column(name = "RECEIVE_DATE",length = 8)
 	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate receiveDate;
 
-	@Column(name = "NST_VST_MK")
+//	同存記號  V:同存帳務(VOSTRO)	F:海外聯行同存帳務	N:存同帳務(NOSTRO)
+	@Column(name = "NST_VST_MK",length = 1)
 	String nstVstMk;
 
 }
