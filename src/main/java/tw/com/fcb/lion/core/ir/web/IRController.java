@@ -80,7 +80,6 @@ public class IRController {
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
 	public Response<IR> getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
 		Response<IR> response = new Response<IR>();
-		
 		try {
 			IR ir = irSwiftMessageCheckservice.getById(id);
 			response = new Response<IR>();
