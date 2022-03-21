@@ -1,6 +1,5 @@
 package tw.com.fcb.lion.core.ir.web;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
 import tw.com.fcb.lion.core.commons.enums.ResponseStatus;
 import tw.com.fcb.lion.core.commons.http.Response;
+import tw.com.fcb.lion.core.commons.mock.CommonController;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
@@ -32,6 +32,9 @@ public class IRController {
 	
 	@Autowired
 	IRPaymentService irPaymentService;
+	
+	@Autowired
+	CommonController commonController;
 	
 //	final IRMapper irMapper;
 	
@@ -59,6 +62,11 @@ public class IRController {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
 		
 		try {
+//			commonController.getBeAdvisingBranch(1L);
+//			commonController.getDepositBank(1L);
+//			commonController.getBankNameAndAddress(1L);
+//			commonController.IsRemittanceTransfer(1L);)
+			
 			irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
 			
 			response = new Response<IRSaveCmd>();

@@ -24,7 +24,6 @@ public class IRMaster {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	Long id;
-
 	
 	@Column(name = "IR_NO",unique=true)
 	String irNo;
@@ -128,7 +127,6 @@ public class IRMaster {
 
 	@Column(name = "ADVISING_DATE")
 	@DateTimeFormat(pattern = "yyyyMMdd")
-
 	LocalDate advisingDate;
 
 	@Column(name = "PRINT_ADVISING_DATE")
