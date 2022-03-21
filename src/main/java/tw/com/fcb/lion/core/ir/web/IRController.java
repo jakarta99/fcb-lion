@@ -137,10 +137,10 @@ public class IRController {
 		return response;
 	}
 	
-	@PutMapping("/print")
+	@PutMapping("/printadvise")
 	@Operation(description = "更新印製通知書記號", summary="更新列印通知書狀態")
-	public void print(Long id) {
-		irPaymentService.updatePrintAdviceMark(id);
+	public void printAdvise(String branch) {
+		irPaymentService.updatePrintAdviceMark(branch);
 	}
 	
 	@PutMapping("/query")

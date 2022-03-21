@@ -16,8 +16,11 @@ public class DateConverter implements Converter<String, LocalDate>{
 			return LocalDate.now();
 		}
 		
-		
-		if(source.length() == 8) {
+		if(source.length() == 10) {
+			return LocalDate.of(Integer.valueOf(source.substring(0,4)), 
+					Integer.valueOf(source.substring(5,7)), 
+					Integer.valueOf(source.substring(8,10)));
+		}else if(source.length() == 8) {
 			return LocalDate.of(Integer.valueOf(source.substring(0,4)), 
 					Integer.valueOf(source.substring(4,6)), 
 					Integer.valueOf(source.substring(6,8)));

@@ -1,6 +1,8 @@
 package tw.com.fcb.lion.core.ir.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -22,11 +24,13 @@ public class IRPaymentService {
 	IRMasterRepository IRMasterRepository;
 	
 	//更新印製通知書記號
-	public void updatePrintAdviceMark(Long id) {
-		 var iRMaster = IRMasterRepository.findById(id).
-				 orElseThrow(() -> new NotFoundException("查無ID" + id));
-		 iRMaster.setPrintAdvisingMk("Y");
-		 IRMasterRepository.save(iRMaster);
+	public void updatePrintAdviceMark(String branch) {
+		  List<IRMaster> irMaster = IRMasterRepository.findByBeAdvisingBranchAndPrintAdvisingMk(branch,"N");
+		     for(IRMaster iRMaster : irMaster) {
+			  	 iRMaster.setPrintAdvisingMk("Y");
+				 iRMaster.setPrintAdvisingDate(LocalDate.now());				 
+		     }
+		     IRMasterRepository.saveAll(irMaster);	 
 	}
 	
 	public IR queryIRmasterData(String irNo) {
