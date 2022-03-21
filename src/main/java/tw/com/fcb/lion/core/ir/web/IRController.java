@@ -55,8 +55,25 @@ public class IRController {
 //	KAI - 驗證通過的電文，寫入匯入主檔(IRMaster)
 	@PostMapping
 	@Operation(description = "驗證通過的電文，寫入匯入主檔(IRMaster)", summary="寫入匯入主檔")
-	public void insert(IRSaveCmd irSaveCmd) {
-		irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
+	public Response<IRSaveCmd> insert(IRSaveCmd irSaveCmd) {
+		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
+		
+		try {
+			irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
+			
+			response = new Response<IRSaveCmd>();
+			response.setStatus(ResponseStatus.SUCCESS);
+			response.setCode("0000");
+			response.setMessage("新增成功");
+			response.setData(irSaveCmd);
+		} 
+		catch (Exception e) {
+			response.setStatus(ResponseStatus.ERROR);
+			response.setCode("9999");
+			response.setMessage(e.getMessage());
+		}
+		
+		return response;
 	}
 
 	@GetMapping("/{id}")
