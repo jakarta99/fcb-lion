@@ -49,52 +49,38 @@ public class IRSwiftMessageCheckService {
 	}
 	
 	// 檢核成功，新增資料至IRMASTER
-	public void insertIrMaster(IRSaveCmd irSaveCmd) {
-		var checkIrMasterMk = checkIrMaster(irSaveCmd);
+	public void insertIrMaster(IRSaveCmd irSaveCmd) throws Exception {	
+		checkIrMaster(irSaveCmd);
 		
-		if(checkIrMasterMk == "Y") {
-			IRMaster entityCmd = new IRMaster();
-			BeanUtils.copyProperties(irSaveCmd, entityCmd);
-			IRMasterRepository.save(entityCmd);
-		}
+		IRMaster entityCmd = new IRMaster();
+		BeanUtils.copyProperties(irSaveCmd, entityCmd);
+		IRMasterRepository.save(entityCmd);
 	}
 	
 	// 檢核主檔資料
-	public String checkIrMaster(IRSaveCmd irSaveCmd) {
-		var checkIrMasterMk = "Y";
-		
+	public void checkIrMaster(IRSaveCmd irSaveCmd) throws Exception{
 		String[] branchs = {"091", "093", "094"};
 		String[] currencys = {"USD", "GBP", "JPY"};
 		String[] customers = {"86483666", "05052322", "03218306"};
-		
-		try {
-			var adversingBranch = irSaveCmd.getBeAdvisingBranch();
-			if(!Arrays.asList(branchs).contains(adversingBranch)) {
-				throw new Exception("分行別錯誤");
-			}
+
+		var adversingBranch = irSaveCmd.getBeAdvisingBranch();
+		if(!Arrays.asList(branchs).contains(adversingBranch)) {
+			throw new Exception("分行別錯誤");
+		}
 			
-			var currency  = irSaveCmd.getCurrency();
-			if(!Arrays.asList(currencys).contains(currency)) {
-				throw new Exception("幣別錯誤");
-			}
-			else {
-				FXRateVo fxRateVo = fxRateRepository.findByCurrency(currency);
-				irSaveCmd.setExchangeRate(fxRateVo.getCostSpotBoughFxRate());
-			}
+		var currency  = irSaveCmd.getCurrency();
+		if(!Arrays.asList(currencys).contains(currency)) {
+			throw new Exception("幣別錯誤");
+		}
+		else {
+			FXRateVo fxRateVo = fxRateRepository.findByCurrency(currency);
+			irSaveCmd.setExchangeRate(fxRateVo.getCostSpotBoughFxRate());
+		}
 			
-			var customerId = irSaveCmd.getCustomerId();
-			if(!Arrays.asList(customers).contains(customerId)) {
-				throw new Exception("統編錯誤");
-			}
+		var customerId = irSaveCmd.getCustomerId();
+		if(!Arrays.asList(customers).contains(customerId)) {
+			throw new Exception("統編錯誤");
 		}
-		catch(Exception e){
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			checkIrMasterMk = "N";
-		}
-		finally {
-		}
-		return checkIrMasterMk;
 	}
 	
 	//傳入ID查詢內容
