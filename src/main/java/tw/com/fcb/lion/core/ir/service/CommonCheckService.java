@@ -17,38 +17,23 @@ import tw.com.fcb.lion.core.ir.repository.entity.FxRate;
 public class CommonCheckService {
 	
 	@Autowired
-	FXRateRepository fxRateRepository;
-	
-	@Autowired
 	BranchRepository branchRepository;
 	
 	@Autowired
 	CustomerRepository customerRepository;
 	
+	@Autowired
+	FXRateRepository fxRateRepository;
+	
+	public Branch checkBranchCode(String branchCode) throws Exception {
+		return branchRepository.findByBranchCode(branchCode).orElseThrow(() -> new RuntimeException("分行輸入錯誤"));
+	}
+	
+	public Customer checkCustomerId(String customerId) throws Exception {
+		return customerRepository.findByCustomerId(customerId).orElseThrow(() -> new RuntimeException("統編輸入錯誤"));
+	}
+	
 	public FxRate checkCurrency(String currencyCode) throws Exception {
-		FxRate fxRate = fxRateRepository.findByCurrency(currencyCode);
-		
-		if(fxRate == null) {
-			throw new Exception("幣別輸入錯誤");
-		}
-		else {
-			return fxRate;
-		}
-	}
-	
-	public void checkBranchCode(String branchCode) throws Exception {
-		Branch branch = branchRepository.findByBranchCode(branchCode);
-		
-		if(branch == null) {
-			throw new Exception("分行輸入錯誤");
-		}
-	}
-	
-	public void checkCustomerId(String customerId) throws Exception {
-		Customer customer = customerRepository.findByCustomerId(customerId);
-		
-		if(customer == null) {
-			throw new Exception("統編輸入錯誤");
-		}
+		return fxRateRepository.findByCurrency(currencyCode).orElseThrow(() -> new RuntimeException("幣別輸入錯誤"));
 	}
 }

@@ -38,41 +38,41 @@ public class IRSwiftMessageCheckService {
 	Logger log = LoggerFactory.getLogger(getClass());
 
 	//讀取swift電文資料
-		public List<SwiftMessageSaveCmd> loadFromFile() throws IOException {
-			List<SwiftMessageSaveCmd> swiftMessage = new ArrayList<SwiftMessageSaveCmd>();
-			// 讀檔
-			File file = new File("C:\\data\\swiftMessage.csv");
-			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
-			String lineData;
-			int idx = 0;
-			// 迴圈讀一行資料
-			while ( (lineData = br.readLine()) != null){
-				idx++;
-	            System.out.println(lineData);
+	public List<SwiftMessageSaveCmd> loadFromFile() throws IOException {
+		List<SwiftMessageSaveCmd> swiftMessage = new ArrayList<SwiftMessageSaveCmd>();
+		// 讀檔
+		File file = new File("C:\\data\\swiftMessage.csv");
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String lineData;
+		int idx = 0;
+		// 迴圈讀一行資料
+		while ( (lineData = br.readLine()) != null){
+			idx++;
+	        System.out.println(lineData);
 
-				// split 切割
-				String[] data = lineData.split(",");
+			// split 切割
+			String[] data = lineData.split(",");
 
-				// 設值
-				SwiftMessageSaveCmd messageSaveCmd = new SwiftMessageSaveCmd();
-				if (idx == 1){
-					continue;
-				}else{
-					messageSaveCmd.setSeqNo(data[0]);
-					messageSaveCmd.setSenderSwiftCode(data[1]);
-					messageSaveCmd.setReferenceNo(data[2]);
-					messageSaveCmd.setValueDate(new DateConverter().convert(data[3]));
-					messageSaveCmd.setChargeType(ChargeType.SHA);
-				}
-
-				// 放到 List 之中
-				swiftMessage.add(messageSaveCmd);
+			// 設值
+			SwiftMessageSaveCmd messageSaveCmd = new SwiftMessageSaveCmd();
+			if (idx == 1){
+				continue;
+			}else{
+				messageSaveCmd.setSeqNo(data[0]);
+				messageSaveCmd.setSenderSwiftCode(data[1]);
+				messageSaveCmd.setReferenceNo(data[2]);
+				messageSaveCmd.setValueDate(new DateConverter().convert(data[3]));
+				messageSaveCmd.setChargeType(ChargeType.SHA);
 			}
-			fr.close();
-			br.close();
-			return swiftMessage;
+
+			// 放到 List 之中
+			swiftMessage.add(messageSaveCmd);
 		}
+		fr.close();
+		br.close();
+		return swiftMessage;
+	}
 		
 	public void insert(SwiftMessageSaveCmd saveCmd) {
 		IRSwiftMessage entity = new IRSwiftMessage();
@@ -88,7 +88,7 @@ public class IRSwiftMessageCheckService {
 	}
 	
 	// 檢核成功，新增資料至IRMASTER
-	public void insertIrMaster(IRSaveCmd irSaveCmd) throws Exception {	
+	public void insertIrMaster(IRSaveCmd irSaveCmd){	
 		IRMaster entityCmd = new IRMaster();
 		BeanUtils.copyProperties(irSaveCmd, entityCmd);
 		IRMasterRepository.save(entityCmd);

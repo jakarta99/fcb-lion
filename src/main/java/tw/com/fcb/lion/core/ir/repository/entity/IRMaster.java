@@ -68,7 +68,7 @@ public class IRMaster {
 	BigDecimal commCharge;
 
 	@Column(name = "TO_US_FXRATE")
-	BigDecimal toUsFxRate;
+	String toUsFxRate;
 
 	@Column(name = "SENDER_REFERENCE")
 	String senderReference;
@@ -144,7 +144,7 @@ public class IRMaster {
 	String accountNo;
 
 	@Column(name = "EXCHANGE_RATE")
-	BigDecimal exchangeRate;
+	String exchangeRate;
 
 	@Column(name = "BENEFICIARY_KIND")
 	String beneficiaryKind;

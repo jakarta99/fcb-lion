@@ -37,7 +37,7 @@ public class IRSwiftMessage {
 	String txTime;
 
 //	幣別
-	@Column(name = "CURRENCY",length = 2)
+	@Column(name = "CURRENCY",length = 3)
 	String currency;
 	
 //	匯入匯款金額 - 長度待確認NUMERIC(15,2)
