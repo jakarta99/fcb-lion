@@ -19,19 +19,19 @@ public class CommonController {
 	}
 	@Operation(summary = "判斷所屬存匯行")
 	@GetMapping("/DepositBank")
-	public Boolean getDepositBank(Long id) {
-		return true;
+	public String getDepositBank(Long id) {
+		return "CITIUS33XXX";
 	}
 	@Operation(summary = "讀取銀行檔")
 	@GetMapping("/BankNameAndAddress")
-	public Boolean getBankNameAndAddress(Long id) {
-		return true;
+	public String getBankNameAndAddress(Long id) {
+		return "CITI BANK                          U.S.A NY";
 	}
 	
 	@Operation(summary = "判斷轉匯案件")
 	@GetMapping("/RemittanceTransfer")
 	public Boolean IsRemittanceTransfer(Long id) {
-		return true;
+		return false;
 	}
 	
 }
