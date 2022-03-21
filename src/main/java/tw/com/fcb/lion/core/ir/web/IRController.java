@@ -1,5 +1,8 @@
 package tw.com.fcb.lion.core.ir.web;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +44,27 @@ public class IRController {
 	@PostMapping("/swift")
 	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="儲存 swift")
 	public void receiveSwift(SwiftMessageSaveCmd message) {
-		irSwiftMessageCheckservice.insert(message);
+
+		Response<List<SwiftMessageSaveCmd>> response = new Response<List<SwiftMessageSaveCmd>>();
+		try{
+			List<SwiftMessageSaveCmd> msg = irSwiftMessageCheckservice.loadFromFile();
+			System.out.println("test" + msg);
+			System.out.println("*****read******");
+//			將上述檔案內容寫入IR_SWIFT_MESSAGE
+            for(SwiftMessageSaveCmd saveCmd : msg) {
+				irSwiftMessageCheckservice.insert(saveCmd);
+            }
+			response.setCode(null);
+			response.setStatus(ResponseStatus.SUCCESS);
+			response.setMessage("交易成功");
+			response.setData(msg);
+		} catch (IOException e) {
+			// 不明錯誤 : 9999
+			response.setStatus(ResponseStatus.ERROR);
+			response.setCode("9999");
+			response.setMessage("交易失敗，請重新輸入");
+			e.printStackTrace();
+		}
 	}
 	
 	@GetMapping("/swift/{id}")
