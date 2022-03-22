@@ -14,23 +14,23 @@ public class CommonController {
 
 	@Operation(summary = "判斷受通知分行(含是否為本行帳號檢查)")
 	@GetMapping("/BeAdvisingBranch")
-	public Boolean getBeAdvisingBranch(Long id) {
+	public Boolean getBeAdvisingBranch(String beneficiaryAccount) {
 		return true;
 	}
 	@Operation(summary = "判斷所屬存匯行")
 	@GetMapping("/DepositBank")
-	public String getDepositBank(Long id) {
+	public String getDepositBank(String senderSwiftCode) {
 		return "CITIUS33XXX";
 	}
 	@Operation(summary = "讀取銀行檔")
 	@GetMapping("/BankNameAndAddress")
-	public String getBankNameAndAddress(Long id) {
+	public String getBankNameAndAddress(String bankSwiftCode) {
 		return "CITI BANK                          U.S.A NY";
 	}
 	
 	@Operation(summary = "判斷轉匯案件")
 	@GetMapping("/RemittanceTransfer")
-	public Boolean IsRemittanceTransfer(Long id) {
+	public Boolean IsRemittanceTransfer(String accountInstitution) {
 		return false;
 	}
 	

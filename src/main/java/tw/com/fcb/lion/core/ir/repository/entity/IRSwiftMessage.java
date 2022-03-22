@@ -64,27 +64,27 @@ public class IRSwiftMessage {
 	@Column(name = "SENDER_INFO_4",length = 35)
 	String senderInfo4;
 
-//	原始匯款行 TAG
-	@Column(name = "ACCOUNT_INSTITUTION",length = 1)
+//	設帳行swift code
+	@Column(name = "ACCOUNT_INSTITUTION",length = 11)
 	String accountInstitution;
 
-//	原始匯款行帳號
+//	設帳行帳號
 	@Column(name = "ACCOUNT_INSTITUTION_AC",length = 35)
 	String accountInstitutionAccount;
 
-//	原始匯款行一
+//	設帳行一
 	@Column(name = "ACCOUNT_INSTITUTION_INFO_1",length = 35)
 	String accountInstitutionInfo1;
 
-//	原始匯款行二
+//	設帳行二
 	@Column(name = "ACCOUNT_INSTITUTION_INFO_2",length = 35)
 	String accountInstitutionInfo2;
 
-//	原始匯款行三
+//	設帳行三
 	@Column(name = "ACCOUNT_INSTITUTION_INFO_3",length = 35)
 	String accountInstitutionInfo3;
 
-//	原始匯款行四
+//	設帳行四
 	@Column(name = "ACCOUNT_INSTITUTION_INFO_4",length = 35)
 	String accountInstitutionInfo4;
 
