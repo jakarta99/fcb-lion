@@ -33,14 +33,14 @@ public class IRSwiftMessage {
 	String stats;
 
 //	處理時間
-	@Column(name = "TX_TIME",length = 7)
+	@Column(name = "TX_TIME",length = 8)
 	String txTime;
 
 //	幣別
 	@Column(name = "CURRENCY",length = 3)
 	String currency;
 	
-//	匯入匯款金額 - 長度待確認NUMERIC(15,2)
+//	匯入金額 - 長度待確認NUMERIC(15,2)
 	@Column(name = "IR_AMT",length = 17)
 	BigDecimal irAmt;
 

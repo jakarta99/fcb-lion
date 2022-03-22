@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,11 +62,17 @@ public class IRSwiftMessageCheckService {
 			if (idx == 1){
 				continue;
 			}else{
+//				電文內容
 				messageSaveCmd.setSeqNo(data[0]);
-				messageSaveCmd.setSenderSwiftCode(data[1]);
-				messageSaveCmd.setReferenceNo(data[2]);
+				messageSaveCmd.setCurrency(data[1]);
+				messageSaveCmd.setIrAmt(new BigDecimal(data[2]));;
 				messageSaveCmd.setValueDate(new DateConverter().convert(data[3]));
 				messageSaveCmd.setChargeType(ChargeType.SHA);
+				
+//				初始值
+				messageSaveCmd.setStats("0");
+				String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+				messageSaveCmd.setTxTime(time);
 			}
 
 			// 放到 List 之中

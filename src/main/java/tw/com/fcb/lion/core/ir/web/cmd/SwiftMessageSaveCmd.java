@@ -27,7 +27,7 @@ public class SwiftMessageSaveCmd {
 	@Schema(description = "幣別" )
 	String currency;
 	
-	@Schema(description = "匯入匯款金額" )
+	@Schema(description = "匯入金額" )
 	BigDecimal irAmt;
 	
 	@Schema(description = "匯款行匯出編號(匯票NO) 20欄位" )
@@ -45,22 +45,22 @@ public class SwiftMessageSaveCmd {
 	@Schema(description = "匯款人四" )
 	String senderInfo4;
 	
-	@Schema(description = "原始匯款行 TAG" )
+	@Schema(description = "設帳行swift code" )
 	String accountInstitution;
 	
-	@Schema(description = "原始匯款行帳號" )
+	@Schema(description = "設帳行帳號" )
 	String accountInstitutionAccount;
 	
-	@Schema(description = "原始匯款行一" )
+	@Schema(description = "設帳行一" )
 	String accountInstitutionInfo1;
 	
-	@Schema(description = "原始匯款行二" )
+	@Schema(description = "設帳行二" )
 	String accountInstitutionInfo2;
 	
-	@Schema(description = "原始匯款行三" )
+	@Schema(description = "設帳行三" )
 	String accountInstitutionInfo3;
 	
-	@Schema(description = "原始匯款行四" )
+	@Schema(description = "設帳行四" )
 	String accountInstitutionInfo4;
 		
 	@Schema(description = "受款人往來銀行帳號" )
