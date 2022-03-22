@@ -1,6 +1,7 @@
 package tw.com.fcb.lion.core.ir.web;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +155,7 @@ public class IRController {
 	public Response<IR> settle(IR ir) {
 		Response<IR> response = new Response<IR>();
 		try {
-			ir.setCommCharge(irPaymentService.calculateFee());
+			ir.setCommCharge(irPaymentService.calculateFee(ir.getIrAmt()));
 			irPaymentService.settle(ir);
 			response.setCode(null);
 			response.setStatus(ResponseStatus.SUCCESS);
