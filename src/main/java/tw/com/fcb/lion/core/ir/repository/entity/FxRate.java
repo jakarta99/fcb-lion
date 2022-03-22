@@ -1,5 +1,7 @@
 package tw.com.fcb.lion.core.ir.repository.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,14 +27,14 @@ public class FxRate {
 	private String currency;
 	
 	@Column(name = "SPOT_BOUGH_FXRATE")
-	private String spotBoughFxRate;
+	private BigDecimal spotBoughFxRate;
 	
 	@Column(name = "COST_SPOT_BOUGH_FXRATE")
-	private String costSpotBoughFxRate;
+	private BigDecimal costSpotBoughFxRate;
 	
 	@Column(name = "COST_SPOT_SOLD_FXRATE")
-	private String costSpotSoldFxRate;
+	private BigDecimal costSpotSoldFxRate;
 	
 	@Column(name = "SPOT_SOLD_FXRATE")
-	private String spotSoldFxRate;
+	private BigDecimal spotSoldFxRate;
 }

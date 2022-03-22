@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import tw.com.fcb.lion.core.ir.ChargeType;
 
 @Data
 @Schema(description = "匯入 SWIFT 主檔資料")
@@ -60,10 +61,10 @@ public class IRSaveCmd {
 	BigDecimal spotSettledFx;
 	
 	@Schema(description = "手續費支出(入帳差額為負數時)")
-	String commCharge;
+	BigDecimal commCharge;
 
 	@Schema(description = "折美匯率")
-	String toUsFxRate;
+	BigDecimal toUsFxRate;
 
 	@Schema(description = "匯款行匯出編號(匯票號碼)")
 	String senderReference;
@@ -96,7 +97,7 @@ public class IRSaveCmd {
 	String beneficiaryInfo4;
 
 	@Schema(description = "費用明細")
-	String chargeType;
+	ChargeType chargeType;
 
 	@Schema(description = "匯款行SWIFT-TID")
 	String remitBank;
@@ -139,7 +140,7 @@ public class IRSaveCmd {
 	String accountNo;
 
 	@Schema(description = "匯率")
-	String exchangeRate;
+	BigDecimal exchangeRate;
 
 	@Schema(description = "受款人身分別")
 	String beneficiaryKind;
