@@ -97,10 +97,14 @@ public class IRSwiftMessageCheckService {
 	}
 	
 	// 檢核成功，新增資料至IRMASTER
-	public void insertIrMaster(IRSaveCmd irSaveCmd){	
+	public IR insertIrMaster(IRSaveCmd irSaveCmd){	
 		IRMaster entityCmd = new IRMaster();
 		BeanUtils.copyProperties(irSaveCmd, entityCmd);
 		IRMasterRepository.save(entityCmd);
+		
+		IR ir = new IR();
+		BeanUtils.copyProperties(entityCmd, ir);
+		return ir;
 	}
 	
 	//傳入ID查詢內容

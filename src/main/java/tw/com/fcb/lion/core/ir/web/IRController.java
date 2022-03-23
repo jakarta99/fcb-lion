@@ -1,7 +1,6 @@
 package tw.com.fcb.lion.core.ir.web;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,32 +85,21 @@ public class IRController {
 //	KAI - 驗證通過的電文，寫入匯入主檔(IRMaster)
 	@PostMapping
 	@Operation(description = "驗證通過的電文，寫入匯入主檔(IRMaster)", summary="寫入匯入主檔")
-	public Response<IRSaveCmd> insert(IRSaveCmd irSaveCmd) {
-		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
+	public Response<IR> insert(IRSaveCmd irSaveCmd) {
+		Response<IR> response = new Response<IR>();
+		IR ir = new IR();
 		
 		try {
-//			commonController.getBeAdvisingBranch(1L);
-//			commonController.getDepositBank(1L);
-//			commonController.getBankNameAndAddress(1L);
-//			commonController.IsRemittanceTransfer(1L);
-			
 			commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
 			commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
 			var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
 			irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
 			
-			irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
-			
-			response = new Response<IRSaveCmd>();
-			response.setStatus(ResponseStatus.SUCCESS);
-			response.setCode("0000");
-			response.setMessage("新增成功");
-			response.setData(irSaveCmd);
+			ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
+			response = showMessage(ir, "0000", "新增成功"); 
 		} 
 		catch (Exception e) {
-			response.setStatus(ResponseStatus.ERROR);
-			response.setCode("9999");
-			response.setMessage(e.getMessage());
+			response = showMessage(ir, "9999", e.getMessage()); 
 		}
 		
 		return response;
@@ -121,20 +109,16 @@ public class IRController {
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
 	public Response<IR> getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
 		Response<IR> response = new Response<IR>();
+		IR ir = new IR();
+		
 		try {
-			IR ir = irSwiftMessageCheckservice.getById(id);
-			response = new Response<IR>();
-			response.setCode(null);
-			response.setStatus(ResponseStatus.SUCCESS);
-			response.setMessage("交易成功");
-			response.setData(ir);
-        } catch (Exception e) {
-			// 不明錯誤 : 9999
-			response.setStatus(ResponseStatus.ERROR);
-			response.setCode("9999");
-			response.setMessage("交易失敗，請重新輸入");
-            e.printStackTrace();
+			ir = irSwiftMessageCheckservice.getById(id);
+			response = showMessage(ir, "0000", "交易成功"); 
+        } 
+		catch (Exception e) {
+            response = showMessage(ir, "9999", "交易失敗，請重新輸入");
         }
+		
 		return response;
 	}
 	
@@ -154,20 +138,35 @@ public class IRController {
 	@Operation(description = "S211匯入解款", summary="匯入解款")
 	public Response<IR> settle(IR ir) {
 		Response<IR> response = new Response<IR>();
+		
 		try {
 			ir.setCommCharge(irPaymentService.calculateFee(ir.getIrAmt()));
 			irPaymentService.settle(ir);
-			response.setCode(null);
-			response.setStatus(ResponseStatus.SUCCESS);
-			response.setMessage("交易成功");
-			response.setData(ir);
-        } catch (Exception e) {
-			// 不明錯誤 : 9999
-			response.setStatus(ResponseStatus.ERROR);
-			response.setCode("9999");
-			response.setMessage("交易失敗，請重新輸入");
-            e.printStackTrace();
+			response = showMessage(ir, "0000", "交易成功"); 
+        } 
+		catch (Exception e) {
+            response = showMessage(ir, "9999", "交易失敗，請重新輸入");
         }
+		
+		return response;
+	}
+	
+//	Response訊息
+	public Response<IR> showMessage(IR ir, String code, String msg){
+		Response<IR> response = new Response<IR>();
+		
+		if(code.equals("0000")) {
+			response.setStatus(ResponseStatus.SUCCESS);
+			response.setCode(code);
+			response.setMessage(msg);
+			response.setData(ir);
+		}
+		else {
+			response.setStatus(ResponseStatus.ERROR);
+			response.setCode(code);
+			response.setMessage(msg);
+		}
+		
 		return response;
 	}
 }
