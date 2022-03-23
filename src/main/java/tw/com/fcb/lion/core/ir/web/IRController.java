@@ -130,8 +130,19 @@ public class IRController {
 	
 	@PutMapping("/query")
 	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔查詢")
-	public IR queryIRmasterData(String irNo) {
-		return irPaymentService.queryIRmasterData(irNo);
+	public Response<IR> queryIRmasterData(String irNo) {
+		Response<IR> response = new Response<IR>();
+		
+		try {
+			IR ir = irPaymentService.queryIRmasterData(irNo);
+			response.showMessage(ir, "0000", "交易成功"); 
+        } 
+		catch (Exception e) {
+            response.showMessage(null, "9999", "交易失敗，請重新輸入");
+        }
+		
+		return response;
+		
 	}
 	
 	@PutMapping("/settle")
