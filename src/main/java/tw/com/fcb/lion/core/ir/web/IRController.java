@@ -96,10 +96,10 @@ public class IRController {
 			irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
 			
 			ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
-			response = showMessage(ir, "0000", "新增成功"); 
+			response.showMessage(ir, "0000", "新增成功"); 
 		} 
 		catch (Exception e) {
-			response = showMessage(ir, "9999", e.getMessage()); 
+			response.showMessage(ir, "9999", e.getMessage()); 
 		}
 		
 		return response;
@@ -113,10 +113,10 @@ public class IRController {
 		
 		try {
 			ir = irSwiftMessageCheckservice.getById(id);
-			response = showMessage(ir, "0000", "交易成功"); 
+			response.showMessage(ir, "0000", "交易成功"); 
         } 
 		catch (Exception e) {
-            response = showMessage(ir, "9999", "交易失敗，請重新輸入");
+            response.showMessage(ir, "9999", "交易失敗，請重新輸入");
         }
 		
 		return response;
@@ -136,37 +136,37 @@ public class IRController {
 	
 	@PutMapping("/settle")
 	@Operation(description = "S211匯入解款", summary="匯入解款")
-	public Response<IR> settle(IR ir) {
-		Response<IR> response = new Response<IR>();
+	public Response<IRSaveCmd> settle(IRSaveCmd ir) {
+		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
 		
 		try {
 			ir.setCommCharge(irPaymentService.calculateFee(ir.getIrAmt()));
 			irPaymentService.settle(ir);
-			response = showMessage(ir, "0000", "交易成功"); 
+			response.showMessage(ir, "0000", "交易成功"); 
         } 
 		catch (Exception e) {
-            response = showMessage(ir, "9999", "交易失敗，請重新輸入");
+            response.showMessage(ir, "9999", "交易失敗，請重新輸入");
         }
 		
 		return response;
 	}
 	
-//	Response訊息
-	public Response<IR> showMessage(IR ir, String code, String msg){
-		Response<IR> response = new Response<IR>();
-		
-		if(code.equals("0000")) {
-			response.setStatus(ResponseStatus.SUCCESS);
-			response.setCode(code);
-			response.setMessage(msg);
-			response.setData(ir);
-		}
-		else {
-			response.setStatus(ResponseStatus.ERROR);
-			response.setCode(code);
-			response.setMessage(msg);
-		}
-		
-		return response;
-	}
+////	Response訊息
+//	public Response<IR> showMessage(IR ir, String code, String msg){
+//		Response<IR> response = new Response<IR>();
+//		
+//		if(code.equals("0000")) {
+//			response.setStatus(ResponseStatus.SUCCESS);
+//			response.setCode(code);
+//			response.setMessage(msg);
+//			response.setData(ir);
+//		}
+//		else {
+//			response.setStatus(ResponseStatus.ERROR);
+//			response.setCode(code);
+//			response.setMessage(msg);
+//		}
+//		
+//		return response;
+//	}
 }

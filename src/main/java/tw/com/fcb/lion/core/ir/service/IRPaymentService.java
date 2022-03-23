@@ -13,6 +13,7 @@ import org.webjars.NotFoundException;
 
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
 import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
+import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
 
 
@@ -52,7 +53,7 @@ public class IRPaymentService {
 		return BigDecimal.valueOf(standardCharge);
 	}
 	//傳入外匯編號，執行匯入解款
-	public void settle(IR ir) {
+	public void settle(IRSaveCmd ir) {
 		IRMaster irmaster = IRMasterRepository.findByIrNo(ir.getIrNo());
 		ir.setPaidStats("2");
 		BeanUtils.copyProperties(ir,irmaster);
