@@ -14,10 +14,10 @@ class IRMasterRepositoryTest {
 	@Autowired
 	IRMasterRepository irMasterRepository;
 
-	@Test
-	void test() {
+//	@Test
+//	void test() {
 //		fail("Not yet implemented");
-	}
+//	}
 
 
 	@Test

@@ -20,18 +20,18 @@ public class CommonController {
 	}
 	@Operation(summary = "判斷所屬存匯行")
 	@GetMapping("/DepositBank")
-	public String getDepositBank(String senderSwiftCode) {
+	public String getDepositBank(@RequestParam("senderSwiftCode") String senderSwiftCode) {
 		return "CITIUS33XXX";
 	}
 	@Operation(summary = "讀取銀行檔")
 	@GetMapping("/BankNameAndAddress")
-	public String getBankNameAndAddress(String bankSwiftCode) {
+	public String getBankNameAndAddress(@RequestParam("bankSwiftCode") String bankSwiftCode) {
 		return "CITI BANK                          U.S.A NY";
 	}
 	
 	@Operation(summary = "判斷轉匯案件")
 	@GetMapping("/RemittanceTransfer")
-	public Boolean isRemittanceTransfer(String accountInstitution) {
+	public Boolean isRemittanceTransfer(@RequestParam("accountInstitution") String accountInstitution) {
 		return false;
 	}
 	

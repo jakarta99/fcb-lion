@@ -15,15 +15,15 @@ public interface MainFrameClient {
 	Boolean isBeAdvisingBranch(@RequestParam("beneficiaryAccount") String beneficiaryAccount);
 
 	@Operation(summary = "判斷所屬存匯行")
-	@GetMapping("/DepositBank")
+	@GetMapping("/common/DepositBank")
 	String getDepositBank(@RequestParam("senderSwiftCode") String senderSwiftCode);
 	
 	@Operation(summary = "讀取銀行檔")
-	@GetMapping("/BankNameAndAddress")
+	@GetMapping("/common/BankNameAndAddress")
 	String getBankNameAndAddress(@RequestParam("bankSwiftCode") String bankSwiftCode);
 	
 	@Operation(summary = "判斷轉匯案件")
-	@GetMapping("/RemittanceTransfer")
+	@GetMapping("/common/RemittanceTransfer")
 	Boolean isRemittanceTransfer(@RequestParam("accountInstitution") String accountInstitution);
 	
 

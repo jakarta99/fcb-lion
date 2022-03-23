@@ -138,7 +138,7 @@ public class IRController {
 		irPaymentService.updatePrintAdviceMark(branch);
 	}
 	
-	@PutMapping("/query")
+	@GetMapping("/query")
 	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔查詢")
 	public Response<IR> queryIRmasterData(String irNo) {
 		Response<IR> response = new Response<IR>();
