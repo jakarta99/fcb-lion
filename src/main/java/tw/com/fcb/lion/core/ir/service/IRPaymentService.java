@@ -43,14 +43,16 @@ public class IRPaymentService {
 	//計算手續費
 	public BigDecimal calculateFee(BigDecimal irAmt) {
 
-		double standardCharge = irAmt.doubleValue()*0.0005;
-//		暫訂最低收美金7元 (台幣200)，最高收美金28元(台幣800)
-		if (standardCharge < 7){
-			standardCharge = 7;
-		} else { if (standardCharge > 28)
-			standardCharge = 28;
+		BigDecimal feeRate = new BigDecimal("0.0005");
+		BigDecimal standardCharge = irAmt.multiply(feeRate);
+		Double standardChargeDouble = standardCharge.doubleValue();
+		//暫訂最低收美金7元 (台幣200)，最高收美金28元(台幣800)
+		if (standardChargeDouble < 7){
+			standardCharge = BigDecimal.valueOf(7);
+		} else { if (standardChargeDouble > 28)
+			standardCharge = BigDecimal.valueOf(28);
 		}
-		return BigDecimal.valueOf(standardCharge);
+		return standardCharge;
 	}
 	//傳入外匯編號，執行匯入解款
 	public void settle(IRSaveCmd ir) {

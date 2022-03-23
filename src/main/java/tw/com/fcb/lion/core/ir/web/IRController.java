@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
+import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.commons.mock.CommonController;
 import tw.com.fcb.lion.core.ir.service.CommonCheckService;
@@ -23,10 +24,11 @@ import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
+import tw.com.fcb.lion.core.sharedkernel.api.MainFrameClient;
 
 @RestController
 @RequestMapping("/ir")
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @OpenAPIDefinition(info = @Info(title = "獅子王's  匯入  API", version = "v1.0.0"))
 public class IRController {
 
@@ -41,6 +43,8 @@ public class IRController {
 	
 	@Autowired
 	CommonController commonController;
+	
+	final MainFrameClient mainFrameClient;
 	
 //	final IRMapper irMapper;
 	
@@ -86,13 +90,23 @@ public class IRController {
 		IR ir = new IR();
 		
 		try {
-			commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
-			commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
-			var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
-			irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
+			Boolean isBeAdvisingBranch = mainFrameClient.isBeAdvisingBranch(irSaveCmd.getBeneficiaryAccount());
+			Boolean isRemittanceTransfer = mainFrameClient.isRemittanceTransfer(irSaveCmd.getAccountInstitution());
+			String depositBank = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
+			String bankNameAndAddress = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
 			
-			ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
-			response.showMessage(ir, "0000", "新增成功"); 
+			if(isBeAdvisingBranch==true && isRemittanceTransfer == false) {
+				commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
+				commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
+				var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
+				irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
+				irSaveCmd.setDepositBank(depositBank);
+				irSaveCmd.setRemitBankInfo1(bankNameAndAddress);
+				ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
+				response.showMessage(ir, "0000", "新增成功"); 	
+			}
+			
+
 		} 
 		catch (Exception e) {
 			response.showMessage(ir, "9999", e.getMessage()); 

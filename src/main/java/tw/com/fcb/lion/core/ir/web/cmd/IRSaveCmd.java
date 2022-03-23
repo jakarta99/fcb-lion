@@ -153,4 +153,10 @@ public class IRSaveCmd {
 
 	@Schema(description = "分行注意事項三")
 	String notice3;
+	
+	@Schema(description = "設帳行swift code" )
+	String accountInstitution;
+	
+	@Schema(description = "發電行 swift 代號" )
+	String senderSwiftCode;
 }
