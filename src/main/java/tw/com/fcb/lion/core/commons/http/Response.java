@@ -14,18 +14,18 @@ public class Response<T> {
 	
 	T data;
 	
-	public void showMessage(T data, String code, String msg){
+	public void showMessage(T data, String code, String message){
 		
 		if(code.equals("0000")) {
 			this.setStatus(ResponseStatus.SUCCESS);
 			this.setCode(code);
-			this.setMessage(msg);
+			this.setMessage(message);
 			this.setData(data);
 		}
 		else {
 			this.setStatus(ResponseStatus.ERROR);
 			this.setCode(code);
-			this.setMessage(msg);
+			this.setMessage(message);
 			this.setData(data);
 		}
 	}

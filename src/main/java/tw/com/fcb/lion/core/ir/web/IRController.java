@@ -95,18 +95,18 @@ public class IRController {
 			String depositBank = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
 			String bankNameAndAddress = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
 			
-			if(isBeAdvisingBranch==true && isRemittanceTransfer == false) {
+			if(isBeAdvisingBranch == true && isRemittanceTransfer == false) {
 				commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
 				commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
 				var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
+				
 				irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
 				irSaveCmd.setDepositBank(depositBank);
 				irSaveCmd.setRemitBankInfo1(bankNameAndAddress);
+				
 				ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
 				response.showMessage(ir, "0000", "新增成功"); 	
 			}
-			
-
 		} 
 		catch (Exception e) {
 			response.showMessage(ir, "9999", e.getMessage()); 
