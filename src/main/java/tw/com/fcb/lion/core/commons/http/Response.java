@@ -2,7 +2,6 @@ package tw.com.fcb.lion.core.commons.http;
 
 import lombok.Data;
 import tw.com.fcb.lion.core.commons.enums.ResponseStatus;
-import tw.com.fcb.lion.core.ir.web.dto.IR;
 
 @Data
 public class Response<T> {

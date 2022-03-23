@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
-import tw.com.fcb.lion.core.commons.enums.ResponseStatus;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.commons.mock.CommonController;
 import tw.com.fcb.lion.core.ir.service.CommonCheckService;
@@ -50,24 +49,21 @@ public class IRController {
 	public void receiveSwift(SwiftMessageSaveCmd message) {
 
 		Response<List<SwiftMessageSaveCmd>> response = new Response<List<SwiftMessageSaveCmd>>();
+		List<SwiftMessageSaveCmd> msg = null;
 		try{
-			List<SwiftMessageSaveCmd> msg = irSwiftMessageCheckservice.loadFromFile();
+//			List<SwiftMessageSaveCmd> msg = irSwiftMessageCheckservice.loadFromFile();
+			msg = irSwiftMessageCheckservice.loadFromFile();
 			System.out.println("test" + msg);
 			System.out.println("*****read******");
 //			將上述檔案內容寫入IR_SWIFT_MESSAGE
             for(SwiftMessageSaveCmd saveCmd : msg) {
 				irSwiftMessageCheckservice.insert(saveCmd);
             }
-			response.setCode(null);
-			response.setStatus(ResponseStatus.SUCCESS);
-			response.setMessage("交易成功");
-			response.setData(msg);
-		} catch (IOException e) {
-			// 不明錯誤 : 9999
-			response.setStatus(ResponseStatus.ERROR);
-			response.setCode("9999");
-			response.setMessage("交易失敗，請重新輸入");
-			e.printStackTrace();
+
+			response.showMessage(msg, "0000", "交易成功"); 
+		} 
+		catch (IOException e) {
+			response.showMessage(msg, "9999", e.getMessage()); 
 		}
 	}
 	
@@ -150,23 +146,4 @@ public class IRController {
 		
 		return response;
 	}
-	
-////	Response訊息
-//	public Response<IR> showMessage(IR ir, String code, String msg){
-//		Response<IR> response = new Response<IR>();
-//		
-//		if(code.equals("0000")) {
-//			response.setStatus(ResponseStatus.SUCCESS);
-//			response.setCode(code);
-//			response.setMessage(msg);
-//			response.setData(ir);
-//		}
-//		else {
-//			response.setStatus(ResponseStatus.ERROR);
-//			response.setCode(code);
-//			response.setMessage(msg);
-//		}
-//		
-//		return response;
-//	}
 }
