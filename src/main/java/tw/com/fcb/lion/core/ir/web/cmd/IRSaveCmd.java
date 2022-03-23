@@ -14,12 +14,8 @@ import lombok.Data;
 import tw.com.fcb.lion.core.ir.ChargeType;
 
 @Data
-@Schema(description = "匯入 SWIFT 主檔資料")
+@Schema(description = "匯入案件主檔資料")
 public class IRSaveCmd {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Schema(description = "序號")
-	Long id;
 
 	@Schema(description = "匯入匯款編號")
 	String irNo;
