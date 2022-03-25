@@ -1,6 +1,7 @@
 package tw.com.fcb.lion.core.ir.web;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,9 +160,9 @@ public class IRController {
 	@Operation(description = "S211匯入解款", summary="匯入解款")
 	public Response<IRSaveCmd> settle(IRSaveCmd ir) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
-		
+		BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
 		try {
-			ir.setCommCharge(irPaymentService.calculateFee(ir.getIrAmt()));
+			ir.setCommCharge(irFee);
 			irPaymentService.settle(ir);
 			response.showMessage(ir, "0000", "交易成功"); 
         } 
