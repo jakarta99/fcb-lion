@@ -2,6 +2,7 @@ package tw.com.fcb.lion.core.ir.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -15,6 +16,7 @@ import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
 import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
+import tw.com.fcb.lion.core.ir.web.dto.IRQuery;
 
 
 @Transactional
@@ -39,6 +41,19 @@ public class IRPaymentService {
 		IR ir = new IR();
 		BeanUtils.copyProperties(irmaster,ir);
 		return ir;
+	}
+	//模糊查詢匯入主檔資料
+	public List<IRQuery> queryIRmasterDataLikeByirNo(String irNo) {
+		List<IRMaster> irmasterlist = IRMasterRepository.findByIrNoLike(irNo);
+		List<IRQuery> irquerylist = new ArrayList<IRQuery>();
+
+		for(int i = 0; i < irmasterlist.size();i++) {
+			IRMaster irmaster = irmasterlist.get(i);
+			IRQuery irquery = new IRQuery();
+			BeanUtils.copyProperties(irmaster,irquery);
+			irquerylist.add(irquery);
+		}
+		return irquerylist;
 	}
 	//計算手續費
 	public BigDecimal calculateFee(BigDecimal irAmt) {

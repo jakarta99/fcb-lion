@@ -13,4 +13,6 @@ public interface IRMasterRepository extends JpaRepository <IRMaster,Long> {
 	List<IRMaster> findByBeAdvisingBranchAndPrintAdvisingMk(String beAdvisingBranch,String printAdvMk);
 	//以外匯編號查詢匯入主檔
 	IRMaster findByIrNo(String irNo);
+	//以外匯編號模糊查詢匯入主檔
+	List<IRMaster> findByIrNoLike(String irNo);
 }

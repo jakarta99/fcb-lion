@@ -19,12 +19,14 @@ import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.commons.mock.CommonController;
+import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.service.CommonCheckService;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
+import tw.com.fcb.lion.core.ir.web.dto.IRQuery;
 import tw.com.fcb.lion.core.sharedkernel.api.MainFrameClient;
 
 @RestController
@@ -137,6 +139,23 @@ public class IRController {
 	@Operation(description = "更新印製通知書記號", summary="更新列印通知書狀態")
 	public void printAdvise(String branch) {
 		irPaymentService.updatePrintAdviceMark(branch);
+	}
+	
+	@GetMapping("/query/list")
+	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔多筆查詢")
+	public Response<List<IRQuery>> queryIRmasterDataList(String irNo) {
+		Response<List<IRQuery>> response = new Response<List<IRQuery>>();
+		
+		try {
+			List<IRQuery> irquerylist = irPaymentService.queryIRmasterDataLikeByirNo(irNo);
+			response.showMessage(irquerylist, "0000", "交易成功"); 
+        } 
+		catch (Exception e) {
+            response.showMessage(null, "9999", "交易失敗，請重新輸入");
+        }
+		
+		return response;
+		
 	}
 	
 	@GetMapping("/query")
