@@ -68,10 +68,6 @@ public class IRSwiftMessage {
 	@Column(name = "ACCOUNT_INSTITUTION",length = 11)
 	String accountInstitution;
 
-//	設帳行帳號
-	@Column(name = "ACCOUNT_INSTITUTION_AC",length = 35)
-	String accountInstitutionAccount;
-
 //	設帳行一
 	@Column(name = "ACCOUNT_INSTITUTION_INFO_1",length = 35)
 	String accountInstitutionInfo1;
