@@ -3,10 +3,6 @@ package tw.com.fcb.lion.core.ir.web.cmd;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
