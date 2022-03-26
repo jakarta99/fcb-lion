@@ -26,5 +26,8 @@ public interface MainFrameClient {
 	@GetMapping("/common/RemittanceTransfer")
 	Boolean isRemittanceTransfer(@RequestParam("accountInstitution") String accountInstitution);
 	
+	@Operation(summary = "判斷自動解款案件")
+	@GetMapping("/common/AutoSettleCase")
+	Boolean isAutoSettleCase(@RequestParam("beneficiaryAccount") String beneficiaryAccount);
 
 }

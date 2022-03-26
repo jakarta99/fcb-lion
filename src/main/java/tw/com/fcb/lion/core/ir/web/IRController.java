@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -92,22 +93,38 @@ public class IRController {
 		IR ir = new IR();
 		
 		try {
+			//Validate 檢核SwiftMessage
 			Boolean isBeAdvisingBranch = mainFrameClient.isBeAdvisingBranch(irSaveCmd.getBeneficiaryAccount());
 			Boolean isRemittanceTransfer = mainFrameClient.isRemittanceTransfer(irSaveCmd.getAccountInstitution());
 			String depositBank = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
 			String bankNameAndAddress = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
+			Boolean isAutoSettleCase = mainFrameClient.isAutoSettleCase(irSaveCmd.getBeneficiaryAccount());
 			
-			if(isBeAdvisingBranch == true && isRemittanceTransfer == false) {
+			if (isBeAdvisingBranch == true && isRemittanceTransfer == false) {
 				commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
 				commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
 				var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
-				
+
 				irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
 				irSaveCmd.setDepositBank(depositBank);
 				irSaveCmd.setRemitBankInfo1(bankNameAndAddress);
-				
+
 				ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
-				response.showMessage(ir, "0000", "新增成功"); 	
+				//自動解款
+				if(isAutoSettleCase == true) {
+					//自動印製通知書
+					irPaymentService.updatePrintAdviceMark(ir.getBeAdvisingBranch());
+					ir= irPaymentService.queryIRmasterData(ir.getIrNo());
+					BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
+					ir.setCommCharge(irFee);
+					//自動解款
+					BeanUtils.copyProperties(ir,irSaveCmd);
+					irPaymentService.settle(irSaveCmd);
+				}
+				
+				response.showMessage(ir, "0000", "新增成功");				
+			}else {
+				response.showMessage(ir, "9998", "驗證電文失敗"); 
 			}
 		} 
 		catch (Exception e) {

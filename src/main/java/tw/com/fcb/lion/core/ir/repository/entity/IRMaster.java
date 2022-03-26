@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import tw.com.fcb.lion.core.ir.ChargeType;
 

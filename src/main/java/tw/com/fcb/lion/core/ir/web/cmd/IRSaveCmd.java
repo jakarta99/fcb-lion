@@ -34,7 +34,7 @@ public class IRSaveCmd {
 	@Schema(description = "處理單位")
 	String processBranch;
 	
-	@Schema(description = "是否為本行客戶")
+	@Schema(description = "是否本行客戶(空白, Y, N)")
 	String ourCustomer;
 	
 	@Schema(description = "客戶統編")
@@ -55,7 +55,7 @@ public class IRSaveCmd {
 	@Schema(description = "手續費支出(入帳差額為負數時)")
 	BigDecimal commCharge;
 
-	@Schema(description = "折美匯率")
+	@Schema(description = "折合美金匯率")
 	BigDecimal toUsFxRate;
 
 	@Schema(description = "匯款行匯出編號(匯票號碼)")
@@ -88,7 +88,7 @@ public class IRSaveCmd {
 	@Schema(description = "受款人資訊四")
 	String beneficiaryInfo4;
 
-	@Schema(description = "費用明細")
+	@Schema(description = "費用明細(SHR,BEN,OUR)")
 	ChargeType chargeType;
 
 	@Schema(description = "匯款行SWIFT-TID")
@@ -121,7 +121,7 @@ public class IRSaveCmd {
 	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate printAdvisingDate;
 
-	@Schema(description = "處理日")
+	@Schema(description = "付款日")
 	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate processDate;
 

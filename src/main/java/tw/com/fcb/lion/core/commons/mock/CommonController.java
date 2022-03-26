@@ -35,4 +35,14 @@ public class CommonController {
 		return false;
 	}
 	
+	@Operation(summary = "判斷自動解款案件")
+	@GetMapping("/AutoSettleCase")
+	public Boolean isAutoSettleCase(@RequestParam("beneficiaryAccount") String beneficiaryAccount) {
+		if(beneficiaryAccount.equals("09340123456")) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
 }

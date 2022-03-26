@@ -18,7 +18,7 @@ public class IR {
     @Schema(description = "匯款性質")
     String natureOfRemittance;
 
-    @Schema(description = "匯款細分類")
+    @Schema(description = "匯款性質細項分類")
     String natureOfRemittanceSubCode;
 
     @Schema(description = "付款狀態")
@@ -36,7 +36,7 @@ public class IR {
     @Schema(description = "是否本行客戶(空白, Y, N)")
     String ourCustomer;
 
-    @Schema(description = "客戶 ID")
+    @Schema(description = "客戶統編")
     String customerId;
 
     @Schema(description = "幣別")
@@ -51,40 +51,40 @@ public class IR {
     @Schema(description = "即期結匯金額")
     BigDecimal spotSettledFx;
 
-    @Schema(description = "手續費支出")
+    @Schema(description = "手續費支出(入帳差額為負數時)")
     BigDecimal commCharge;
 
     @Schema(description = "折合美金匯率")
     BigDecimal toUsFxRate;
 
-    @Schema(description = "匯款行匯出編號(匯票NO)")
+    @Schema(description = "匯款行匯出編號(匯票號碼)")
     String senderReference;
 
-    @Schema(description = "匯款人一")
+    @Schema(description = "匯款人資訊一")
     String remitterInfo1;
 
-    @Schema(description = "匯款人二")
+    @Schema(description = "匯款人資訊二")
     String remitterInfo2;
 
-    @Schema(description = "匯款人三")
+    @Schema(description = "匯款人資訊三")
     String remitterInfo3;
 
-    @Schema(description = "匯款人四")
+    @Schema(description = "匯款人資訊四")
     String remitterInfo4;
 
     @Schema(description = "受款人帳號")
     String beneficiaryAccount;
 
-    @Schema(description = "受款人一")
+    @Schema(description = "受款人資訊一")
     String beneficiaryInfo1;
 
-    @Schema(description = "受款人二")
+    @Schema(description = "受款人資訊二")
     String beneficiaryInfo2;
 
-    @Schema(description = "受款人三")
+    @Schema(description = "受款人資訊三")
     String beneficiaryInfo3;
 
-    @Schema(description = "受款人四")
+    @Schema(description = "受款人資訊四")
     String beneficiaryInfo4;
 
     @Schema(description = "費用明細(SHR,BEN,OUR)")
@@ -93,19 +93,19 @@ public class IR {
     @Schema(description = "匯款行 SWIFT_TID")
     String remitBank;
 
-    @Schema(description = "匯款行名稱一")
+    @Schema(description = "匯款行資訊一")
     String remitBankInfo1;
 
-    @Schema(description = "匯款行名稱二")
+    @Schema(description = "匯款行資訊二")
     String remitBankInfo2;
 
-    @Schema(description = "匯款行名稱一")
+    @Schema(description = "匯款行資訊三")
     String remitBankInfo3;
 
-    @Schema(description = "匯款行名稱二")
+    @Schema(description = "匯款行資訊四")
     String remitBankInfo4;
 
-    @Schema(description = "存匯行 SWIFT_TID")
+    @Schema(description = "存匯行SWIFT_TID")
     String depositBank;
 
     @Schema(description = "有效日")
@@ -127,7 +127,7 @@ public class IR {
     @Schema(description = "客戶電話號碼")
     String customerTelNo;
 
-    @Schema(description = "SW59_AC受款人帳號")
+    @Schema(description = "受款人帳號(SW59-AC)")
     String accountNo;
 
     @Schema(description = "匯率")
@@ -148,4 +148,5 @@ public class IR {
 
     @Schema(description = "分行注意事項三")
     String notice3;
+    
 }
