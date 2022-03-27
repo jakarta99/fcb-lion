@@ -25,103 +25,107 @@ public class IRSwiftMessage {
 	Long id;
 
 //	匯入 swift 序號
-	@Column(name = "SEQ_NO",length = 6,nullable = false)
+	@Column(name = "SEQ_NO")
 	String seqNo;
 
 //	處理狀態
-	@Column(name = "STATS",length = 1,nullable = true)
+	@Column(name = "STATS")
 	String stats;
 
 //	處理時間
-	@Column(name = "TX_TIME",length = 8)
+	@Column(name = "TX_TIME")
 	String txTime;
 
 //	幣別
-	@Column(name = "CURRENCY",length = 3)
+	@Column(name = "CURRENCY")
 	String currency;
 	
-//	匯入金額 - 長度待確認NUMERIC(15,2)
-	@Column(name = "IR_AMT",length = 17)
+//	匯入金額
+	@Column(name = "IR_AMT")
 	BigDecimal irAmt;
 
 //	匯款行匯出編號(匯票NO) 20欄位
-	@Column(name = "REFERENCE_NO",length = 16)
+	@Column(name = "REFERENCE_NO")
 	String referenceNo;
 
-//	匯款人一
-	@Column(name = "SENDER_INFO_1",length = 35)
-	String senderInfo1;
-
-//	匯款人二
-	@Column(name = "SENDER_INFO_2",length = 35)
-	String senderInfo2;
-
-//	匯款人三
-	@Column(name = "SENDER_INFO_3",length = 35)
-	String senderInfo3;
-
-//	匯款人四
-	@Column(name = "SENDER_INFO_4",length = 35)
-	String senderInfo4;
-
-//	設帳行swift code
-	@Column(name = "ACCOUNT_INSTITUTION",length = 11)
-	String accountInstitution;
+//	原始匯款行 SWIFT-TID
+	@Column(name = "ORIGIN_REMIT_SWIFT_TID")
+	String originRemitSwiftCode;
+	
+//	原始匯款行一
+	@Column(name = "ORIGIN_REMIT_BANK_INFO_1")
+	String originRemitBankInfo1;
+	
+//	原始匯款行二
+	@Column(name = "ORIGIN_REMIT_BANK_INFO_2")
+	String originRemitBankInfo2;
+	
+//	原始匯款行三
+	@Column(name = "ORIGIN_REMIT_BANK_INFO_3")
+	String originRemitBankInfo3;
+	
+//	原始匯款行四
+	@Column(name = "ORIGIN_REMIT_BANK_INFO_4")
+	String originRemitBankInfo4;
+	
+//	受款人設帳銀行 SWIFT-TID
+	@Column(name = "ACCOUNT_SWIFT_TID")
+	String accountSwiftCode;
 
 //	設帳行一
-	@Column(name = "ACCOUNT_INSTITUTION_INFO_1",length = 35)
-	String accountInstitutionInfo1;
+	@Column(name = "ACCOUNT_BANK_INFO_1")
+	String accountBankInfo1;
 
 //	設帳行二
-	@Column(name = "ACCOUNT_INSTITUTION_INFO_2",length = 35)
-	String accountInstitutionInfo2;
+	@Column(name = "ACCOUNT_BANK_INFO_2")
+	String accountBankInfo2;
 
 //	設帳行三
-	@Column(name = "ACCOUNT_INSTITUTION_INFO_3",length = 35)
-	String accountInstitutionInfo3;
+	@Column(name = "ACCOUNT_BANK_INFO_3")
+	String accountBankInfo3;
 
 //	設帳行四
-	@Column(name = "ACCOUNT_INSTITUTION_INFO_4",length = 35)
-	String accountInstitutionInfo4;
+	@Column(name = "ACCOUNT_BANK_INFO_4")
+	String accountBankInfo4;
 
-//	受款人往來銀行帳號
-	@Column(name = "BENEFICIARY_AC",length = 35)
+//	受款人帳號
+	@Column(name = "BENEFICIARY_AC")
 	String beneficiaryAccount;
 
-//	受款人往來銀行一
-	@Column(name = "BENEFICIARY_INFO_1",length = 35)
+//	受款人一
+	@Column(name = "BENEFICIARY_INFO_1")
 	String beneficiaryInfo1;
 
-//	受款人往來銀行二
-	@Column(name = "BENEFICIARY_INFO_2",length = 35)
+//	受款人二
+	@Column(name = "BENEFICIARY_INFO_2")
 	String beneficiaryInfo2;
 
-//	受款人往來銀行三
-	@Column(name = "BENEFICIARY_INFO_3",length = 35)
+//	受款人三
+	@Column(name = "BENEFICIARY_INFO_3")
 	String beneficiaryInfo3;
 
-//	受款人往來銀行四
-	@Column(name = "BENEFICIARY_INFO_4",length = 35)
+//	受款人四
+	@Column(name = "BENEFICIARY_INFO_4")
 	String beneficiaryInfo4;
 
-//	受款人一
-	@Column(name = "REMITTER_INFO_1",length = 35)
+//	匯款人一
+	@Column(name = "REMITTER_INFO_1")
 	String remitterInfo1;
 
-//	受款人二
-	@Column(name = "REMITTER_INFO_2",length = 35)
+//	匯款人二
+	@Column(name = "REMITTER_INFO_2")
 	String remitterInfo2;
 
-//	受款人三
-	@Column(name = "REMITTER_INFO_3",length = 35)
+//	匯款人三
+	@Column(name = "REMITTER_INFO_3")
 	String remitterInfo3;
 
-//	受款人四
-	@Column(name = "REMITTER_INFO_4",length = 35)
+//	匯款人四
+	@Column(name = "REMITTER_INFO_4")
 	String remitterInfo4;
 
-//	費用明細
-	@Column(name = "CHARGE_TYPE",length = 3)
+//	手續費負擔類型
+	@Column(name = "CHARGE_TYPE")
 	String chargeType;
 
 //	中間行費用_幣別1
@@ -149,48 +153,48 @@ public class IRSwiftMessage {
 	BigDecimal senderCharge3;
 
 //	分行注意事項一
-	@Column(name = "NOTICE_1",length = 2)
+	@Column(name = "NOTICE_1")
 	String notice1;
 
 //	分行注意事項二
-	@Column(name = "NOTICE_2",length = 2)
+	@Column(name = "NOTICE_2")
 	String notice2;
 
 //	分行注意事項三
-	@Column(name = "NOTICE_3",length = 2)
+	@Column(name = "NOTICE_3")
 	String notice3;
 
-//	發電行 swift 代號
-	@Column(name = "SENDER_SWIFT_CODE",length = 11)
-	String senderSwiftCode;
+//	匯款行 SWIFT-TID
+	@Column(name = "REMIT_SWIFT_TID")
+	String remitSwiftCode;
 
 //	匯款行一
-	@Column(name = "REMIT_BANK_INFO1",length = 35)
+	@Column(name = "REMIT_BANK_INFO_1")
 	String remitBankInfo1;
 
 //	匯款行二
-	@Column(name = "REMIT_BANK_INFO2",length = 35)
+	@Column(name = "REMIT_BANK_INFO_2")
 	String remitBankInfo2;
 
 //	匯款行三
-	@Column(name = "REMIT_BANK_INFO3",length = 1)
+	@Column(name = "REMIT_BANK_INFO_3")
 	String remitBankInfo3;
 
 //	匯款行四
-	@Column(name = "REMIT_BANK_INFO4",length = 3)
+	@Column(name = "REMIT_BANK_INFO_4")
 	String remitBankInfo4;
 
 //	存匯行 SWIFT-TID
-	@Column(name = "DEPOSIT_BANK",length = 11)
-	String depositBank;
+	@Column(name = "DEPOSIT_SWIFT_TID")
+	String depositSwiftCode;
 
 //	有效日
-	@Column(name = "VALUE_DATE",length = 8)
+	@Column(name = "VALUE_DATE")
 	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate valueDate;
 
 //	收件日做自動/單筆查詢印表時之日期
-	@Column(name = "RECEIVE_DATE",length = 8)
+	@Column(name = "RECEIVE_DATE")
 	@DateTimeFormat(pattern = "yyyyMMdd")
 	LocalDate receiveDate;
 

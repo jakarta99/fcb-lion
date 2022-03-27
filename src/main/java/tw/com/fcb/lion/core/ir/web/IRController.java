@@ -53,15 +53,14 @@ public class IRController {
 	
 	@PostMapping("/swift")
 	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="儲存 swift")
-	public void receiveSwift(SwiftMessageSaveCmd message) {
+	public Response<List<SwiftMessageSaveCmd>> receiveSwift() {
 
 		Response<List<SwiftMessageSaveCmd>> response = new Response<List<SwiftMessageSaveCmd>>();
 		List<SwiftMessageSaveCmd> msg = null;
 		try{
 //			List<SwiftMessageSaveCmd> msg = irSwiftMessageCheckservice.loadFromFile();
 			msg = irSwiftMessageCheckservice.loadFromFile();
-			System.out.println("test" + msg);
-			System.out.println("*****read******");
+			
 //			將上述檔案內容寫入IR_SWIFT_MESSAGE
             for(SwiftMessageSaveCmd saveCmd : msg) {
 				irSwiftMessageCheckservice.insert(saveCmd);
@@ -72,6 +71,7 @@ public class IRController {
 		catch (IOException e) {
 			response.showMessage(msg, "9999", e.getMessage()); 
 		}
+		return response;
 	}
 	
 	@GetMapping("/swift/{id}")

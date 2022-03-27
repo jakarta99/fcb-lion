@@ -15,7 +15,7 @@ public class SwiftMessageSaveCmd {
 
 	Long id;
 	
-	@Schema(description = "swift 序號" )
+	@Schema(description = "匯入 swift 序號" )
 	String seqNo;
 	
 	@Schema(description = "處理狀態" )
@@ -33,61 +33,61 @@ public class SwiftMessageSaveCmd {
 	@Schema(description = "匯款行匯出編號(匯票NO) 20欄位" )
 	String referenceNo;
 	
-	@Schema(description = "匯款人一" )
-	String senderInfo1;
+	@Schema(description = "原始匯款行 SWIFT-TID" )
+	String originRemitSwiftCode;
 	
-	@Schema(description = "匯款人二" )
-	String senderInfo2;
+	@Schema(description = "原始匯款行一" )
+	String originRemitBankInfo1;
 	
-	@Schema(description = "匯款人三" )
-	String senderInfo3;
+	@Schema(description = "原始匯款行二" )
+	String originRemitBankInfo2;
 	
-	@Schema(description = "匯款人四" )
-	String senderInfo4;
+	@Schema(description = "原始匯款行三" )
+	String originRemitBankInfo3;
 	
-	@Schema(description = "設帳行swift code" )
-	String accountInstitution;
+	@Schema(description = "原始匯款行四" )
+	String originRemitBankInfo4;
 	
-	@Schema(description = "設帳行帳號" )
-	String accountInstitutionAccount;
+	@Schema(description = "受款人設帳銀行 SWIFT-TID" )
+	String accountSwiftCode;
 	
 	@Schema(description = "設帳行一" )
-	String accountInstitutionInfo1;
+	String accountBankInfo1;
 	
 	@Schema(description = "設帳行二" )
-	String accountInstitutionInfo2;
+	String accountBankInfo2;
 	
 	@Schema(description = "設帳行三" )
-	String accountInstitutionInfo3;
+	String accountBankInfo3;
 	
 	@Schema(description = "設帳行四" )
-	String accountInstitutionInfo4;
+	String accountBankInfo4;
 		
-	@Schema(description = "受款人往來銀行帳號" )
+	@Schema(description = "受款人帳號" )
 	String beneficiaryAccount;
 	
-	@Schema(description = "受款人往來銀行一" )
+	@Schema(description = "受款人一" )
 	String beneficiaryInfo1;
 	
-	@Schema(description = "受款人往來銀行二" )
+	@Schema(description = "受款人二" )
 	String beneficiaryInfo2;
 	
-	@Schema(description = "受款人往來銀行三" )
+	@Schema(description = "受款人三" )
 	String beneficiaryInfo3;
 	
-	@Schema(description = "受款人往來銀行四" )
+	@Schema(description = "受款人四" )
 	String beneficiaryInfo4;
 	
-	@Schema(description = "受款人一" )
+	@Schema(description = "匯款人一" )
 	String remitterInfo1;
 
-	@Schema(description = "受款人二" )
+	@Schema(description = "匯款人二" )
 	String remitterInfo2;
 
-	@Schema(description = "受款人三" )
+	@Schema(description = "匯款人三" )
 	String remitterInfo3;
 
-	@Schema(description = "受款人四" )
+	@Schema(description = "匯款人四" )
 	String remitterInfo4;
 	
 	@Schema(description = "手續費負擔類型", example = "SHA, BEN, OUR")
@@ -120,8 +120,8 @@ public class SwiftMessageSaveCmd {
 	@Schema(description = "分行注意事項三" )
 	String notice3;
 	
-	@Schema(description = "發電行 swift 代號" )
-	String senderSwiftCode;
+	@Schema(description = "匯款行 SWIFT-TID" )
+	String remitSwiftCode;
 
 	@Schema(description = "匯款行一" )
 	String remitBankInfo1;
@@ -136,7 +136,7 @@ public class SwiftMessageSaveCmd {
 	String remitBankInfo4;
 
 	@Schema(description = "存匯行 SWIFT-TID" )
-	String depositBank;
+	String depositSwiftCode;
 	
 	@Schema(description = "有效日" )
 	LocalDate valueDate;
