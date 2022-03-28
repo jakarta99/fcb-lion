@@ -115,4 +115,10 @@ public class IRSwiftMessageCheckService {
 		return ir;
 	}
 	
+	//傳入ID查詢內容
+	public IRSwiftMessage getBySwiftMessageId(Long id) {
+		IRSwiftMessage irSwiftMessage = repository.findById(id).orElseThrow( () -> new RuntimeException("errID") );
+
+		return irSwiftMessage;
+	}
 }

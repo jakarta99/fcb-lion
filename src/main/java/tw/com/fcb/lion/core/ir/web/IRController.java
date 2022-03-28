@@ -96,25 +96,17 @@ public class IRController {
 			//Validate 檢核SwiftMessage
 			Boolean isBeAdvisingBranch = mainFrameClient.isBeAdvisingBranch(irSaveCmd.getBeneficiaryAccount());
 			Boolean isRemittanceTransfer = mainFrameClient.isRemittanceTransfer(irSaveCmd.getAccountInstitution());
-			String depositBank = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
-			String bankNameAndAddress = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
 			Boolean isAutoSettleCase = mainFrameClient.isAutoSettleCase(irSaveCmd.getBeneficiaryAccount());
 			
 			if (isBeAdvisingBranch == true && isRemittanceTransfer == false) {
-				commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
-				commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
-				var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
-
-				irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
-				irSaveCmd.setDepositBank(depositBank);
-				irSaveCmd.setRemitBankInfo1(bankNameAndAddress);
-
+				swiftMessageCheckSuccess(irSaveCmd);		
 				ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
+				
 				//自動解款
 				if(isAutoSettleCase == true) {
 					//自動印製通知書
 					irPaymentService.updatePrintAdviceMark(ir.getBeAdvisingBranch());
-					ir= irPaymentService.queryIRmasterData(ir.getIrNo());
+					ir = irPaymentService.queryIRmasterData(ir.getIrNo());
 					BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
 					ir.setCommCharge(irFee);
 					//自動解款
@@ -123,7 +115,8 @@ public class IRController {
 				}
 				
 				response.showMessage(ir, "0000", "新增成功");				
-			}else {
+			}
+			else {
 				response.showMessage(ir, "9998", "驗證電文失敗"); 
 			}
 		} 
@@ -132,6 +125,24 @@ public class IRController {
 		}
 		
 		return response;
+	}
+	
+	public void swiftMessageCheckSuccess(IRSaveCmd irSaveCmd) throws Exception {
+		String depositBank = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
+		String bankNameAndAddress = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
+		
+		commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
+		commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
+		var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
+		
+		irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
+		irSaveCmd.setDepositBank(depositBank);
+		irSaveCmd.setRemitBankInfo1(bankNameAndAddress);
+		irSaveCmd.setPaidStats("2");
+	}
+	
+	public void swiftMessageCheckFail(SwiftMessageSaveCmd saveCmd) throws Exception {
+		saveCmd.setStats("3");
 	}
 
 	@GetMapping("/{id}")
