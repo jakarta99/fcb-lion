@@ -65,8 +65,7 @@ public class IRController {
             for(SwiftMessageSaveCmd saveCmd : msg) {
 				irSwiftMessageCheckservice.insert(saveCmd);
             }
-
-			response.showMessage(msg, "0000", "交易成功"); 
+			response.showMessage(msg, "0000", "交易成功，寫入" + msg.size() + "筆資料"); 
 		} 
 		catch (IOException e) {
 			response.showMessage(msg, "9999", e.getMessage()); 
