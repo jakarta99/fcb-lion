@@ -104,13 +104,13 @@ public class IRController {
 			if (isBeAdvisingBranch == true && isRemittanceTransfer == false) {
 				swiftMessageCheckSuccess(swiftMessage, irSaveCmd);
 				
-				irSwiftMessageCheckservice.updateSwiftMessageStatus(seqNo, "2");
-				ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
-				
 //				自動解款
 				if(isAutoSettleCase == true) {
-					swiftMessageAutoSettle(ir, irSaveCmd);
+					swiftMessageAutoSettle(irSaveCmd);
 				}
+				
+				irSwiftMessageCheckservice.updateSwiftMessageStatus(seqNo, "2");
+				ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
 				
 				response.showMessage(ir, "0000", "新增成功");				
 			}
@@ -136,6 +136,7 @@ public class IRController {
 		irSaveCmd.setAccountInstitution("string");
 		irSaveCmd.setBeneficiaryAccount(swiftMessage.getBeneficiaryAccount());
 		irSaveCmd.setSenderSwiftCode(swiftMessage.getRemitSwiftCode());
+//		irSaveCmd.setIrNo("S1NHA00010");
 		
 		String depositBank = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
 		String bankNameAndAddress = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
@@ -150,16 +151,17 @@ public class IRController {
 		irSaveCmd.setStatus("2");
 	}
 	
-	public void swiftMessageAutoSettle(IR ir, IRSaveCmd irSaveCmd) {
+	public void swiftMessageAutoSettle(IRSaveCmd irSaveCmd) {
 		//自動印製通知書
-		irPaymentService.updatePrintAdviceMark(ir.getBeAdvisingBranch());
-		ir = irPaymentService.queryIRmasterData(ir.getIrNo());
-		BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
-		ir.setCommCharge(irFee);
+		irPaymentService.updatePrintAdviceMark(irSaveCmd.getBeAdvisingBranch());
 		
-		//自動解款
-		BeanUtils.copyProperties(ir, irSaveCmd);
-		irPaymentService.settle(irSaveCmd);
+		//計算手續費
+		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt());
+		irSaveCmd.setCommCharge(irFee);
+		
+		//付款狀態
+		//irPaymentService.settle(irSaveCmd);
+		irSaveCmd.setPaidStats("2");
 	}
 	
 	@GetMapping("/{id}")
