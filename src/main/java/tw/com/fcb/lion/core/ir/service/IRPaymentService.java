@@ -41,6 +41,7 @@ public class IRPaymentService {
 		BeanUtils.copyProperties(irmaster,ir);
 		return ir;
 	}
+	
 	//模糊查詢匯入主檔資料
 	public List<IRQuery> queryIRmasterDataLikeByirNo(String irNo) {
 		List<IRMaster> irmasterlist = IRMasterRepository.findByIrNoLike(irNo);
@@ -54,6 +55,7 @@ public class IRPaymentService {
 		}
 		return irquerylist;
 	}
+	
 	//計算手續費
 	public BigDecimal calculateFee(BigDecimal irAmt) {
 
@@ -61,13 +63,15 @@ public class IRPaymentService {
 		BigDecimal standardCharge = irAmt.multiply(feeRate);
 		Double standardChargeDouble = standardCharge.doubleValue();
 		//暫訂最低收美金7元 (台幣200)，最高收美金28元(台幣800)
-		if (standardChargeDouble < 7){
+		if (standardChargeDouble < 7) {
 			standardCharge = BigDecimal.valueOf(7);
-		} else { if (standardChargeDouble > 28)
+		} 
+		else if (standardChargeDouble > 28) {
 			standardCharge = BigDecimal.valueOf(28);
 		}
 		return standardCharge;
 	}
+	
 	//傳入外匯編號，執行匯入解款
 	public void settle(IRSaveCmd ir) {
 		IRMaster irmaster = IRMasterRepository.findByIrNo(ir.getIrNo());

@@ -155,4 +155,7 @@ public class IRSaveCmd {
 	
 	@Schema(description = "發電行 swift 代號" )
 	String senderSwiftCode;
+	
+	@Schema(description = "SwiftMessage檢核狀態")
+	String status;
 }

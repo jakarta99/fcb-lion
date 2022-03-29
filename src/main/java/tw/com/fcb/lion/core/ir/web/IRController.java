@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.commons.mock.CommonController;
+import tw.com.fcb.lion.core.ir.repository.entity.IRSwiftMessage;
 import tw.com.fcb.lion.core.ir.service.CommonCheckService;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
@@ -83,39 +84,38 @@ public class IRController {
 	public Integer getCount(String branch,String printAdvMk) {
 		return irSwiftMessageCheckservice.getIrCaseCount(branch, printAdvMk);
 	}
-
+	
 //	KAI - 驗證通過的電文，寫入匯入主檔(IRMaster)
 	@PostMapping
 	@Operation(description = "驗證通過的電文，寫入匯入主檔(IRMaster)", summary="寫入匯入主檔")
-	public Response<IR> insert(IRSaveCmd irSaveCmd) {
+	public Response<IR> insert(String seqNo) {
 		Response<IR> response = new Response<IR>();
+		IRSaveCmd irSaveCmd = new IRSaveCmd();
 		IR ir = new IR();
 		
 		try {
-			//Validate 檢核SwiftMessage
-			Boolean isBeAdvisingBranch = mainFrameClient.isBeAdvisingBranch(irSaveCmd.getBeneficiaryAccount());
-			Boolean isRemittanceTransfer = mainFrameClient.isRemittanceTransfer(irSaveCmd.getAccountInstitution());
-			Boolean isAutoSettleCase = mainFrameClient.isAutoSettleCase(irSaveCmd.getBeneficiaryAccount());
+			IRSwiftMessage swiftMessage = irSwiftMessageCheckservice.getBySwiftMessageSeqNo(seqNo);
 			
+//			Validate 檢核 SwiftMessage
+			Boolean isBeAdvisingBranch = mainFrameClient.isBeAdvisingBranch(swiftMessage.getBeneficiaryAccount());
+			Boolean isRemittanceTransfer = mainFrameClient.isRemittanceTransfer(swiftMessage.getRemitSwiftCode());
+			Boolean isAutoSettleCase = mainFrameClient.isAutoSettleCase(swiftMessage.getBeneficiaryAccount());
+
 			if (isBeAdvisingBranch == true && isRemittanceTransfer == false) {
-				swiftMessageCheckSuccess(irSaveCmd);		
+				swiftMessageCheckSuccess(swiftMessage, irSaveCmd);
+				
+				irSwiftMessageCheckservice.updateSwiftMessageStatus(seqNo, "2");
 				ir = irSwiftMessageCheckservice.insertIrMaster(irSaveCmd);
 				
-				//自動解款
+//				自動解款
 				if(isAutoSettleCase == true) {
-					//自動印製通知書
-					irPaymentService.updatePrintAdviceMark(ir.getBeAdvisingBranch());
-					ir = irPaymentService.queryIRmasterData(ir.getIrNo());
-					BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
-					ir.setCommCharge(irFee);
-					//自動解款
-					BeanUtils.copyProperties(ir,irSaveCmd);
-					irPaymentService.settle(irSaveCmd);
+					swiftMessageAutoSettle(ir, irSaveCmd);
 				}
 				
 				response.showMessage(ir, "0000", "新增成功");				
 			}
 			else {
+				irSwiftMessageCheckservice.updateSwiftMessageStatus(seqNo, "3");
 				response.showMessage(ir, "9998", "驗證電文失敗"); 
 			}
 		} 
@@ -126,7 +126,17 @@ public class IRController {
 		return response;
 	}
 	
-	public void swiftMessageCheckSuccess(IRSaveCmd irSaveCmd) throws Exception {
+	public void swiftMessageCheckSuccess(IRSwiftMessage swiftMessage, IRSaveCmd irSaveCmd) throws Exception {
+		BeanUtils.copyProperties(swiftMessage, irSaveCmd);
+		
+//		test
+		irSaveCmd.setBeAdvisingBranch("094");
+		irSaveCmd.setCustomerId("05052322");
+		irSaveCmd.setCurrency("USD");
+		irSaveCmd.setAccountInstitution("string");
+		irSaveCmd.setBeneficiaryAccount(swiftMessage.getBeneficiaryAccount());
+		irSaveCmd.setSenderSwiftCode(swiftMessage.getRemitSwiftCode());
+		
 		String depositBank = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
 		String bankNameAndAddress = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
 		
@@ -137,13 +147,21 @@ public class IRController {
 		irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
 		irSaveCmd.setDepositBank(depositBank);
 		irSaveCmd.setRemitBankInfo1(bankNameAndAddress);
-		irSaveCmd.setPaidStats("2");
+		irSaveCmd.setStatus("2");
 	}
 	
-	public void swiftMessageCheckFail(SwiftMessageSaveCmd saveCmd) throws Exception {
-		saveCmd.setStats("3");
+	public void swiftMessageAutoSettle(IR ir, IRSaveCmd irSaveCmd) {
+		//自動印製通知書
+		irPaymentService.updatePrintAdviceMark(ir.getBeAdvisingBranch());
+		ir = irPaymentService.queryIRmasterData(ir.getIrNo());
+		BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
+		ir.setCommCharge(irFee);
+		
+		//自動解款
+		BeanUtils.copyProperties(ir, irSaveCmd);
+		irPaymentService.settle(irSaveCmd);
 	}
-
+	
 	@GetMapping("/{id}")
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
 	public Response<IR> getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {

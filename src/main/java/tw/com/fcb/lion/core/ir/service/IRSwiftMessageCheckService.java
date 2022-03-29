@@ -115,10 +115,17 @@ public class IRSwiftMessageCheckService {
 		return ir;
 	}
 	
-	//傳入ID查詢內容
-	public IRSwiftMessage getBySwiftMessageId(Long id) {
-		IRSwiftMessage irSwiftMessage = repository.findById(id).orElseThrow( () -> new RuntimeException("errID") );
+	//傳入SEQ_NO (SWIFT序號) 查詢內容
+	public IRSwiftMessage getBySwiftMessageSeqNo(String seqNo) {
+		IRSwiftMessage irSwiftMessage = repository.findBySeqNo(seqNo).orElseThrow( () -> new RuntimeException("SWIFT序號不存在") );
 
 		return irSwiftMessage;
+	}
+	
+	//修改SwiftMessage狀態(2:成功、3：失敗)
+	public void updateSwiftMessageStatus(String seqNo, String status) {
+		IRSwiftMessage swiftMessage = getBySwiftMessageSeqNo(seqNo);
+		swiftMessage.setStats(status);
+		repository.save(swiftMessage);		
 	}
 }
