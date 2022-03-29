@@ -57,22 +57,17 @@ public class IRSwiftMessageCheckService {
 			// split 切割
 			String[] data = lineData.split(",");
 
-			// 設值
-			SwiftMessageSaveCmd messageSaveCmd = new SwiftMessageSaveCmd();
+			SwiftMessageSaveCmd messageSaveCmd = null;
 			if (idx == 1){
 				continue;
 			}else{
-//				電文內容
-				messageSaveCmd.setSeqNo(data[0]);
-				messageSaveCmd.setCurrency(data[1]);
-				messageSaveCmd.setIrAmt(new BigDecimal(data[2]));;
-				messageSaveCmd.setValueDate(new DateConverter().convert(data[3]));
-				messageSaveCmd.setChargeType(ChargeType.SHA);
-				
-//				初始值
-				messageSaveCmd.setStats("0");
+//				電文內容 - 設值
 				String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-				messageSaveCmd.setTxTime(time);
+				messageSaveCmd = messageSaveCmd.builder().seqNo(data[0]).currency(data[1])
+						        .irAmt(new BigDecimal(data[2])).valueDate(new DateConverter().convert(data[4]))
+						        .beneficiaryAccount(data[5]).chargeType(ChargeType.SHA).remitSwiftCode(data[34])
+						        .stats("1").txTime(time).build();
+				
 			}
 
 			// 放到 List 之中

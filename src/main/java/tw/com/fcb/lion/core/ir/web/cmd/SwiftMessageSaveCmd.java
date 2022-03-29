@@ -6,10 +6,12 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import tw.com.fcb.lion.core.ir.ChargeType;
 
 @Data
+@Builder
 @Schema(description = "匯入 SWIFT 資料")
 public class SwiftMessageSaveCmd {
 
