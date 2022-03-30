@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>測試案例</title>
+    <style>
+		.success {background-color: #04AA6D;} 
+		.fail {background-color: #f44336;} 
+	</style>
+</head>
+<body>
+	<div align="center">
+		<h1>測試結果</h1>
+		<a href="/ir">回主畫面</a>
+	</div>
+	
+	<span th:if="${#strings.contains(response.status, 'SUCCESS')}">
+	<label class="label success" th:text="${response.status}"></label><br/>
+	<label th:text="${response}"></label>
+	</span> 
+	
+	<span th:if="${#strings.contains(response.status, 'ERROR')}">
+	<label class="label fail" th:text="${response.status}"></label><br/>
+	<label th:text="${response}"></label>
+	</span> 
+	
+</body>
+</html>
