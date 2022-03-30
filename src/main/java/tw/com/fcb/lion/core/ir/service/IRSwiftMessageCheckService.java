@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.DateConverter;
 import tw.com.fcb.lion.core.ir.ChargeType;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
@@ -27,9 +29,11 @@ import tw.com.fcb.lion.core.ir.repository.entity.IRSwiftMessage;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
+import tw.com.fcb.lion.core.sharedkernel.api.MainFrameClient;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class IRSwiftMessageCheckService {
 
 	@Autowired
@@ -37,6 +41,14 @@ public class IRSwiftMessageCheckService {
 
 	@Autowired
 	IRMasterRepository IRMasterRepository;
+	
+	@Autowired
+	IRPaymentService irPaymentService;
+	
+	@Autowired
+	CommonCheckService commonCheckService;
+	
+	final MainFrameClient mainFrameClient;
 	
 	Logger log = LoggerFactory.getLogger(getClass());
 
@@ -91,16 +103,6 @@ public class IRSwiftMessageCheckService {
 		return count;
 	}
 	
-	// 檢核成功，新增資料至IRMASTER
-	public IR insertIrMaster(IRSaveCmd irSaveCmd){	
-		IRMaster entityCmd = new IRMaster();
-		BeanUtils.copyProperties(irSaveCmd, entityCmd);
-		IRMasterRepository.save(entityCmd);
-		
-		IR ir = new IR();
-		BeanUtils.copyProperties(entityCmd, ir);
-		return ir;
-	}
 	
 	//傳入ID查詢內容
 	public IR getById(Long id) {
@@ -115,6 +117,87 @@ public class IRSwiftMessageCheckService {
 		IRSwiftMessage irSwiftMessage = repository.findBySeqNo(seqNo).orElseThrow( () -> new RuntimeException("SWIFT序號不存在") );
 
 		return irSwiftMessage;
+	}
+	
+	Boolean isBeAdvisingBranch;
+	Boolean isRemittanceTransfer;
+	// 檢核成功，新增資料至IRMASTER
+	public IR insertIRMaster(String seqNo) {
+		IRSaveCmd irSaveCmd = new IRSaveCmd();
+		IR ir = new IR();
+		try {
+			IRSwiftMessage swiftMessage = getBySwiftMessageSeqNo(seqNo);
+			validateSwiftMessage(swiftMessage);
+			Boolean isAutoSettleCase = mainFrameClient.isAutoSettleCase(swiftMessage.getBeneficiaryAccount());
+			if (isBeAdvisingBranch == true && isRemittanceTransfer == false) {
+				swiftMessageCheckSuccess(swiftMessage, irSaveCmd);
+
+			   //自動解款
+				if (isAutoSettleCase == true) {
+					swiftMessageAutoSettle(irSaveCmd);
+				}
+
+				updateSwiftMessageStatus(seqNo, "2");
+				
+				IRMaster entityCmd = new IRMaster();
+				BeanUtils.copyProperties(irSaveCmd, entityCmd);
+				IRMasterRepository.save(entityCmd);
+				BeanUtils.copyProperties(entityCmd, ir);
+				
+			} else {
+				updateSwiftMessageStatus(seqNo, "3");
+				ir.setStatus("3");
+			}
+		} catch (Exception e) {
+			log.error("insertIRMaster: " +e.getMessage());
+		}
+		return ir;
+
+	}
+	public void validateSwiftMessage(IRSwiftMessage swiftMessage) {
+//		Validate 檢核 SwiftMessage
+		isBeAdvisingBranch = mainFrameClient.isBeAdvisingBranch(swiftMessage.getBeneficiaryAccount());
+		isRemittanceTransfer = mainFrameClient.isRemittanceTransfer(swiftMessage.getRemitSwiftCode());
+		
+	}
+	
+	public void swiftMessageCheckSuccess(IRSwiftMessage swiftMessage, IRSaveCmd irSaveCmd) throws Exception {
+		BeanUtils.copyProperties(swiftMessage, irSaveCmd);
+		
+//		test
+		irSaveCmd.setBeAdvisingBranch("094");
+		irSaveCmd.setCustomerId("05052322");
+		irSaveCmd.setCurrency("USD");
+		irSaveCmd.setAccountInstitution("string");
+		irSaveCmd.setBeneficiaryAccount(swiftMessage.getBeneficiaryAccount());
+		irSaveCmd.setSenderSwiftCode(swiftMessage.getRemitSwiftCode());
+		irSaveCmd.setPrintAdvisingMk("N");
+		//To-Do 設計取號程式
+		irSaveCmd.setIrNo("S1NHA00010");
+		
+		String depositBank = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
+		String bankNameAndAddress = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
+		
+		commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
+		commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
+		var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
+		
+		irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
+		irSaveCmd.setDepositBank(depositBank);
+		irSaveCmd.setRemitBankInfo1(bankNameAndAddress);
+		irSaveCmd.setStatus("2");
+	}
+	
+	public void swiftMessageAutoSettle(IRSaveCmd irSaveCmd) {
+		//自動印製通知書
+		irSaveCmd.setPrintAdvisingMk("Y");
+		irSaveCmd.setPrintAdvisingDate(LocalDate.now());	
+		//計算手續費
+		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt());
+		irSaveCmd.setCommCharge(irFee);
+		
+		//付款狀態
+		irSaveCmd.setPaidStats("2");
 	}
 	
 	//修改SwiftMessage狀態(2:成功、3：失敗)

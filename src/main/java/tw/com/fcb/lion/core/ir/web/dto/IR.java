@@ -3,6 +3,8 @@ package tw.com.fcb.lion.core.ir.web.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -148,5 +150,8 @@ public class IR {
 
     @Schema(description = "分行注意事項三")
     String notice3;
+    
+    @Schema(description = "SwiftMessage檢核狀態")
+	String status;
     
 }

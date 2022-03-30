@@ -73,10 +73,10 @@ public class IRPaymentService {
 	}
 	
 	//傳入外匯編號，執行匯入解款
-	public void settle(IRSaveCmd ir) {
-		IRMaster irmaster = IRMasterRepository.findByIrNo(ir.getIrNo());
-		ir.setPaidStats("2");
-		BeanUtils.copyProperties(ir,irmaster);
+	public void settle(IRSaveCmd irSaveCmd) {
+		IRMaster irmaster = IRMasterRepository.findByIrNo(irSaveCmd.getIrNo());
+		irSaveCmd.setPaidStats("2");
+		BeanUtils.copyProperties(irSaveCmd,irmaster);
 		IRMasterRepository.save(irmaster);
 	}
 }
