@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,7 +17,8 @@ import tw.com.fcb.lion.core.ir.ChargeType;
 @Data
 @Schema(description = "匯入案件主檔資料")
 public class IRSaveCmd {
-
+	
+	@NotBlank(message ="irNo不可空白或Null")
 	@Schema(description = "匯入匯款編號")
 	String irNo;
 	
@@ -47,6 +49,7 @@ public class IRSaveCmd {
 	@Schema(description = "幣別")
 	String currency;
 	
+	@Positive
 	@Schema(description = "匯入匯款金額")
 	BigDecimal irAmt;
 	
