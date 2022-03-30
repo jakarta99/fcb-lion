@@ -29,6 +29,12 @@ public class CommonCheckService {
 		return branchRepository.findByBranchCode(branchCode).orElseThrow(() -> new RuntimeException("分行輸入錯誤"));
 	}
 	
+	public void updateBranchSerialNo(Branch branch) {
+		Integer branchSerialNo = Integer.valueOf(branch.getBranchSerialNo()) + 1;
+		branch.setBranchSerialNo(branchSerialNo);
+		branchRepository.save(branch);
+	}
+	
 	public Customer checkCustomerId(String customerId) throws Exception {
 		return customerRepository.findByCustomerId(customerId).orElseThrow(() -> new RuntimeException("統編輸入錯誤"));
 	}

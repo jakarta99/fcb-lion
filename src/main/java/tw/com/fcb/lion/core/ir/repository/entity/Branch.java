@@ -23,4 +23,10 @@ public class Branch {
 	
 	@Column(name = "BRANCH_NAME")
 	private String branchName;
+	
+	@Column(name = "BRANCH_TRACK")
+	private String branchTrack;
+	
+	@Column(name = "BRANCH_SERIAL_NO")
+	private Integer branchSerialNo;
 }

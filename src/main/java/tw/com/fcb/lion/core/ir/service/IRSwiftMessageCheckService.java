@@ -24,6 +24,7 @@ import tw.com.fcb.lion.core.commons.http.DateConverter;
 import tw.com.fcb.lion.core.ir.ChargeType;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
 import tw.com.fcb.lion.core.ir.repository.IRSwiftMessageRepository;
+import tw.com.fcb.lion.core.ir.repository.entity.Branch;
 import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.repository.entity.IRSwiftMessage;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
@@ -103,7 +104,6 @@ public class IRSwiftMessageCheckService {
 		return count;
 	}
 	
-	
 	//傳入ID查詢內容
 	public IR getById(Long id) {
 		IRMaster iRMaster = IRMasterRepository.findById(id).orElseThrow( () -> new RuntimeException("errID") );
@@ -119,16 +119,18 @@ public class IRSwiftMessageCheckService {
 		return irSwiftMessage;
 	}
 	
+	// 檢核成功，新增資料至IRMASTER
 	Boolean isBeAdvisingBranch;
 	Boolean isRemittanceTransfer;
-	// 檢核成功，新增資料至IRMASTER
 	public IR insertIRMaster(String seqNo) {
 		IRSaveCmd irSaveCmd = new IRSaveCmd();
 		IR ir = new IR();
+		
 		try {
 			IRSwiftMessage swiftMessage = getBySwiftMessageSeqNo(seqNo);
 			validateSwiftMessage(swiftMessage);
 			Boolean isAutoSettleCase = mainFrameClient.isAutoSettleCase(swiftMessage.getBeneficiaryAccount());
+			
 			if (isBeAdvisingBranch == true && isRemittanceTransfer == false) {
 				swiftMessageCheckSuccess(swiftMessage, irSaveCmd);
 
@@ -143,22 +145,23 @@ public class IRSwiftMessageCheckService {
 				BeanUtils.copyProperties(irSaveCmd, entityCmd);
 				IRMasterRepository.save(entityCmd);
 				BeanUtils.copyProperties(entityCmd, ir);
-				
-			} else {
+			} 
+			else {
 				updateSwiftMessageStatus(seqNo, "3");
 				ir.setStatus("3");
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			log.error("insertIRMaster: " +e.getMessage());
 		}
+		
 		return ir;
-
 	}
+	
+//	Validate 檢核 SwiftMessage
 	public void validateSwiftMessage(IRSwiftMessage swiftMessage) {
-//		Validate 檢核 SwiftMessage
 		isBeAdvisingBranch = mainFrameClient.isBeAdvisingBranch(swiftMessage.getBeneficiaryAccount());
 		isRemittanceTransfer = mainFrameClient.isRemittanceTransfer(swiftMessage.getRemitSwiftCode());
-		
 	}
 	
 	public void swiftMessageCheckSuccess(IRSwiftMessage swiftMessage, IRSaveCmd irSaveCmd) throws Exception {
@@ -172,16 +175,21 @@ public class IRSwiftMessageCheckService {
 		irSaveCmd.setBeneficiaryAccount(swiftMessage.getBeneficiaryAccount());
 		irSaveCmd.setSenderSwiftCode(swiftMessage.getRemitSwiftCode());
 		irSaveCmd.setPrintAdvisingMk("N");
-		//To-Do 設計取號程式
-		irSaveCmd.setIrNo("S1NHA00010");
 		
 		String depositBank = mainFrameClient.getDepositBank(irSaveCmd.getSenderSwiftCode());
 		String bankNameAndAddress = mainFrameClient.getBankNameAndAddress(irSaveCmd.getSenderSwiftCode());
 		
-		commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
+		//取號程式
+		var branch = commonCheckService.checkBranchCode(irSaveCmd.getBeAdvisingBranch());
+		var branchSerialNo = generateIrno(branch);
+		
+		//客戶統編
 		commonCheckService.checkCustomerId(irSaveCmd.getCustomerId());
+		
+		//匯率
 		var fxRate = commonCheckService.checkCurrency(irSaveCmd.getCurrency());
 		
+		irSaveCmd.setIrNo(branchSerialNo);
 		irSaveCmd.setExchangeRate(fxRate.getSpotBoughFxRate());
 		irSaveCmd.setDepositBank(depositBank);
 		irSaveCmd.setRemitBankInfo1(bankNameAndAddress);
@@ -191,13 +199,34 @@ public class IRSwiftMessageCheckService {
 	public void swiftMessageAutoSettle(IRSaveCmd irSaveCmd) {
 		//自動印製通知書
 		irSaveCmd.setPrintAdvisingMk("Y");
-		irSaveCmd.setPrintAdvisingDate(LocalDate.now());	
+		irSaveCmd.setPrintAdvisingDate(LocalDate.now());
+		
 		//計算手續費
 		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt());
 		irSaveCmd.setCommCharge(irFee);
 		
 		//付款狀態
 		irSaveCmd.setPaidStats("2");
+	}
+	
+	//分行取號作業
+	public String generateIrno(Branch branch) {
+		String branchSerialNo = new String();
+		String branchSerialNo1 = "S1";
+		String branchSerialNo2 = branch.getBranchTrack();
+		
+		// 號碼加一再取號
+		commonCheckService.updateBranchSerialNo(branch);
+		String branchSerialNo3 = branch.getBranchSerialNo().toString();
+		
+		String zeroString = new String();
+		for(int i  = 0 ; i < (6 - branchSerialNo3.length()) ; i++) {
+			zeroString = zeroString + "0";
+		}
+		branchSerialNo3 = zeroString.concat(branchSerialNo3);
+		branchSerialNo = branchSerialNo1.concat(branchSerialNo2).concat(branchSerialNo3);
+		
+		return branchSerialNo;
 	}
 	
 	//修改SwiftMessage狀態(2:成功、3：失敗)

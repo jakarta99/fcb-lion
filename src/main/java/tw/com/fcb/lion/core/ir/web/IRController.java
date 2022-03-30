@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +19,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
 import tw.com.fcb.lion.core.commons.http.Response;
-import tw.com.fcb.lion.core.commons.mock.CommonController;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
@@ -38,9 +36,6 @@ public class IRController {
 	
 	@Autowired
 	IRPaymentService irPaymentService;
-	
-	@Autowired
-	CommonController commonController;
 	
 //	final IRMapper irMapper;
 	
@@ -83,14 +78,18 @@ public class IRController {
 	public Response<IR> insert(String seqNo) {
 		Response<IR> response = new Response<IR>();
 		IR ir = new IR();
+		
 		try {
 			ir = irSwiftMessageCheckservice.insertIRMaster(seqNo);
+			
 			if(ir.getStatus().equals("2")) {
 				response.showMessage(ir, "0000", "新增成功");
-			}else if(ir.getStatus().equals("3")){
+			}
+			else if(ir.getStatus().equals("3")){
 				response.showMessage(ir, "9998", "驗證電文失敗"); 
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			response.showMessage(ir, "9999", e.getMessage());
 		}
 
