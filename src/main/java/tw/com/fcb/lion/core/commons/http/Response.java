@@ -14,8 +14,7 @@ public class Response<T> {
 	
 	T data;
 	
-	public void showMessage(T data, String code, String message){
-		
+	public void of(String code, String message, T data){
 		if(code.equals("0000")) {
 			this.setStatus(ResponseStatus.SUCCESS);
 			this.setCode(code);

@@ -113,7 +113,7 @@ class IRControllerTest {
 	public void testInsert() throws Exception {	
 		var insert = mockMvc.perform(post("/ir")
 				.param("seqNo", "654321"))
-				.andExpect(status().isCreated())
+				.andExpect(status().isOk())
 				.andDo(print())
 				.andReturn().getResponse().getContentAsString();
 

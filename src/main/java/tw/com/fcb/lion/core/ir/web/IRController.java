@@ -54,10 +54,10 @@ public class IRController {
             for(SwiftMessageSaveCmd saveCmd : msg) {
 				irSwiftMessageCheckservice.insert(saveCmd);
             }
-			response.showMessage(msg, "0000", "交易成功，寫入" + msg.size() + "筆資料"); 
+			response.of("0000", "交易成功，寫入" + msg.size() + "筆資料", msg); 
 		} 
 		catch (IOException e) {
-			response.showMessage(msg, "9999", e.getMessage()); 
+			response.of("9999", e.getMessage(), msg); 
 		}
 		return response;
 	}
@@ -84,14 +84,14 @@ public class IRController {
 			ir = irSwiftMessageCheckservice.insertIRMaster(seqNo);
 			
 			if(ir.getStatus().equals("2")) {
-				response.showMessage(ir, "0000", "新增成功");
+				response.of("0000", "新增成功", ir);
 			}
 			else if(ir.getStatus().equals("3")){
-				response.showMessage(ir, "9998", "驗證電文失敗"); 
+				response.of("9998", "驗證電文失敗", ir); 
 			}
 		} 
 		catch (Exception e) {
-			response.showMessage(ir, "9999", e.getMessage());
+			response.of("9999", e.getMessage(), ir);
 		}
 
 		return response;
@@ -105,10 +105,10 @@ public class IRController {
 		
 		try {
 			ir = irSwiftMessageCheckservice.getById(id);
-			response.showMessage(ir, "0000", "交易成功"); 
+			response.of("0000", "交易成功", ir); 
         } 
 		catch (Exception e) {
-            response.showMessage(ir, "9999", "交易失敗，請重新輸入");
+            response.of("9999", "交易失敗，請重新輸入", ir);
         }
 		
 		return response;
@@ -127,10 +127,10 @@ public class IRController {
 		
 		try {
 			List<IRQuery> irquerylist = irPaymentService.queryIRmasterDataLikeByirNo(irNo);
-			response.showMessage(irquerylist, "0000", "交易成功"); 
+			response.of("0000", "交易成功", irquerylist); 
         } 
 		catch (Exception e) {
-            response.showMessage(null, "9999", "交易失敗，請重新輸入");
+            response.of("9999", "交易失敗，請重新輸入", null);
         }
 		
 		return response;
@@ -143,10 +143,10 @@ public class IRController {
 		
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
-			response.showMessage(ir, "0000", "交易成功"); 
+			response.of("0000", "交易成功", ir); 
         } 
 		catch (Exception e) {
-            response.showMessage(null, "9999", "交易失敗，請重新輸入");
+            response.of("9999", "交易失敗，請重新輸入", null);
         }
 		
 		return response;
@@ -160,10 +160,10 @@ public class IRController {
 		try {
 			irSaveCmd.setCommCharge(irFee);
 			irPaymentService.settle(irSaveCmd);
-			response.showMessage(irSaveCmd, "0000", "交易成功"); 
+			response.of("0000", "交易成功", irSaveCmd); 
         } 
 		catch (Exception e) {
-            response.showMessage(irSaveCmd, "9999", "交易失敗，請重新輸入");
+            response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
         }
 		
 		return response;
