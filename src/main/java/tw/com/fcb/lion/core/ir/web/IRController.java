@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -75,7 +76,7 @@ public class IRController {
 //	KAI - 驗證通過的電文，寫入匯入主檔(IRMaster)
 	@PostMapping
 	@Operation(description = "驗證通過的電文，寫入匯入主檔(IRMaster)", summary="寫入匯入主檔")
-	public Response<IR> insert(String seqNo) {
+	public Response<IR> insert(@RequestParam("seqNo") String seqNo) {
 		Response<IR> response = new Response<IR>();
 		IR ir = new IR();
 		
@@ -133,7 +134,6 @@ public class IRController {
         }
 		
 		return response;
-		
 	}
 	
 	@GetMapping("/query")
@@ -150,7 +150,6 @@ public class IRController {
         }
 		
 		return response;
-		
 	}
 	
 	@PutMapping("/settle")

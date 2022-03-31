@@ -7,30 +7,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.swagger.v3.oas.models.media.Content;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
-import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@EnableFeignClients
 class IRControllerTest {
 	
 	@Autowired
@@ -116,23 +111,8 @@ class IRControllerTest {
 //	 case 3 : 驗證通過的電文，寫入匯入主檔(IRMaster)
 	@Test
 	public void testInsert() throws Exception {	
-//		mapper = new ObjectMapper();
-//		
-//		IRSaveCmd cmd = new IRSaveCmd();
-//		cmd.setBeAdvisingBranch("094");
-//		cmd.setCustomerId("05052322");
-//		cmd.setCurrency("USD");
-//		cmd.setBeneficiaryAccount("string");
-//		cmd.setAccountInstitution("string");
-//		cmd.setSenderSwiftCode("1010");
-		
-	    JSONObject request = new JSONObject()
-	            .put("seqNo", 123456);
-	    
 		var insert = mockMvc.perform(post("/ir")
-//				.content(mapper.writeValueAsString(cmd))
-				.content(request.toString()))
-//				.contentType(MediaType.APPLICATION_JSON))
+				.param("seqNo", "654321"))
 				.andExpect(status().isCreated())
 				.andDo(print())
 				.andReturn().getResponse().getContentAsString();
@@ -155,5 +135,30 @@ class IRControllerTest {
 		assertEquals(irMasterRepository.findByIrNo("S1AW000003").getPrintAdvisingMk(),"Y");
 		
 		System.out.println("data: " + data);
+	}
+	
+//	Case 5 : S211匯入解款
+	@Test
+	public void testSettle() throws Exception {	
+		mapper = new ObjectMapper();
+		
+		IRSaveCmd cmd = new IRSaveCmd();
+		cmd.setIrNo("S1AW000001");
+		cmd.setBeAdvisingBranch("094");
+		cmd.setCustomerId("05052322");
+		cmd.setCurrency("USD");
+		cmd.setIrAmt(new BigDecimal("100"));
+		cmd.setBeneficiaryAccount("string");
+		cmd.setAccountInstitution("string");
+		cmd.setSenderSwiftCode("1010");
+	    
+		var updated = mockMvc.perform(put("/ir/settle")
+				.content(mapper.writeValueAsString(cmd))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn().getResponse().getContentAsString(Charset.defaultCharset());
+
+		System.out.println("updated: " + updated);
 	}
 }
