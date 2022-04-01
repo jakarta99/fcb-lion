@@ -83,7 +83,7 @@ class IRControllerTest {
 		System.out.println("bankNameAndAddress: " + bankNameAndAddress);
 	}
 	
-//	 case1 : 傳入受通知單位查詢案件數
+//	case 1 : 查詢受通知單位案件數
 	@Test
 	public void testGetCount() throws Exception {
 		var branchCount =  mockMvc.perform(get("/ir/count/branch")
@@ -96,7 +96,7 @@ class IRControllerTest {
 		System.out.println("branchCount: " + branchCount);
 	}
 	
-//	 case2 : 依ID查詢IRMaster資料
+//	case 2 : 依ID查詢匯入主檔資料
 	@Test
 	public void testGetById() throws Exception {
 		var id = 1;
@@ -108,7 +108,33 @@ class IRControllerTest {
 		System.out.println("data: " + data);
 	}
 	
-//	 case 3 : 驗證通過的電文，寫入匯入主檔(IRMaster)
+//  case 3 : 依匯入編號查詢匯入主檔資料
+	@Test
+	public void testQueryIRmasterData() throws Exception {
+		var irNo = "S1AW000001";
+		var data =  mockMvc.perform(get("/ir/query")
+				.param("irNo", irNo))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn().getResponse().getContentAsString(Charset.defaultCharset());
+		
+		System.out.println("data: " + data);
+	}
+	
+//  case 4 : 查詢多筆匯入主檔資料(模糊查詢)
+	@Test
+	public void testQueryIRmasterDataList() throws Exception {
+		var irNo = "S1%";
+		var data =  mockMvc.perform(get("/ir/query/list")
+				.param("irNo", irNo))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn().getResponse().getContentAsString(Charset.defaultCharset());
+		
+		System.out.println("data: " + data);
+	}
+	
+//	case 5 : 驗證通過的電文，寫入匯入主檔(IRMaster)
 	@Test
 	public void testInsert() throws Exception {	
 		var insert = mockMvc.perform(post("/ir")
@@ -120,7 +146,10 @@ class IRControllerTest {
 		System.out.println("insert: " + insert);
 	}
 	
-//	case 4 : 更新印製通知書記號
+//	case 6 : 接收 swift 電文並存到 SwiftMessage
+//	@Test
+	
+//	case 7 : 更新印製通知書記號
 	@Test
 	public void testPrintAdvise() throws Exception {
 		mapper = new ObjectMapper();
@@ -137,7 +166,7 @@ class IRControllerTest {
 		System.out.println("data: " + data);
 	}
 	
-//	Case 5 : S211匯入解款
+//	case 8 : S211匯入解款
 	@Test
 	public void testSettle() throws Exception {	
 		mapper = new ObjectMapper();
