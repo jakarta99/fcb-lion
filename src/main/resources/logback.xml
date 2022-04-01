@@ -12,6 +12,7 @@
     <logger name="tw.com.fcb.sample.io.gary" level="debug" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
+    <logger name="tw.com.fcb.lion.core" level = "debug"> </logger>
 
     <root level="error">
         <appender-ref ref="CONSOLE"/>

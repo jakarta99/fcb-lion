@@ -67,16 +67,16 @@ public class IRController {
 //		return true;
 //	}
 
-	@GetMapping("/count/{branch}")
+	@GetMapping("/branches/count")
 	@Operation(description = "傳入受通知單位查詢案件數", summary="查詢案件數")
-	public Integer getCount(String branch,String printAdvMk) {
+	public Integer getCount(@RequestParam("branchCode") String branch,@RequestParam("printAdvMk") String printAdvMk) {
 		return irSwiftMessageCheckservice.getIrCaseCount(branch, printAdvMk);
 	}
 	
 //	KAI - 驗證通過的電文，寫入匯入主檔(IRMaster)
-	@PostMapping
+	@PostMapping("/ir-masters/{seqNo}")
 	@Operation(description = "驗證通過的電文，寫入匯入主檔(IRMaster)", summary="寫入匯入主檔")
-	public Response<IR> insert(@RequestParam("seqNo") String seqNo) {
+	public Response<IR> insert(@PathVariable("seqNo") String seqNo) {
 		Response<IR> response = new Response<IR>();
 		IR ir = new IR();
 		
@@ -97,7 +97,7 @@ public class IRController {
 		return response;
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/ir-masters/{id}")
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
 	public Response<IR> getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
 		Response<IR> response = new Response<IR>();
@@ -114,15 +114,15 @@ public class IRController {
 		return response;
 	}
 	
-	@PutMapping("/printadvise")
+	@PutMapping("/branches/{branchCode}/print-advise")
 	@Operation(description = "更新印製通知書記號", summary="更新列印通知書狀態")
-	public void printAdvise(String branch) {
+	public void printAdvise(@PathVariable("branchCode") String branch) {
 		irPaymentService.updatePrintAdviceMark(branch);
 	}
 	
-	@GetMapping("/query/list")
-	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔多筆查詢")
-	public Response<List<IRQuery>> queryIRmasterDataList(String irNo) {
+	@GetMapping("/ir-masters/list/fuzzy-search")
+	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔多筆模糊查詢")
+	public Response<List<IRQuery>> queryIRmasterDataList(@RequestParam("irNoirNo")String irNo) {
 		Response<List<IRQuery>> response = new Response<List<IRQuery>>();
 		
 		try {
@@ -136,9 +136,9 @@ public class IRController {
 		return response;
 	}
 	
-	@GetMapping("/query")
+	@GetMapping("/ir-masters/ir-No/{irNo}")
 	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔查詢")
-	public Response<IR> queryIRmasterData(String irNo) {
+	public Response<IR> queryIRmasterData(@PathVariable("irNo") String irNo) {
 		Response<IR> response = new Response<IR>();
 		
 		try {
@@ -152,7 +152,7 @@ public class IRController {
 		return response;
 	}
 	
-	@PutMapping("/settle")
+	@PutMapping("/ir-masters/{irNo}/settle")
 	@Operation(description = "S211匯入解款", summary="匯入解款")
 	public Response<IRSaveCmd> settle(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
