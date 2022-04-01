@@ -62,6 +62,22 @@ public class IRController {
 		return response;
 	}
 	
+	@PostMapping("/swift/query/{seqNo}")
+	@Operation(description = "查詢 SwiftMessage", summary="查詢 swift")
+	public Response<SwiftMessageSaveCmd> querySwift(@PathVariable("seqNo") String seqNo) {
+		Response<SwiftMessageSaveCmd> response = new Response<SwiftMessageSaveCmd>();
+		
+		try {
+			SwiftMessageSaveCmd swiftmessage = irSwiftMessageCheckservice.getBySwiftMessageSeqNo(seqNo);
+			response.of("0000", "交易成功", swiftmessage); 
+        } 
+		catch (Exception e) {
+            response.of("9999", "交易失敗，請重新輸入", null);
+        }
+		
+		return response;
+	}
+
 //	@GetMapping("/swift/{id}")
 //	public Boolean getValidateResult(Long id) {
 //		return true;

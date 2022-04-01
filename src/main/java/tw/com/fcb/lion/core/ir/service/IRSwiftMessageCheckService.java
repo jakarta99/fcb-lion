@@ -113,10 +113,12 @@ public class IRSwiftMessageCheckService {
 	}
 	
 	//傳入SEQ_NO (SWIFT序號) 查詢內容
-	public IRSwiftMessage getBySwiftMessageSeqNo(String seqNo) {
+	public SwiftMessageSaveCmd getBySwiftMessageSeqNo(String seqNo) {
 		IRSwiftMessage irSwiftMessage = repository.findBySeqNo(seqNo).orElseThrow( () -> new RuntimeException("SWIFT序號不存在") );
-
-		return irSwiftMessage;
+		SwiftMessageSaveCmd swiftmessage = SwiftMessageSaveCmd.builder().build();
+		BeanUtils.copyProperties(irSwiftMessage, swiftmessage);
+		
+		return swiftmessage;
 	}
 	
 	// 檢核成功，新增資料至IRMASTER
@@ -127,7 +129,7 @@ public class IRSwiftMessageCheckService {
 		IR ir = new IR();
 		
 		try {
-			IRSwiftMessage swiftMessage = getBySwiftMessageSeqNo(seqNo);
+			SwiftMessageSaveCmd swiftMessage = getBySwiftMessageSeqNo(seqNo);
 			validateSwiftMessage(swiftMessage);
 			Boolean isAutoSettleCase = mainFrameClient.isAutoSettleCase(swiftMessage.getBeneficiaryAccount());
 			
@@ -159,12 +161,12 @@ public class IRSwiftMessageCheckService {
 	}
 	
 //	Validate 檢核 SwiftMessage
-	public void validateSwiftMessage(IRSwiftMessage swiftMessage) {
+	public void validateSwiftMessage(SwiftMessageSaveCmd swiftMessage) {
 		isBeAdvisingBranch = mainFrameClient.isBeAdvisingBranch(swiftMessage.getBeneficiaryAccount());
 		isRemittanceTransfer = mainFrameClient.isRemittanceTransfer(swiftMessage.getRemitSwiftCode());
 	}
 	
-	public void swiftMessageCheckSuccess(IRSwiftMessage swiftMessage, IRSaveCmd irSaveCmd) throws Exception {
+	public void swiftMessageCheckSuccess(SwiftMessageSaveCmd swiftMessage, IRSaveCmd irSaveCmd) throws Exception {
 		BeanUtils.copyProperties(swiftMessage, irSaveCmd);
 		
 //		test
@@ -231,8 +233,10 @@ public class IRSwiftMessageCheckService {
 	
 	//修改SwiftMessage狀態(2:成功、3：失敗)
 	public void updateSwiftMessageStatus(String seqNo, String status) {
-		IRSwiftMessage swiftMessage = getBySwiftMessageSeqNo(seqNo);
+		SwiftMessageSaveCmd swiftMessage = getBySwiftMessageSeqNo(seqNo);
+		IRSwiftMessage IRswiftMessage = new IRSwiftMessage();
 		swiftMessage.setStats(status);
-		repository.save(swiftMessage);		
+		BeanUtils.copyProperties(swiftMessage, IRswiftMessage);
+		repository.save(IRswiftMessage);		
 	}
 }
