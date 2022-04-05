@@ -70,6 +70,7 @@ public class IRController {
 	@PostMapping("/swift/query/{seqNo}")
 	@Operation(description = "查詢 SwiftMessage", summary="查詢 swift")
 	public Response<SwiftMessageSaveCmd> querySwift(@PathVariable("seqNo") String seqNo) {
+		
 		Response<SwiftMessageSaveCmd> response = new Response<SwiftMessageSaveCmd>();
 		
 		try {
@@ -83,6 +84,32 @@ public class IRController {
 		return response;
 	}
 
+	
+	@PostMapping("/swift/recheck")
+	@Operation(description = "更新 SwiftMessage，並驗證電文，執行寫入匯入主檔", summary="修改 swift")
+	public Response<IR> recheckSwift(SwiftMessageSaveCmd swiftmessage) {
+		
+		Response<IR> response = new Response<IR>();
+		IR ir = new IR();
+		try {
+			irSwiftMessageCheckservice.insert(swiftmessage);
+			
+			ir = irSwiftMessageCheckservice.insertIRMaster(swiftmessage.getSeqNo());
+			
+			if(ir.getStatus().equals("2")) {
+				response.of("0000", "新增成功", ir);
+			}
+			else if(ir.getStatus().equals("3")){
+				response.of("9998", "驗證電文失敗", ir); 
+			}
+        } 
+		catch (Exception e) {
+            response.of("9999", "交易失敗，請重新輸入", null);
+        }
+		
+		return response;
+	}
+	
 //	@GetMapping("/swift/{id}")
 //	public Boolean getValidateResult(Long id) {
 //		return true;

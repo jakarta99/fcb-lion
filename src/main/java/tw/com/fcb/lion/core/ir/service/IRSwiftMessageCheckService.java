@@ -231,6 +231,7 @@ public class IRSwiftMessageCheckService {
 		return branchSerialNo;
 	}
 	
+	
 	//修改SwiftMessage狀態(2:成功、3：失敗)
 	public void updateSwiftMessageStatus(String seqNo, String status) {
 		SwiftMessageSaveCmd swiftMessage = getBySwiftMessageSeqNo(seqNo);
