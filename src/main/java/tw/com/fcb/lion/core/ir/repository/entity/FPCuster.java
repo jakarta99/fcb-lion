@@ -24,12 +24,11 @@ import lombok.Data;
 @Data
 public class FPCuster {
 	
-	
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
 	
-	@Id
 	@Column(name = "FPC_ACCOUNT")
 	private String fpcAccount;
 	
@@ -44,7 +43,7 @@ public class FPCuster {
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@JoinColumn(name = "FPM_ACCOUNT",nullable = false)
+	@JoinColumn(name = "FPC_LINK_ID",nullable = false)
 	List<FPMaster> fpmasters;
 	
 

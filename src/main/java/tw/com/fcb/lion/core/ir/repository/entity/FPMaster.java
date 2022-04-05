@@ -10,10 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 
- * FPC 幣別層資訊
+ * FPM 幣別層資訊
  *
  */
 
