@@ -20,8 +20,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
 import tw.com.fcb.lion.core.commons.http.Response;
-import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
-import tw.com.fcb.lion.core.ir.service.FPCService;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
@@ -40,13 +38,11 @@ public class IRController {
 	@Autowired
 	IRPaymentService irPaymentService;
 	
-	@Autowired
-	FPCService  fPCService;
 	
 //	final IRMapper irMapper;
 	
 	@PostMapping("/swift")
-	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="儲存 swift")
+	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="CASE 1：接收 swift 電文儲存 swift")
 	public Response<List<SwiftMessageSaveCmd>> receiveSwift() {
 
 		Response<List<SwiftMessageSaveCmd>> response = new Response<List<SwiftMessageSaveCmd>>();
@@ -189,48 +185,5 @@ public class IRController {
 		
 		return response;
 	}
-	
-//	FPC 查詢帳號是否存在
-	@GetMapping("/ir-fpc/{account}")
-	@Operation(description = "依帳號查詢FPCuster資料", summary="查詢FPCuster資料")
-	public Response<FPCuster> getByfpcAccount(@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc) {
-		Response<FPCuster> response = new Response<FPCuster>();
 		
-		try {
-			FPCuster fPCusterAcc = fPCService.getByfpcAccount(acc);
-			if (fPCusterAcc == null) {
-				response.of("D001", "查詢"+acc +"無此帳號，請重新輸入", fPCusterAcc); 
-			}else {
-				response.of("0000", "交易成功", fPCusterAcc); 
-			}
-        } 
-		catch (Exception e) {
-            response.of("9999","交易失敗，請重新輸入", null);
-        }
-		
-		return response;
-	}
-	
-//	FPM BAL 查詢該帳號之幣別餘額
-	@GetMapping("/ir-fpc/{account}/{crcy}/balance")
-	@Operation(description = "依帳號、幣別查詢FPM餘額", summary="查詢FPM餘額")
-	public Response<BigDecimal> getByfpmCurrencyBal(@Parameter(description = "帳號", example = "09340123456")
-													@PathVariable("account") String acc,@PathVariable("crcy")String crcy) {
-		
-		Response<BigDecimal> response = new Response<BigDecimal>();
-		try {
-			FPCuster fPCusterAcc = fPCService.getByfpcAccount(acc);
-			if (fPCusterAcc == null) {
-				response.of("D001", "查詢"+acc +"無此帳號，請重新輸入", null); 
-			}else {
-				BigDecimal fpmBal = fPCService.getByfpmCurrencyBal(acc,crcy);
-				response.of("0000", "交易成功，帳號"+acc+"之幣別"+crcy+"餘額", fpmBal); 
-			}
-        } 
-		catch (Exception e) {
-            response.of("9999","交易失敗，請重新輸入", null);
-        }
-		
-		return response;
-	}
 }
