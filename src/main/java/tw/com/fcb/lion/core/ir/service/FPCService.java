@@ -54,4 +54,46 @@ public class FPCService {
 		return accfpmBal;
 	}
 	
+	//傳入帳號、幣別，查詢幣別資訊
+		public FPMaster getByfpmCurrencyData(String acc,String crcy) {
+			FPMaster fPMaster = null;
+			FPCuster fpcuster = FPCustomerRepository.findByfpcAccount(acc);
+			List<FPMaster> fpmArry = fpcuster.getFpmasters();
+			for (FPMaster idx : fpmArry) {
+				if (idx.getFpmCurrency().equals(crcy)) {
+					fPMaster = idx;
+				}
+			}
+			return fPMaster;
+		}
+		
+	//更新幣別餘額
+		public FPCuster updfpmBal(String acc,String crcy,BigDecimal addAmt,BigDecimal subAmt) {
+			FPMaster fPMaster = null;
+			FPCuster fpcuster = FPCustomerRepository.findByfpcAccount(acc);
+			List<FPMaster> fpmArry = fpcuster.getFpmasters();
+			for (FPMaster idx : fpmArry) {
+				if (idx.getFpmCurrency().equals(crcy)) {
+					fPMaster = idx;
+					BigDecimal afterBal = idx.getFpmBalance().add(addAmt).subtract(subAmt);
+					fPMaster.setFpmBalance(afterBal);
+				}
+			}
+			System.out.println("test@@@ = " + fPMaster);
+			return fpcuster;
+		}	
+		
+		
+	//新增帳號、幣別資訊
+		public FPCuster insfpcAccount(FPCuster accData) {
+			
+			FPCuster fpcentity = new FPCuster();
+//			List<FPMaster> fpmArry = fpcentity.getFpmasters();
+//			fpmArry.add(crcyData);
+			System.out.println("test@@@= " + accData);
+			BeanUtils.copyProperties(accData, fpcentity);
+			FPCustomerRepository.save(fpcentity);
+			return fpcentity;
+		}
+	
 }

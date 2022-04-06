@@ -1,5 +1,6 @@
 package tw.com.fcb.lion.core.commons.mock;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,8 +17,16 @@ public class CommonController {
 	@Operation(summary = "判斷受通知分行(含是否為本行帳號檢查)")
 	@GetMapping("/BeAdvisingBranch")
 	public Boolean isBeAdvisingBranch(@RequestParam("beneficiaryAccount") String beneficiaryAccount) {
-		if(beneficiaryAccount.equals("09340123456") || beneficiaryAccount.equals("09340654321")) {
-			return true;
+//		if(beneficiaryAccount.equals("09340123456") || beneficiaryAccount.equals("09340654321")) {
+		int branch;
+		branch = Integer.parseInt(beneficiaryAccount.substring(0,3));
+		if(beneficiaryAccount.length() == 11 && StringUtils.isNumeric(beneficiaryAccount)){
+			if ( branch > 93  && branch < 821) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 		else {
 			return false;

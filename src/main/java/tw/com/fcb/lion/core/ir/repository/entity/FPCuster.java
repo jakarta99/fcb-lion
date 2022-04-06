@@ -2,6 +2,7 @@ package tw.com.fcb.lion.core.ir.repository.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,7 +42,7 @@ public class FPCuster {
 	@Column(name = "FPC_VALID_CRCY_CNT")
 	private String fpcValidCrcyCnt;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "FPC_LINK_ID",nullable = false)
 	List<FPMaster> fpmasters;

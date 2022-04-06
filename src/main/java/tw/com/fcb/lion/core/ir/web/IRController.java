@@ -19,17 +19,19 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
+import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
-import tw.com.fcb.lion.core.ir.service.FPCService;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
 import tw.com.fcb.lion.core.ir.web.dto.IRQuery;
+import tw.com.fcb.lion.core.sharedkernel.api.FPClient;
 
 @RestController
+//@RequiredArgsConstructor
 @RequestMapping("/ir")
 @OpenAPIDefinition(info = @Info(title = "獅子王's  匯入  API", version = "v1.0.0"))
 public class IRController {
@@ -39,14 +41,12 @@ public class IRController {
 	
 	@Autowired
 	IRPaymentService irPaymentService;
-	
-	@Autowired
-	FPCService  fPCService;
-	
+
+//	final FPClient fPClient;	
 //	final IRMapper irMapper;
 	
 	@PostMapping("/swift")
-	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="儲存 swift")
+	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="CASE 1：接收 swift 電文儲存 swift")
 	public Response<List<SwiftMessageSaveCmd>> receiveSwift() {
 
 		Response<List<SwiftMessageSaveCmd>> response = new Response<List<SwiftMessageSaveCmd>>();
@@ -217,47 +217,24 @@ public class IRController {
 		return response;
 	}
 	
-//	FPC 查詢帳號是否存在
-	@GetMapping("/ir-fpc/{account}")
-	@Operation(description = "依帳號查詢FPCuster資料", summary="查詢FPCuster資料")
-	public Response<FPCuster> getByfpcAccount(@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc) {
-		Response<FPCuster> response = new Response<FPCuster>();
+//	@PutMapping("/fpc-masters/updfpm/{irNo}/balance")
+//	@Operation(description = "S211匯入解款內扣手續費", summary="匯入解款")
+//	public Response<FPCuster> deposit(@PathVariable("irNo") String irNo) {
+//		Response<FPCuster> response = new Response<FPCuster>();
+//		
+//		try {
+////			ir.setCommCharge(irFee);
+////			irPaymentService.settle(ir);
+//			IR ir = irPaymentService.queryIRmasterData(irNo);
+//			BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
+//			FPCuster fPCusterAcc = fPClient.updfpmBal(ir.getAccountNo(),ir.getCurrency(),irFee,ir.getIrAmt());
+//			response.of("0000", "交易成功", fPCusterAcc); 
+//        } 
+//		catch (Exception e) {
+//            response.of("9999", "交易失敗，請重新輸入", null);
+//        }
+//		
+//		return response;
+//	}
 		
-		try {
-			FPCuster fPCusterAcc = fPCService.getByfpcAccount(acc);
-			if (fPCusterAcc == null) {
-				response.of("D001", "查詢"+acc +"無此帳號，請重新輸入", fPCusterAcc); 
-			}else {
-				response.of("0000", "交易成功", fPCusterAcc); 
-			}
-        } 
-		catch (Exception e) {
-            response.of("9999","交易失敗，請重新輸入", null);
-        }
-		
-		return response;
-	}
-	
-//	FPM BAL 查詢該帳號之幣別餘額
-	@GetMapping("/ir-fpc/{account}/{crcy}/balance")
-	@Operation(description = "依帳號、幣別查詢FPM餘額", summary="查詢FPM餘額")
-	public Response<BigDecimal> getByfpmCurrencyBal(@Parameter(description = "帳號", example = "09340123456")
-													@PathVariable("account") String acc,@PathVariable("crcy")String crcy) {
-		
-		Response<BigDecimal> response = new Response<BigDecimal>();
-		try {
-			FPCuster fPCusterAcc = fPCService.getByfpcAccount(acc);
-			if (fPCusterAcc == null) {
-				response.of("D001", "查詢"+acc +"無此帳號，請重新輸入", null); 
-			}else {
-				BigDecimal fpmBal = fPCService.getByfpmCurrencyBal(acc,crcy);
-				response.of("0000", "交易成功，帳號"+acc+"之幣別"+crcy+"餘額", fpmBal); 
-			}
-        } 
-		catch (Exception e) {
-            response.of("9999","交易失敗，請重新輸入", null);
-        }
-		
-		return response;
-	}
 }
