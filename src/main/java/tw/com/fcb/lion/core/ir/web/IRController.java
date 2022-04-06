@@ -85,14 +85,14 @@ public class IRController {
 	}
 
 	
-	@PostMapping("/swift/recheck")
+	@PutMapping("/swift/recheck")
 	@Operation(description = "更新 SwiftMessage，並驗證電文，執行寫入匯入主檔", summary="修改 swift")
 	public Response<IR> recheckSwift(SwiftMessageSaveCmd swiftmessage) {
 		
 		Response<IR> response = new Response<IR>();
 		IR ir = new IR();
 		try {
-			irSwiftMessageCheckservice.insert(swiftmessage);
+			irSwiftMessageCheckservice.updateSwiftMessage(swiftmessage);
 			
 			ir = irSwiftMessageCheckservice.insertIRMaster(swiftmessage.getSeqNo());
 			
@@ -200,7 +200,7 @@ public class IRController {
 		return response;
 	}
 	
-	@PutMapping("/ir-masters/{irNo}/settle")
+	@PutMapping("/ir-masters/settle")
 	@Operation(description = "S211匯入解款", summary="匯入解款")
 	public Response<IRSaveCmd> settle(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();

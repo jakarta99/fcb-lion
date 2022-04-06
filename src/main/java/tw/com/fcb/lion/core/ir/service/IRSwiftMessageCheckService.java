@@ -231,6 +231,12 @@ public class IRSwiftMessageCheckService {
 		return branchSerialNo;
 	}
 	
+	//修改SwiftMessage
+	public void updateSwiftMessage(SwiftMessageSaveCmd swiftMessage) {
+		IRSwiftMessage IRswiftMessage = repository.findBySeqNo(swiftMessage.getSeqNo()).orElseThrow( () -> new RuntimeException("SWIFT序號不存在") );
+		BeanUtils.copyProperties(swiftMessage, IRswiftMessage);
+		repository.save(IRswiftMessage);		
+	}
 	
 	//修改SwiftMessage狀態(2:成功、3：失敗)
 	public void updateSwiftMessageStatus(String seqNo, String status) {
@@ -240,4 +246,6 @@ public class IRSwiftMessageCheckService {
 		BeanUtils.copyProperties(swiftMessage, IRswiftMessage);
 		repository.save(IRswiftMessage);		
 	}
+	
+	
 }

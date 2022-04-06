@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
+import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -182,6 +183,24 @@ class IRControllerTest {
 		cmd.setSenderSwiftCode("1010");
 	    
 		var updated = mockMvc.perform(put("/ir/settle")
+				.content(mapper.writeValueAsString(cmd))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn().getResponse().getContentAsString(Charset.defaultCharset());
+
+		System.out.println("updated: " + updated);
+	}
+	
+//	case 9 : 更新SWIFT電文
+	@Test
+	public void testUpdateSwiftMessageSettle() throws Exception {	
+		mapper = new ObjectMapper();
+		
+		SwiftMessageSaveCmd cmd = SwiftMessageSaveCmd.builder().build();
+		cmd.setSeqNo("123456");
+	    
+		var updated = mockMvc.perform(put("/ir/swift/recheck")
 				.content(mapper.writeValueAsString(cmd))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
