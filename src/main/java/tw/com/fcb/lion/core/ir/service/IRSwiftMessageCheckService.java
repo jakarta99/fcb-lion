@@ -124,7 +124,7 @@ public class IRSwiftMessageCheckService {
 	// 檢核成功，新增資料至IRMASTER
 	Boolean isBeAdvisingBranch;
 	Boolean isRemittanceTransfer;
-	public IR insertIRMaster(String seqNo) {
+	public IR insertIRMaster(String seqNo) throws Exception{
 		IRSaveCmd irSaveCmd = new IRSaveCmd();
 		IR ir = new IR();
 		
@@ -154,7 +154,8 @@ public class IRSwiftMessageCheckService {
 			}
 		} 
 		catch (Exception e) {
-			log.error("insertIRMaster: " +e.getMessage());
+			log.error("insertIRMaster: " + e.getMessage());
+			throw new Exception(e.getMessage());
 		}
 		
 		return ir;

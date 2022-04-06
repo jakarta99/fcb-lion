@@ -19,16 +19,13 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
-import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.Response;
-import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
 import tw.com.fcb.lion.core.ir.web.dto.IRQuery;
-import tw.com.fcb.lion.core.sharedkernel.api.FPClient;
 
 @RestController
 //@RequiredArgsConstructor
@@ -145,6 +142,23 @@ public class IRController {
 		return response;
 	}
 	
+	@PostMapping("/ir-masters/notify/{seqNo}")
+	@Operation(description = "通知", summary="通知")
+	public String notify(@PathVariable("seqNo") String seqNo) {
+		Response<IR> response = new Response<IR>();
+		response = insert(seqNo);
+		
+		String notifyMessage = "";
+		if(response.getCode().equals("0000")) {
+			notifyMessage = response.getData().getBeAdvisingBranch() + "分行有待處理案件";
+		}
+		else {
+			notifyMessage = response.getMessage();
+		}
+
+		return notifyMessage;
+	}
+	
 	@GetMapping("/ir-masters/{id}")
 	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
 	public Response<IR> getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
@@ -170,7 +184,7 @@ public class IRController {
 	
 	@GetMapping("/ir-masters/list/fuzzy-search")
 	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔多筆模糊查詢")
-	public Response<List<IRQuery>> queryIRmasterDataList(@RequestParam("irNoirNo")String irNo) {
+	public Response<List<IRQuery>> queryIRmasterDataList(@RequestParam("irNo")String irNo) {
 		Response<List<IRQuery>> response = new Response<List<IRQuery>>();
 		
 		try {
