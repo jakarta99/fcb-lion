@@ -90,8 +90,9 @@ public class FPCService {
 			FPCuster fpcentity = new FPCuster();
 //			List<FPMaster> fpmArry = fpcentity.getFpmasters();
 //			fpmArry.add(crcyData);
+			System.out.println("test@@@= " + accData);
 			BeanUtils.copyProperties(accData, fpcentity);
-
+			FPCustomerRepository.save(fpcentity);
 			return fpcentity;
 		}
 	

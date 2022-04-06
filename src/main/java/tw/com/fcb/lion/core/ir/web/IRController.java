@@ -19,15 +19,19 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
+import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.Response;
+import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
 import tw.com.fcb.lion.core.ir.web.dto.IRQuery;
+import tw.com.fcb.lion.core.sharedkernel.api.FPClient;
 
 @RestController
+//@RequiredArgsConstructor
 @RequestMapping("/ir")
 @OpenAPIDefinition(info = @Info(title = "獅子王's  匯入  API", version = "v1.0.0"))
 public class IRController {
@@ -37,8 +41,8 @@ public class IRController {
 	
 	@Autowired
 	IRPaymentService irPaymentService;
-	
-	
+
+//	final FPClient fPClient;	
 //	final IRMapper irMapper;
 	
 	@PostMapping("/swift")
@@ -185,5 +189,25 @@ public class IRController {
 		
 		return response;
 	}
+	
+//	@PutMapping("/fpc-masters/updfpm/{irNo}/balance")
+//	@Operation(description = "S211匯入解款內扣手續費", summary="匯入解款")
+//	public Response<FPCuster> deposit(@PathVariable("irNo") String irNo) {
+//		Response<FPCuster> response = new Response<FPCuster>();
+//		
+//		try {
+////			ir.setCommCharge(irFee);
+////			irPaymentService.settle(ir);
+//			IR ir = irPaymentService.queryIRmasterData(irNo);
+//			BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
+//			FPCuster fPCusterAcc = fPClient.updfpmBal(ir.getAccountNo(),ir.getCurrency(),irFee,ir.getIrAmt());
+//			response.of("0000", "交易成功", fPCusterAcc); 
+//        } 
+//		catch (Exception e) {
+//            response.of("9999", "交易失敗，請重新輸入", null);
+//        }
+//		
+//		return response;
+//	}
 		
 }

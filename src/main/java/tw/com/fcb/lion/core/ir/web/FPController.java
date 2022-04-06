@@ -3,9 +3,12 @@ package tw.com.fcb.lion.core.ir.web;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +18,7 @@ import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
 import tw.com.fcb.lion.core.ir.service.FPCService;
+import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 
 @RestController
 @RequestMapping("/fpc")
@@ -71,7 +75,8 @@ public class FPController {
 //	更新幣別FPM餘額(先加後減)
 	@PutMapping("/fpc-upd/{account}/{crcy}/balance")
 	@Operation(description = "更新幣別FPM餘額(先加後減)", summary="更新幣別FPM餘額")
-	public Response<FPCuster> updfpmBal(@PathVariable("account") String acc,@PathVariable("crcy") String crcy) {
+	public Response<FPCuster> updfpmBal(@PathVariable("account") String acc,@PathVariable("crcy") String crcy,
+										BigDecimal addAmt,BigDecimal subAmt) {
 		
 		Response<FPCuster> response = new Response<FPCuster>();
 		try {
@@ -87,9 +92,9 @@ public class FPController {
 	}
 	
 //	新增FPC帳號 幣別FPM - 測試用    ERR = 400
-	@PutMapping("/fpc-ins/{account}/{crcy}/creat")
+	@PostMapping("/fpc-ins/creat")
 	@Operation(description = "新增帳號、幣別資訊", summary="新增帳號、幣別資訊")
-	public Response<FPCuster> insfpcAccount(@PathVariable("account") FPCuster accData) {
+	public Response<FPCuster> insfpcAccount(@RequestBody FPCuster accData) {
 		
 		Response<FPCuster> response = new Response<FPCuster>();
 		try {
@@ -106,9 +111,12 @@ public class FPController {
 //			}
         } 
 		catch (Exception e) {
+			System.out.println("err=" + e);
             response.of("9999","交易失敗，請重新輸入", null);
         }
 		
 		return response;
 	}
+	
+	
 }
