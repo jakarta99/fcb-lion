@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.Response;
+import tw.com.fcb.lion.core.ir.config.IRConfig;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
@@ -44,6 +45,9 @@ public class IRController {
 	
 	@Autowired
 	IRPaymentService irPaymentService;
+	
+	@Autowired
+	IRConfig irConfig;
 	
 	@Value("${tw.com.fcb.lion.core.ir.web.file-path}")
 	String filePath;
@@ -272,5 +276,9 @@ public class IRController {
 		
 		return response;
 	}
-		
+	
+	@GetMapping
+	public String getSettings() {
+		return "FileName: " + filePath + " ENVIRONMENT: " + irConfig.getEnvType();
+	}
 }
