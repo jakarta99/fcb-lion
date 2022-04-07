@@ -249,25 +249,19 @@ public class IRController {
 	
 
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance")
-	@Operation(description = "S211匯入解款內扣手續費", summary="匯入解款")
-	public Response<FPCuster> deposit(@PathVariable("irNo") String irNo) {
+	@Operation(description = "S211匯入解款內扣手續費", summary="匯入解款FPC")
+	public Response<FPCuster> deposit(@Parameter(example = "S1NHA00001")@PathVariable("irNo") String irNo) {
 		Response<FPCuster> response = new Response<FPCuster>();
 		IR ir = irPaymentService.queryIRmasterData(irNo);
 		BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
-		FPCuster fPCusterAcc = null;
+		
 		try {
-//			ir.setCommCharge(irFee);
-//			irPaymentService.settle(ir);
-			
-//			FPCuster fPCusterAcc = fPClient.updfpmBal(ir.getAccountNo(),ir.getCurrency(),ir.getIrAmt(),irFee);
-
-			fPCusterAcc = fPClient.updfpmBal("09340123456",ir.getCurrency(),ir.getIrAmt(),irFee);
-			log.debug("fPCusterAcc = {}",fPCusterAcc);
-			log.debug("AccountNo = {}",ir.getAccountNo());
-			log.debug("Currency = {}",ir.getCurrency());
-			log.debug("irFee = {}",irFee);
-			log.debug("IrAmt = {}",ir.getIrAmt());
-			response.of("0000", "交易成功", fPCusterAcc); 
+			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
+				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
+			}else {
+				Response<FPCuster> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),irFee);
+				response.of("0000", "交易成功", fPCusterAccR.getData());
+			}			 
         } 
 		catch (Exception e) {
 			log.debug("e = {}",e);
