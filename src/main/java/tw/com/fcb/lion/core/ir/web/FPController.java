@@ -3,13 +3,13 @@ package tw.com.fcb.lion.core.ir.web;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +18,6 @@ import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
 import tw.com.fcb.lion.core.ir.service.FPCService;
-import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 
 @RestController
 @RequestMapping("/fpc")
@@ -76,11 +75,11 @@ public class FPController {
 	@PutMapping("/fpc-upd/{account}/{crcy}/balance")
 	@Operation(description = "更新幣別FPM餘額(先加後減)", summary="更新幣別FPM餘額")
 	public Response<FPCuster> updfpmBal(@PathVariable("account") String acc,@PathVariable("crcy") String crcy,
-										BigDecimal addAmt,BigDecimal subAmt) {
+										@RequestParam BigDecimal addAmt,@RequestParam BigDecimal subAmt) {
 		
 		Response<FPCuster> response = new Response<FPCuster>();
 		try {
-			FPCuster fPCusterAcc = fPCService.updfpmBal(acc,crcy,BigDecimal.valueOf(100),BigDecimal.valueOf(10));
+			FPCuster fPCusterAcc = fPCService.updfpmBal(acc,crcy,addAmt,subAmt);
 			response.of("0000", "交易成功", fPCusterAcc); 
 			
         } 

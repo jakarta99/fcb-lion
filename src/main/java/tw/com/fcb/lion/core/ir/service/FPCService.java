@@ -80,6 +80,7 @@ public class FPCService {
 				}
 			}
 			System.out.println("test@@@ = " + fPMaster);
+			System.out.println("test@@@fpc = " + fpcuster);
 			return fpcuster;
 		}	
 		

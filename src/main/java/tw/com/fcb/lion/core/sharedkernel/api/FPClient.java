@@ -5,16 +5,17 @@ import java.math.BigDecimal;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import io.swagger.v3.oas.annotations.Operation;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 
-@FeignClient(name = "updfpc", url = "http://localhost:8080")
+@FeignClient(name = "updfpc", url = "http://localhost:8080",path = "/fpc")
 public interface FPClient {
 
 	@Operation(summary="更新幣別FPM餘額")
-	@GetMapping("/fpc-upd/{account}/{crcy}/balance")
+	@PutMapping("/fpc-upd/{account}/{crcy}/balance")
 	FPCuster updfpmBal(@PathVariable("account") String acc,
 			@PathVariable("crcy") String crcy,
 			@RequestParam BigDecimal addAmt, 
