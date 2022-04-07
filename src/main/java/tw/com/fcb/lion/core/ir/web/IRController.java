@@ -252,10 +252,10 @@ public class IRController {
 	@Operation(description = "S211匯入解款內扣手續費", summary="匯入解款FPC")
 	public Response<FPCuster> deposit(@Parameter(example = "S1NHA00001")@PathVariable("irNo") String irNo) {
 		Response<FPCuster> response = new Response<FPCuster>();
-		IR ir = irPaymentService.queryIRmasterData(irNo);
-		BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
 		
 		try {
+			IR ir = irPaymentService.queryIRmasterData(irNo);
+			BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
