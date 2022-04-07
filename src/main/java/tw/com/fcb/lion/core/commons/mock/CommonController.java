@@ -21,7 +21,7 @@ public class CommonController {
 		int branch;
 		branch = Integer.parseInt(beneficiaryAccount.substring(0,3));
 		if(beneficiaryAccount.length() == 11 && StringUtils.isNumeric(beneficiaryAccount)){
-			if ( branch >= 91  && branch < 821) {
+			if (( branch >= 93  && branch <= 801) || ( branch == 811) || branch == 821) {
 				return true;
 			}
 			else {
