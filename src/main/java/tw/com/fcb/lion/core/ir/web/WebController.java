@@ -197,7 +197,7 @@ public class WebController {
 	@Operation(description = "S211匯入解款", summary="匯入解款")
 	public Response<IRSaveCmd> settle(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
-		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
+		BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		try {
 			irSaveCmd.setCommCharge(irFee);
 			irPaymentService.settle(irSaveCmd);

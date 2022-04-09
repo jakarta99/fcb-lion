@@ -1,6 +1,8 @@
 package tw.com.fcb.lion.core.ir.service;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +66,8 @@ public class IRPaymentService {
 		return irquerylist;
 	}
 	
-	//計算手續費
-	public BigDecimal calculateFee(BigDecimal irAmt,String currency) {
+	//計算手續費(原幣採內扣)
+	public BigDecimal calculateOriginalCurrencyFee(BigDecimal irAmt,String currency) {
 		FxRate fxRate =  fxRateRepository.findByCurrency(currency)
 				.orElseThrow(() -> new RuntimeException("無此幣別") );
 		BigDecimal spotSoldFxRate = fxRate.getSpotSoldFxRate();
@@ -82,7 +84,7 @@ public class IRPaymentService {
 		log.info("standardCharge:{} " , standardCharge);
 		log.info("toUSDStandardCharge:{} " , toUSDStandardCharge);
 		log.info("toUSDStandardChargeDouble:{} " , toUSDStandardChargeDouble);
-		//暫訂最低收美金7元 (台幣200)，最高收美金28元(台幣800)
+		//暫訂最低收美金7元 (相當於新台幣200)，最高收美金28元(相當於新台幣800)
 		if (toUSDStandardChargeDouble < 7) {
 			toUSDStandardCharge = BigDecimal.valueOf(7);
 			standardCharge = BigDecimal.valueOf(7).divide(toUSDfxRate);
@@ -91,9 +93,43 @@ public class IRPaymentService {
 			toUSDStandardCharge = BigDecimal.valueOf(28);
 			standardCharge = BigDecimal.valueOf(28).divide(toUSDfxRate);
 		}
+		//日幣沒有小數
+		if (currency.equals("JPY")){
+			standardCharge = standardCharge.round(new MathContext(1 ,RoundingMode.HALF_UP));
+		}
+
 		return standardCharge;
 	}
-	
+
+	//計算新台幣手續費(採外收另扣台幣)
+	public BigDecimal calculaTWDFee(BigDecimal irAmt,String currency) {
+		FxRate fxRate =  fxRateRepository.findByCurrency(currency)
+				.orElseThrow(() -> new RuntimeException("無此幣別") );
+		BigDecimal spotSoldFxRate = fxRate.getSpotSoldFxRate();
+		BigDecimal toUSDfxRate = fxRate.getToUsdFxRate();
+		log.info("fxRate:{} " , fxRate);
+		log.info("spotSoldFxRate:{} " , spotSoldFxRate);
+		log.info("toUsdfxRate:{} " , toUSDfxRate);
+
+		BigDecimal feeRate = new BigDecimal("0.0005");
+		//新台幣沒有小數
+		BigDecimal standardCharge = irAmt.multiply(feeRate).round(new MathContext(1 ,RoundingMode.HALF_UP));
+
+		BigDecimal toTWDStandardCharge = standardCharge.multiply(spotSoldFxRate);
+		Double toTWDStandardChargeDouble = toTWDStandardCharge.doubleValue();
+		log.info("standardCharge:{} " , standardCharge);
+		log.info("toTWDStandardCharge:{} " , toTWDStandardCharge);
+		log.info("toTWDStandardChargeDouble:{} " , toTWDStandardChargeDouble);
+		//暫訂最低收台幣200，最高收台幣800
+		if (toTWDStandardChargeDouble < 200) {
+			standardCharge = BigDecimal.valueOf(200);
+		}
+		else if (toTWDStandardChargeDouble > 800) {
+			standardCharge = BigDecimal.valueOf(800);
+		}
+		return standardCharge;
+	}
+
 	//傳入外匯編號，執行匯入解款
 	public void settle(IRSaveCmd irSaveCmd) {
 		IRMaster irmaster = IRMasterRepository.findByIrNo(irSaveCmd.getIrNo());

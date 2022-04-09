@@ -27,7 +27,7 @@ class IRPaymentServiceTest {
 		BigDecimal expectValue1 = new BigDecimal(7);
 		String ccy1 = "USD";
 		//Act
-		BigDecimal actualValue1 = irPaymentService.calculateFee(irAmt1, ccy1);
+		BigDecimal actualValue1 = irPaymentService.calculateOriginalCurrencyFee(irAmt1, ccy1);
 		//Assert
 		assertEquals(expectValue1, actualValue1);
 		log.info("actualValue1: {}",actualValue1);
@@ -38,7 +38,7 @@ class IRPaymentServiceTest {
 		BigDecimal expectValue2 = new BigDecimal(28);
 		String ccy2 = "USD";
 		//Act
-		BigDecimal actualValue2 = irPaymentService.calculateFee(irAmt2, ccy2);
+		BigDecimal actualValue2 = irPaymentService.calculateOriginalCurrencyFee(irAmt2, ccy2);
 		//Assert
 		assertEquals(expectValue2, actualValue2);
 		log.info("actualValue2: {}",actualValue2);

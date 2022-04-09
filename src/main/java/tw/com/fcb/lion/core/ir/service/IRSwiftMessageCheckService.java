@@ -205,7 +205,7 @@ public class IRSwiftMessageCheckService {
 		irSaveCmd.setPrintAdvisingDate(LocalDate.now());
 		
 		//計算手續費
-		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
+		BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		irSaveCmd.setCommCharge(irFee);
 		
 		//付款狀態
