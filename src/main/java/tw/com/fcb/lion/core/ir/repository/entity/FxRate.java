@@ -37,4 +37,7 @@ public class FxRate {
 	
 	@Column(name = "SPOT_SOLD_FXRATE")
 	private BigDecimal spotSoldFxRate;
+	
+	@Column(name = "TO_USD_FXRATE")
+	private BigDecimal toUsdFxRate;
 }

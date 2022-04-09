@@ -234,7 +234,7 @@ public class IRController {
 	@Operation(description = "S211匯入解款", summary="匯入解款")
 	public Response<IRSaveCmd> settle(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
-		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt());
+		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		try {
 			irSaveCmd.setCommCharge(irFee);
 			irPaymentService.settle(irSaveCmd);
@@ -255,7 +255,7 @@ public class IRController {
 		
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
-			BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt());
+			BigDecimal irFee = irPaymentService.calculateFee(ir.getIrAmt(),ir.getCurrency());
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {

@@ -130,6 +130,7 @@ public class IRSwiftMessageCheckService {
 		
 		try {
 			SwiftMessageSaveCmd swiftMessage = getBySwiftMessageSeqNo(seqNo);
+			log.info("swiftMessage: {}", swiftMessage);
 			validateSwiftMessage(swiftMessage);
 			Boolean isAutoSettleCase = mainFrameClient.isAutoSettleCase(swiftMessage.getBeneficiaryAccount());
 			
@@ -173,7 +174,6 @@ public class IRSwiftMessageCheckService {
 //		test
 		irSaveCmd.setBeAdvisingBranch("094");
 		irSaveCmd.setCustomerId("05052322");
-		irSaveCmd.setCurrency("USD");
 		irSaveCmd.setAccountInstitution("string");
 		irSaveCmd.setBeneficiaryAccount(swiftMessage.getBeneficiaryAccount());
 		irSaveCmd.setSenderSwiftCode(swiftMessage.getRemitSwiftCode());
@@ -205,7 +205,7 @@ public class IRSwiftMessageCheckService {
 		irSaveCmd.setPrintAdvisingDate(LocalDate.now());
 		
 		//計算手續費
-		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt());
+		BigDecimal irFee = irPaymentService.calculateFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		irSaveCmd.setCommCharge(irFee);
 		
 		//付款狀態

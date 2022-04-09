@@ -7,11 +7,15 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tw.com.fcb.lion.core.ir.repository.FXRateRepository;
 import tw.com.fcb.lion.core.ir.repository.IRMasterRepository;
+import tw.com.fcb.lion.core.ir.repository.entity.FxRate;
 import tw.com.fcb.lion.core.ir.repository.entity.IRMaster;
 import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
@@ -25,6 +29,10 @@ public class IRPaymentService {
 	@Autowired
 	IRMasterRepository IRMasterRepository;
 	
+	@Autowired
+	FXRateRepository fxRateRepository;
+	
+	Logger log = LoggerFactory.getLogger(getClass());
 	//更新印製通知書記號
 	public void updatePrintAdviceMark(String branch) {
 		  List<IRMaster> irMaster = IRMasterRepository.findByBeAdvisingBranchAndPrintAdvisingMk(branch,"N");
@@ -57,17 +65,31 @@ public class IRPaymentService {
 	}
 	
 	//計算手續費
-	public BigDecimal calculateFee(BigDecimal irAmt) {
-
+	public BigDecimal calculateFee(BigDecimal irAmt,String currency) {
+		FxRate fxRate =  fxRateRepository.findByCurrency(currency)
+				.orElseThrow(() -> new RuntimeException("無此幣別") );
+		BigDecimal spotSoldFxRate = fxRate.getSpotSoldFxRate();
+		BigDecimal toUSDfxRate = fxRate.getToUsdFxRate();
+		log.info("fxRate:{} " , fxRate);
+		log.info("spotSoldFxRate:{} " , spotSoldFxRate);
+		log.info("toUsdfxRate:{} " , toUSDfxRate);
+		
+		
 		BigDecimal feeRate = new BigDecimal("0.0005");
 		BigDecimal standardCharge = irAmt.multiply(feeRate);
-		Double standardChargeDouble = standardCharge.doubleValue();
+		BigDecimal toUSDStandardCharge = standardCharge.multiply(toUSDfxRate);
+		Double toUSDStandardChargeDouble = toUSDStandardCharge.doubleValue();
+		log.info("standardCharge:{} " , standardCharge);
+		log.info("toUSDStandardCharge:{} " , toUSDStandardCharge);
+		log.info("toUSDStandardChargeDouble:{} " , toUSDStandardChargeDouble);
 		//暫訂最低收美金7元 (台幣200)，最高收美金28元(台幣800)
-		if (standardChargeDouble < 7) {
-			standardCharge = BigDecimal.valueOf(7);
+		if (toUSDStandardChargeDouble < 7) {
+			toUSDStandardCharge = BigDecimal.valueOf(7);
+			standardCharge = BigDecimal.valueOf(7).divide(toUSDfxRate);
 		} 
-		else if (standardChargeDouble > 28) {
-			standardCharge = BigDecimal.valueOf(28);
+		else if (toUSDStandardChargeDouble > 28) {
+			toUSDStandardCharge = BigDecimal.valueOf(28);
+			standardCharge = BigDecimal.valueOf(28).divide(toUSDfxRate);
 		}
 		return standardCharge;
 	}

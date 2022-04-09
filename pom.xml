@@ -94,11 +94,29 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>springloaded</artifactId>
+						<version>1.2.8.RELEASE</version>
+					</dependency>
+				</dependencies>
+
+				<configuration>
+					<profiles>
+						<profile>dev</profile>
+						<profile>sit</profile>
+						<profile>uat</profile>
+						<profile>prod</profile>
+						<profile>dr</profile>
+					</profiles>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 <!--				<version>${maven-compiler-plugin.version}</version>-->
+
 				<configuration>
 <!--					<executable>11</executable>-->
 <!--					<source>11</source>-->
