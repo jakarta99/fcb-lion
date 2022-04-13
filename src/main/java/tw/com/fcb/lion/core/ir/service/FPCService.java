@@ -79,8 +79,6 @@ public class FPCService {
 					fPMaster.setFpmBalance(afterBal);
 				}
 			}
-			System.out.println("test@@@ = " + fPMaster);
-			System.out.println("test@@@fpc = " + fpcuster);
 			return fpcuster;
 		}	
 		
@@ -91,7 +89,7 @@ public class FPCService {
 			FPCuster fpcentity = new FPCuster();
 //			List<FPMaster> fpmArry = fpcentity.getFpmasters();
 //			fpmArry.add(crcyData);
-			System.out.println("test@@@= " + accData);
+			
 			BeanUtils.copyProperties(accData, fpcentity);
 			FPCustomerRepository.save(fpcentity);
 			return fpcentity;

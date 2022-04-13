@@ -65,8 +65,7 @@ public class IRSwiftMessageCheckService {
 		// 迴圈讀一行資料
 		while ( (lineData = br.readLine()) != null){
 			idx++;
-	        System.out.println(lineData);
-
+	        
 			// split 切割
 			String[] data = lineData.split(",");
 
@@ -76,9 +75,22 @@ public class IRSwiftMessageCheckService {
 			}else{
 //				電文內容 - 設值
 				String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-				messageSaveCmd = messageSaveCmd.builder().seqNo(data[0]).currency(data[1])
+//				帳號強制11碼 - 右靠左補零
+				String account = String.format("%011d", Long.valueOf(data[5]));
+//				手續費類型
+				ChargeType chargeType = null;
+				try {
+					chargeType = ChargeType.valueOf(data[24]);
+				} catch (Exception e) {
+						log.debug(e + "資料型態（chargeType）不符EUNM定義=" + data[24]);
+					chargeType = ChargeType.valueOf("SHA");
+				}
+				System.out.println("test @@@@ = " + chargeType);
+					
+				
+				messageSaveCmd = SwiftMessageSaveCmd.builder().seqNo(data[0]).currency(data[1])
 						        .irAmt(new BigDecimal(data[2])).valueDate(new DateConverter().convert(data[4]))
-						        .beneficiaryAccount(data[5]).chargeType(ChargeType.SHA).remitSwiftCode(data[34])
+						        .beneficiaryAccount(account).chargeType(chargeType).remitSwiftCode(data[34])
 						        .stats("1").txTime(time).build();
 				
 			}
