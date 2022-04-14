@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
 import tw.com.fcb.lion.core.commons.http.Response;
+import tw.com.fcb.lion.core.fp.web.FPClient;
 import tw.com.fcb.lion.core.ir.config.IRConfig;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
@@ -32,7 +33,6 @@ import tw.com.fcb.lion.core.ir.web.cmd.IRSaveCmd;
 import tw.com.fcb.lion.core.ir.web.cmd.SwiftMessageSaveCmd;
 import tw.com.fcb.lion.core.ir.web.dto.IR;
 import tw.com.fcb.lion.core.ir.web.dto.IRQuery;
-import tw.com.fcb.lion.core.sharedkernel.api.FPClient;
 
 @RestController
 @RequiredArgsConstructor

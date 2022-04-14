@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
+import tw.com.fcb.lion.core.ir.ChargeType;
 
 @Entity
 @Table(name = "IR_SWIFT_MESSAGE")
@@ -126,7 +129,8 @@ public class IRSwiftMessage {
 
 //	手續費負擔類型
 	@Column(name = "CHARGE_TYPE")
-	String chargeType;
+	@Enumerated(EnumType.STRING)
+	ChargeType chargeType;
 
 //	中間行費用_幣別1
 	@Column(name = "SENDER_CHARGE_CURRENCY_1")

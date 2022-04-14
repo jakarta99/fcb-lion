@@ -106,7 +106,7 @@ public class IRSwiftMessageCheckService {
 		;
 		BeanUtils.copyProperties(saveCmd, entity);
 //		因SwiftMessageSaveCmd(ChargeType)為EUNM，IRSwiftMessage(ChargeType)為String，故需轉換
-		entity.setChargeType(String.valueOf(saveCmd.getChargeType()));
+		//entity.setChargeType(String.valueOf(saveCmd.getChargeType()));
 		repository.save(entity);
 	}
 
