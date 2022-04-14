@@ -1,34 +1,24 @@
-package tw.com.fcb.lion.core.ir.web;
+package tw.com.fcb.lion.core.fp.web;
 
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
 import tw.com.fcb.lion.core.ir.service.FPCService;
 
-@RestController
-@RequestMapping("/fpc")
-public class FPController {
+
+public class FPController implements FPApi {
 
 	@Autowired
 	FPCService  fPCService;
 	
-//	FPC 查詢帳號是否存在
-	@GetMapping("/fpc-query/{account}/fpcuster")
-	@Operation(description = "依帳號查詢FPCuster資料", summary="查詢FPCuster資料")
 	public Response<FPCuster> getByfpcAccount(@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc) {
 		Response<FPCuster> response = new Response<FPCuster>();
 		
@@ -47,9 +37,7 @@ public class FPController {
 		return response;
 	}
 	
-//	FPM BAL 查詢該帳號之幣別餘額
-	@GetMapping("/fpc-query/{account}/{crcy}/balance")
-	@Operation(description = "依帳號、幣別查詢FPM餘額", summary="查詢FPM餘額")
+
 	public Response<BigDecimal> getByfpmCurrencyBal(@Parameter(description = "帳號", example = "09340123456")
 													@PathVariable("account") String acc,@PathVariable("crcy")String crcy) {
 		
@@ -71,9 +59,7 @@ public class FPController {
 		return response;
 	}
 	
-//	更新幣別FPM餘額(先加後減)
-	@PutMapping("/fpc-upd/{account}/{crcy}/balance")
-	@Operation(description = "更新幣別FPM餘額(先加後減)", summary="更新幣別FPM餘額")
+
 	public Response<FPCuster> updfpmBal(@PathVariable("account") String acc,@PathVariable("crcy") String crcy,
 										@RequestParam BigDecimal addAmt,@RequestParam BigDecimal subAmt) {
 		
@@ -89,10 +75,9 @@ public class FPController {
 		
 		return response;
 	}
-	
-//	新增FPC帳號 幣別FPM - 測試用    ERR = 400
-	@PostMapping("/fpc-ins/creat")
-	@Operation(description = "新增帳號、幣別資訊", summary="新增帳號、幣別資訊")
+
+
+
 	public Response<FPCuster> insfpcAccount(@RequestBody FPCuster accData) {
 		
 		Response<FPCuster> response = new Response<FPCuster>();
@@ -116,6 +101,8 @@ public class FPController {
 		
 		return response;
 	}
+	
+
 	
 	
 }
