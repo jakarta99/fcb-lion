@@ -11,4 +11,6 @@ public class FPAccountCreateRequest {
 	
 	@Schema(description = "customer's idno")
 	private String customerIdno;
+	
+
 }

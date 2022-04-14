@@ -12,105 +12,92 @@ import tw.com.fcb.lion.core.fp.service.FPCService;
 import tw.com.fcb.lion.core.fp.service.cmd.FPAccountCreateCmd;
 import tw.com.fcb.lion.core.fp.service.vo.FPAccountVo;
 import tw.com.fcb.lion.core.fp.web.dto.FPAccountDto;
+import tw.com.fcb.lion.core.fp.web.mapper.FpAccountDtoMapper;
 import tw.com.fcb.lion.core.fp.web.request.FPAccountCreateRequest;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
 
-
 public class FPController implements FPAccountApi {
 
 	@Autowired
-	FPCService  fPCService;
+	FPCService fPCService;
 	
-	public Response<FPCuster> getByAccount(@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc) {
+	@Autowired
+	FpAccountDtoMapper mapper;
+
+	public Response<FPCuster> getByAccount(
+			@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc) {
 		Response<FPCuster> response = new Response<FPCuster>();
-		
+
 		try {
 			FPCuster fPCusterAcc = fPCService.getByfpcAccount(acc);
 			if (fPCusterAcc == null) {
-				response.of("D001", "查詢"+acc +"無此帳號，請重新輸入", fPCusterAcc); 
-			}else {
-				response.of("0000", "交易成功", fPCusterAcc); 
+				response.of("D001", "查詢" + acc + "無此帳號，請重新輸入", fPCusterAcc);
+			} else {
+				response.of("0000", "交易成功", fPCusterAcc);
 			}
-        } 
-		catch (Exception e) {
-            response.of("9999","交易失敗，請重新輸入", null);
-        }
-		
+		} catch (Exception e) {
+			response.of("9999", "交易失敗，請重新輸入", null);
+		}
+
 		return response;
 	}
-	
 
-	public Response<BigDecimal> getByfpmCurrencyBal(@Parameter(description = "帳號", example = "09340123456")
-													@PathVariable("account") String acc,@PathVariable("crcy")String crcy) {
-		
+	public Response<BigDecimal> getByfpmCurrencyBal(
+			@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc,
+			@PathVariable("crcy") String crcy) {
+
 		Response<BigDecimal> response = new Response<BigDecimal>();
 		try {
 			FPCuster fPCusterAcc = fPCService.getByfpcAccount(acc);
-			FPMaster fPMaster    = fPCService.getByfpmCurrencyData(acc,crcy);
+			FPMaster fPMaster = fPCService.getByfpmCurrencyData(acc, crcy);
 			if (fPCusterAcc == null) {
-				response.of("D001", "查詢"+acc +"無此帳號，請重新輸入", null); 
-			}else {
+				response.of("D001", "查詢" + acc + "無此帳號，請重新輸入", null);
+			} else {
 				BigDecimal fpmBal = fPMaster.getFpmBalance();
-				response.of("0000", "交易成功，帳號"+acc+"之幣別"+crcy+"餘額", fpmBal); 
+				response.of("0000", "交易成功，帳號" + acc + "之幣別" + crcy + "餘額", fpmBal);
 			}
-        } 
-		catch (Exception e) {
-            response.of("9999","交易失敗，請重新輸入", null);
-        }
-		
+		} catch (Exception e) {
+			response.of("9999", "交易失敗，請重新輸入", null);
+		}
+
 		return response;
 	}
-	
 
-	public Response<FPCuster> updfpmBal(@PathVariable("account") String acc,@PathVariable("crcy") String crcy,
-										@RequestParam BigDecimal addAmt,@RequestParam BigDecimal subAmt) {
-		
+	public Response<FPCuster> updfpmBal(@PathVariable("account") String acc, @PathVariable("crcy") String crcy,
+			@RequestParam BigDecimal addAmt, @RequestParam BigDecimal subAmt) {
+
 		Response<FPCuster> response = new Response<FPCuster>();
 		try {
-			FPCuster fPCusterAcc = fPCService.updfpmBal(acc,crcy,addAmt,subAmt);
-			response.of("0000", "交易成功", fPCusterAcc); 
-			
-        } 
-		catch (Exception e) {
-            response.of("9999","交易失敗，請重新輸入", null);
-        }
-		
+			FPCuster fPCusterAcc = fPCService.updfpmBal(acc, crcy, addAmt, subAmt);
+			response.of("0000", "交易成功", fPCusterAcc);
+
+		} catch (Exception e) {
+			response.of("9999", "交易失敗，請重新輸入", null);
+		}
+
 		return response;
 	}
-
 
 	@Override
 	public Response<FPAccountDto> create(FPAccountCreateRequest createRequest) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 		try {
-			
-			
-			// 1. 接值
-			
-				
-			// 2. 驗證
-			
-			// createRequest 驗證
-			
-			// 3. 呼叫服務
-			FPAccountCreateCmd createCmd = new FPAccountCreateCmd();
-			
-			createCmd.setAccountNo(createRequest.getAccountNo());
-			createCmd.setCustomerIdno(createRequest.getCustomerIdno());
-			
-			FPAccountVo vo = fPCService.create(createCmd);
 
-			
+			// 1. 接值
+
+			// 2. 驗證
+
+			// createRequest 驗證
+
+			// 3. 呼叫服務
+			FPAccountVo vo = fPCService.create(mapper.toCreateCmd(createRequest));
+
 			// 4. 設值
-			FPAccountDto dto = new FPAccountDto();
-			dto.setAccountNo(vo.getAccountNo());
-			dto.setCustomerIdno(vo.getCustomerIdno());
-			dto.setValidCrcyCnt(vo.getValidCrcyCnt());
-			
+
 			// 5. 訊息
-			response.of("0000", "交易成功", dto); 
-			
+			response.of("0000", "交易成功", mapper.fromVo(vo));
+
 //			FPCuster fPCusterAcc = fPCService.getByfpcAccount(accData.getFpcAccount());
 //			FPMaster fPMaster    = fPCService.getByfpmCurrencyData(accData.getFpcAccount(),crcy);
 //			if (fPMaster != null) {
@@ -119,16 +106,12 @@ public class FPController implements FPAccountApi {
 //				fPCusterAcc = fPCService.insfpcAccount(accData,crcy);
 //				response.of("0000", "交易成功", fPCusterAcc); 
 //			}
-        } 
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println("err=" + e);
-            response.of("9999","交易失敗，請重新輸入", null);
-        }
-		
+			response.of("9999", "交易失敗，請重新輸入", null);
+		}
+
 		return response;
 	}
-	
 
-	
-	
 }
