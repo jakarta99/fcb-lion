@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import tw.com.fcb.lion.core.commons.http.Response;
@@ -18,8 +15,7 @@ import tw.com.fcb.lion.core.fp.web.dto.FPAccountDto;
 import tw.com.fcb.lion.core.fp.web.request.FPAccountCreateRequest;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 
-@RestController
-@RequestMapping("/fp/accounts")
+
 public interface FPAccountApi {
 
 	

@@ -4,27 +4,30 @@ import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Parameter;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.fp.service.FPCService;
 import tw.com.fcb.lion.core.fp.service.cmd.FPAccountCreateCmd;
 import tw.com.fcb.lion.core.fp.service.vo.FPAccountVo;
 import tw.com.fcb.lion.core.fp.web.dto.FPAccountDto;
-import tw.com.fcb.lion.core.fp.web.mapper.FpAccountDtoMapper;
 import tw.com.fcb.lion.core.fp.web.request.FPAccountCreateRequest;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
 
+@RestController
+@RequestMapping("/fp/accounts")
 public class FPController implements FPAccountApi {
 
 	@Autowired
 	FPCService fPCService;
 	
-	@Autowired
-	FpAccountDtoMapper mapper;
+//	@Autowired
+//	FpAccountDtoMapper mapper;
 
+	
 	public Response<FPCuster> getByAccount(
 			@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc) {
 		Response<FPCuster> response = new Response<FPCuster>();
@@ -43,6 +46,7 @@ public class FPController implements FPAccountApi {
 		return response;
 	}
 
+	
 	public Response<BigDecimal> getByfpmCurrencyBal(
 			@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc,
 			@PathVariable("crcy") String crcy) {
@@ -64,6 +68,7 @@ public class FPController implements FPAccountApi {
 		return response;
 	}
 
+	
 	public Response<FPCuster> updfpmBal(@PathVariable("account") String acc, @PathVariable("crcy") String crcy,
 			@RequestParam BigDecimal addAmt, @RequestParam BigDecimal subAmt) {
 
@@ -91,12 +96,21 @@ public class FPController implements FPAccountApi {
 			// createRequest 驗證
 
 			// 3. 呼叫服務
-			FPAccountVo vo = fPCService.create(mapper.toCreateCmd(createRequest));
+//			FPAccountVo vo = fPCService.create(mapper.toCreateCmd(createRequest));
 
+			FPAccountCreateCmd createCmd = new FPAccountCreateCmd();
+			createCmd.setAccountNo(createRequest.getAccountNo());
+			createCmd.setCustomerIdno(createRequest.getCustomerIdno());
+			FPAccountVo vo = fPCService.create(createCmd);
+			
 			// 4. 設值
-
+			FPAccountDto dto = new FPAccountDto();
+			dto.setAccountNo(vo.getAccountNo());
+			dto.setCustomerIdno(vo.getCustomerIdno());
+			dto.setValidCrcyCnt(vo.getValidCrcyCnt());
 			// 5. 訊息
-			response.of("0000", "交易成功", mapper.fromVo(vo));
+//			response.of("0000", "交易成功", mapper.fromVo(vo));
+			response.of("0000", "交易成功", dto);
 
 //			FPCuster fPCusterAcc = fPCService.getByfpcAccount(accData.getFpcAccount());
 //			FPMaster fPMaster    = fPCService.getByfpmCurrencyData(accData.getFpcAccount(),crcy);
