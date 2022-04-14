@@ -85,9 +85,7 @@ public class IRSwiftMessageCheckService {
 						log.debug(e + "資料型態（chargeType）不符EUNM定義=" + data[24]);
 					chargeType = ChargeType.valueOf("SHA");
 				}
-				System.out.println("test @@@@ = " + chargeType);
 					
-				
 				messageSaveCmd = SwiftMessageSaveCmd.builder().seqNo(data[0]).currency(data[1])
 						        .irAmt(new BigDecimal(data[2])).valueDate(new DateConverter().convert(data[4]))
 						        .beneficiaryAccount(account).chargeType(chargeType).remitSwiftCode(data[34])
@@ -105,7 +103,10 @@ public class IRSwiftMessageCheckService {
 		
 	public void insert(SwiftMessageSaveCmd saveCmd) {
 		IRSwiftMessage entity = new IRSwiftMessage();
+		;
 		BeanUtils.copyProperties(saveCmd, entity);
+//		因SwiftMessageSaveCmd(ChargeType)為EUNM，IRSwiftMessage(ChargeType)為String，故需轉換
+		entity.setChargeType(String.valueOf(saveCmd.getChargeType()));
 		repository.save(entity);
 	}
 

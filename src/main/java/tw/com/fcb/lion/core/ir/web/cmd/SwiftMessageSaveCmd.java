@@ -3,8 +3,6 @@ package tw.com.fcb.lion.core.ir.web.cmd;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
