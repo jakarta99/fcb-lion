@@ -2,6 +2,8 @@ package tw.com.fcb.lion.core.fp.web;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import tw.com.fcb.lion.core.fp.service.FPCService;
 import tw.com.fcb.lion.core.fp.service.cmd.FPAccountCreateCmd;
 import tw.com.fcb.lion.core.fp.service.vo.FPAccountVo;
 import tw.com.fcb.lion.core.fp.web.dto.FPAccountDto;
+import tw.com.fcb.lion.core.fp.web.mapper.FpAccountDtoMapper;
 import tw.com.fcb.lion.core.fp.web.request.FPAccountCreateRequest;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
@@ -24,10 +27,10 @@ public class FPController implements FPAccountApi {
 	@Autowired
 	FPCService fPCService;
 	
-//	@Autowired
-//	FpAccountDtoMapper mapper;
+	@Autowired
+	FpAccountDtoMapper mapper;
 
-	
+	Logger log = LoggerFactory.getLogger(getClass());
 	public Response<FPCuster> getByAccount(
 			@Parameter(description = "帳號", example = "09340123456") @PathVariable("account") String acc) {
 		Response<FPCuster> response = new Response<FPCuster>();
@@ -89,6 +92,7 @@ public class FPController implements FPAccountApi {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 		try {
 
+			log.info("createRequest:{}",createRequest);
 			// 1. 接值
 
 			// 2. 驗證
@@ -96,12 +100,12 @@ public class FPController implements FPAccountApi {
 			// createRequest 驗證
 
 			// 3. 呼叫服務
-//			FPAccountVo vo = fPCService.create(mapper.toCreateCmd(createRequest));
+			FPAccountVo vo = fPCService.create(mapper.toCreateCmd(createRequest));
 
-			FPAccountCreateCmd createCmd = new FPAccountCreateCmd();
-			createCmd.setAccountNo(createRequest.getAccountNo());
-			createCmd.setCustomerIdno(createRequest.getCustomerIdno());
-			FPAccountVo vo = fPCService.create(createCmd);
+//			FPAccountCreateCmd createCmd = new FPAccountCreateCmd();
+//			createCmd.setAccountNo(createRequest.getAccountNo());
+//			createCmd.setCustomerIdno(createRequest.getCustomerIdno());
+//			FPAccountVo vo = fPCService.create(createCmd);
 			
 			// 4. 設值
 			FPAccountDto dto = new FPAccountDto();
