@@ -9,5 +9,8 @@ public class FPAccountCreateCmd {
 	private String accountNo;
 	
 	private String customerIdno;
-	
+
+	private String status;
+
+	private Integer validCrcyCnt;
 }
