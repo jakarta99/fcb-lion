@@ -251,7 +251,7 @@ public class IRController {
 	@Operation(description = "S211匯入解款手續費外收台幣", summary="匯入解款")
 	public Response<IRSaveCmd> settleTWDFee(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
-		BigDecimal irFee = irPaymentService.calculaTWDFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
+		BigDecimal irFee = irPaymentService.calculateTWDFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		try {
 			irSaveCmd.setCommCharge(irFee);
 			irPaymentService.settle(irSaveCmd);
@@ -309,7 +309,7 @@ public class IRController {
 
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
-			BigDecimal irFee = irPaymentService.calculaTWDFee(ir.getIrAmt(),ir.getCurrency());
+			BigDecimal irFee = irPaymentService.calculateTWDFee(ir.getIrAmt(),ir.getCurrency());
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {

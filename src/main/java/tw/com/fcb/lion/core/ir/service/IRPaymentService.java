@@ -102,7 +102,7 @@ public class IRPaymentService {
 	}
 
 	//計算新台幣手續費(採外收另扣台幣)
-	public BigDecimal calculaTWDFee(BigDecimal irAmt,String currency) {
+	public BigDecimal calculateTWDFee(BigDecimal irAmt, String currency) {
 		FxRate fxRate =  fxRateRepository.findByCurrency(currency)
 				.orElseThrow(() -> new RuntimeException("無此幣別") );
 		BigDecimal spotSoldFxRate = fxRate.getSpotSoldFxRate();
