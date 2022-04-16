@@ -2,6 +2,7 @@ package tw.com.fcb.lion.core.fp.web.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import tw.com.fcb.lion.core.fp.common.enums.BookType;
 import tw.com.fcb.lion.core.fp.common.enums.Status;
 
 @Data
@@ -19,8 +20,11 @@ public class FPAccountDto {
 	private String customerIdno;
 
 	@Schema(description = "外存狀態")
-	private Status status;
+	private String status;
 
 	@Schema(description = "有效帳號數")
 	private Integer validCrcyCnt;
+	
+	@Schema(description = "存摺種類")
+	private String bookType;
 }

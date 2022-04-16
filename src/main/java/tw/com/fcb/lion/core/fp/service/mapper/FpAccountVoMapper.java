@@ -18,6 +18,8 @@ public interface FpAccountVoMapper {
 	
 	@Mapping(target = "accountNo" , source = "fpcAccount")
 	@Mapping(target = "customerIdno" , source = "fpcCustomerId")
+	@Mapping(target = "status" , source = "fpcStatus")
+	@Mapping(target = "validCrcyCnt", source = "fpcValidCrcyCnt")
 	FPAccountVo toVo (FPCuster fpCuster);
 	
 

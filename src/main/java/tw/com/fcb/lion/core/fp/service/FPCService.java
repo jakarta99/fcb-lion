@@ -1,6 +1,7 @@
 package tw.com.fcb.lion.core.fp.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import tw.com.fcb.lion.core.fp.service.cmd.FPAccountCreateCmd;
 import tw.com.fcb.lion.core.fp.service.mapper.FpAccountVoMapper;
 import tw.com.fcb.lion.core.fp.service.vo.FPAccountVo;
+import tw.com.fcb.lion.core.fp.web.request.FPAccountCreateRequest;
 import tw.com.fcb.lion.core.ir.repository.FPCustomerRepository;
 import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
@@ -28,19 +30,6 @@ public class FPCService {
 	@Autowired
 	FpAccountVoMapper fpAccountVoMapper;
 	Logger log = LoggerFactory.getLogger(getClass());
-//	新增帳號
-//	public void insert(FPCuster fPCuster) {
-//		FPCuster entity = new FPCuster();
-//		BeanUtils.copyProperties(fPCuster, entity);
-//		FPCustomerRepository.save(entity);
-//	}
-
-//	新增幣別 xxx
-//	public void insert(FPMaster fPMaster) {
-//		FPMaster entity = new FPMaster();
-//		BeanUtils.copyProperties(fPMaster, entity);
-//		FPMasterRepository.save(entity);
-//	}
 
 	// 傳入帳號，查詢帳號、幣別資訊
 	public FPCuster getByfpcAccount(String acc) {
@@ -89,30 +78,70 @@ public class FPCService {
 		return fpcuster;
 	}
 
-	// 新增帳號、幣別資訊
-	public FPAccountVo create(FPAccountCreateCmd createCmd) {
+	// 新增帳號資訊
+	public FPAccountVo createFpc(FPAccountCreateCmd createCmd) {
+		log.info("createCmd: {}" , createCmd);
+		FPCuster fpcentity = new FPCuster();
 
-//		FPCuster fpcentity = new FPCuster();
-//			List<FPMaster> fpmArry = fpcentity.getFpmasters();
-//			fpmArry.add(crcyData);
-
-//		BeanUtils.copyProperties(createCmd, fpcentity);
-		FPCuster fpcentity = fpAccountVoMapper.toEntity(createCmd);
+//		mapper怪怪的 先註解掉!!!
+//		FPCuster fpcentity = fpAccountVoMapper.toEntity(createCmd);
+		fpcentity.setFpcAccount(createCmd.getAccountNo());
+		fpcentity.setFpcCustomerId(createCmd.getCustomerIdno());
+		fpcentity.setFpcStatus("00");
+		fpcentity.setFpcValidCrcyCnt(0);
+		System.out.println("test = "+ createCmd.getBookType());
+		fpcentity.setBookType(String.valueOf(createCmd.getBookType()));
 		fPCustomerRepository.save(fpcentity);
 		log.info("fpcentity: {}" , fpcentity);
 		
-		FPAccountVo vo = fpAccountVoMapper.toVo(fpcentity);
-//		FPAccountVo vo = new FPAccountVo();
-//		vo.setId(fpcentity.getId());
-//		vo.setAccountNo(fpcentity.getFpcAccount());
-//		vo.setCustomerIdno(fpcentity.getFpcCustomerId());
+//		mapper怪怪的 先註解掉!!!	
+//		FPAccountVo vo = fpAccountVoMapper.toVo(fpcentity);
+		FPAccountVo vo = new FPAccountVo();
+		vo.setId(fpcentity.getId());
+		vo.setAccountNo(fpcentity.getFpcAccount());
+		vo.setCustomerIdno(fpcentity.getFpcCustomerId());
+		vo.setStatus(fpcentity.getFpcStatus());
+		vo.setValidCrcyCnt(fpcentity.getFpcValidCrcyCnt());
 		log.info("FPAccountVo: {}" , vo);
-		//vo.setStatus(fpcentity.getFpcStatus());
-		
-		
-		
 		
 		return vo;
 	}
+	
+	// 新增幣別資訊
+		public FPAccountVo createFpm(FPAccountCreateRequest createRequest) {
+//			log.info("createCmd: {}" , createCmd);
+			FPCuster fpcuster = fPCustomerRepository.findByfpcAccount(createRequest.getAccountNo());
+			FPMaster fpMaster  = new FPMaster();
+			fpMaster.setFpmCurrency(String.valueOf(createRequest.getCrcyCode()));
+			fpMaster.setFpmStatus("00");
+			fpMaster.setFpmBalance(new BigDecimal(0.00));
+			
+			if(fpcuster.getFpmasters() == null) {
+				List<FPMaster> fpmArry = new ArrayList<FPMaster>();
+				fpmArry.add(fpMaster);
+				fpcuster.setFpmasters(fpmArry);
+			}else {
+//*********	會出現null 待研究
+				List<FPMaster> fpmArry = fpcuster.getFpmasters();
+				fpmArry.add(fpMaster);
+				fpcuster.setFpmasters(fpmArry);
+			}
+			
+			fpcuster.setFpcValidCrcyCnt(createRequest.getValidCrcyCnt() + 1 );
+			fPCustomerRepository.save(fpcuster);
+			log.info("fpcentity: {}" , fpcuster);
+			
+//			mapper怪怪的 先註解掉!!!	
+//			FPAccountVo vo = fpAccountVoMapper.toVo(fpcentity);
+			FPAccountVo vo = new FPAccountVo();
+			vo.setId(fpcuster.getId());
+			vo.setAccountNo(fpcuster.getFpcAccount());
+			vo.setCustomerIdno(fpcuster.getFpcCustomerId());
+			vo.setStatus(fpcuster.getFpcStatus());
+			vo.setValidCrcyCnt(fpcuster.getFpcValidCrcyCnt());
+			log.info("FPAccountVo: {}" , vo);
+
+			return vo;
+		}
 
 }

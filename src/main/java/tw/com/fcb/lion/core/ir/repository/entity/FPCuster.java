@@ -13,7 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import tw.com.fcb.lion.core.fp.common.enums.BookType;
+import tw.com.fcb.lion.core.fp.common.enums.CrcyCode;
 
 /**
  * 
@@ -40,7 +43,10 @@ public class FPCuster {
 	private String fpcStatus;
 
 	@Column(name = "FPC_VALID_CRCY_CNT")
-	private String fpcValidCrcyCnt;
+	private Integer fpcValidCrcyCnt;
+	
+	@Column(name = "FPC_BOOK_TYPE")
+	private String bookType;
 	
 	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

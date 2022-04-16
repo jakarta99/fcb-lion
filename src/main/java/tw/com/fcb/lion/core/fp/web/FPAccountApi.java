@@ -17,7 +17,6 @@ import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 
 
 public interface FPAccountApi {
-
 	
 	@GetMapping("/{account}")
 	@Operation(description = "依帳號查詢FPCuster資料", summary="查詢FPCuster資料")

@@ -1,7 +1,8 @@
 package tw.com.fcb.lion.core.fp.service.cmd;
 
 import lombok.Data;
-import tw.com.fcb.lion.core.fp.common.enums.Status;
+import tw.com.fcb.lion.core.fp.common.enums.BookType;
+import tw.com.fcb.lion.core.fp.common.enums.CrcyCode;
 
 @Data
 public class FPAccountCreateCmd {
@@ -13,4 +14,8 @@ public class FPAccountCreateCmd {
 	private String status;
 
 	private Integer validCrcyCnt;
+	
+	private CrcyCode crcyCode;
+	
+	private BookType bookType;
 }
