@@ -302,7 +302,7 @@ public class IRController {
 		return response;
 	}
 
-	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
+	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-TWD-fee")
 	@Operation(description = "S211匯入解款外收台幣手續費", summary="匯入解款FPC")
 	public Response<FPCuster> depositTWDFee(@Parameter(example = "S1NHA00002")@PathVariable("irNo") String irNo) {
 		Response<FPCuster> response = new Response<FPCuster>();
@@ -326,7 +326,7 @@ public class IRController {
 		return response;
 	}
 
-	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
+	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-charge-our")
 	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款FPC")
 	public Response<FPCuster> depositChargeOur(@Parameter(example = "S1NHA00003")@PathVariable("irNo") String irNo) {
 		Response<FPCuster> response = new Response<FPCuster>();
@@ -336,8 +336,8 @@ public class IRController {
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-				Response<FPCuster> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
-				response.of("0000", "交易成功", fPCusterAccR.getData());
+				Response<FPCuster> fPCusterAccX = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+				response.of("0000", "交易成功", fPCusterAccX.getData());
 			}
 		}
 		catch (Exception e) {
