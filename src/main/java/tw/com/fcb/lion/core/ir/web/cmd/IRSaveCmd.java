@@ -3,6 +3,7 @@ package tw.com.fcb.lion.core.ir.web.cmd;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
@@ -163,4 +164,7 @@ public class IRSaveCmd {
 	
 	@Schema(description = "SwiftMessage檢核狀態")
 	String status;
+
+	@Schema(description = "台幣手續費帳號")
+	String TWDFeeAccount;
 }

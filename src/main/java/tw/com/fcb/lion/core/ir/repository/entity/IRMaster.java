@@ -164,4 +164,7 @@ public class IRMaster {
 	
 	@Column(name = "STATUS")
 	String status;
+
+	@Column(name = "FEE_ACCOUNT")
+	String TWDFeeAccount;
 }

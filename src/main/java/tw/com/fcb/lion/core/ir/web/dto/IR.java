@@ -153,5 +153,7 @@ public class IR {
     
     @Schema(description = "SwiftMessage檢核狀態")
 	String status;
-    
+
+    @Schema(description = "台幣手續費帳號")
+    String TWDFeeAccount;
 }

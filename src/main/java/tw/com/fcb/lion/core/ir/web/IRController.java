@@ -230,9 +230,9 @@ public class IRController {
 		return response;
 	}
 	
-	@PutMapping("/ir-masters/settle")
-	@Operation(description = "S211匯入解款", summary="匯入解款")
-	public Response<IRSaveCmd> settle(@Validated @RequestBody IRSaveCmd irSaveCmd) {
+	@PutMapping("/ir-masters/settle/original-currency-fee")
+	@Operation(description = "S211匯入解款手續費內扣原幣", summary="匯入解款")
+	public Response<IRSaveCmd> settleOriginalCurrencyFee(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
 		BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		try {
@@ -246,11 +246,42 @@ public class IRController {
 		
 		return response;
 	}
-	
 
-	@PutMapping("/fpc-masters/updfpm/{irNo}/balance")
-	@Operation(description = "S211匯入解款內扣手續費", summary="匯入解款FPC")
-	public Response<FPCuster> deposit(@Parameter(example = "S1NHA00001")@PathVariable("irNo") String irNo) {
+	@PutMapping("/ir-masters/settle/TWD-fee")
+	@Operation(description = "S211匯入解款手續費外收台幣", summary="匯入解款")
+	public Response<IRSaveCmd> settleTWDFee(@Validated @RequestBody IRSaveCmd irSaveCmd) {
+		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
+		BigDecimal irFee = irPaymentService.calculaTWDFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
+		try {
+			irSaveCmd.setCommCharge(irFee);
+			irPaymentService.settle(irSaveCmd);
+			response.of("0000", "交易成功", irSaveCmd);
+		}
+		catch (Exception e) {
+			response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
+		}
+
+		return response;
+	}
+
+	@PutMapping("/ir-masters/settle/charge-our")
+	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款")
+	public Response<IRSaveCmd> settleChargeOur(@Validated @RequestBody IRSaveCmd irSaveCmd) {
+		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
+		try {
+			irPaymentService.settle(irSaveCmd);
+			response.of("0000", "交易成功", irSaveCmd);
+		}
+		catch (Exception e) {
+			response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
+		}
+
+		return response;
+	}
+
+	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
+	@Operation(description = "S211匯入解款內扣原幣手續費", summary="匯入解款FPC")
+	public Response<FPCuster> depositOriginalCurrencyFee(@Parameter(example = "S1NHA00001")@PathVariable("irNo") String irNo) {
 		Response<FPCuster> response = new Response<FPCuster>();
 		
 		try {
@@ -268,6 +299,52 @@ public class IRController {
             response.of("9999", "交易失敗，請重新輸入", null);
         }
 		
+		return response;
+	}
+
+	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
+	@Operation(description = "S211匯入解款外收台幣手續費", summary="匯入解款FPC")
+	public Response<FPCuster> depositTWDFee(@Parameter(example = "S1NHA00002")@PathVariable("irNo") String irNo) {
+		Response<FPCuster> response = new Response<FPCuster>();
+
+		try {
+			IR ir = irPaymentService.queryIRmasterData(irNo);
+			BigDecimal irFee = irPaymentService.calculaTWDFee(ir.getIrAmt(),ir.getCurrency());
+			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
+				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
+			}else {
+				Response<FPCuster> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+				Response<FPCuster> fPCusterAccTWDFee = fPClient.updfpmBal(ir.getTWDFeeAccount(),"TWD",BigDecimal.ZERO,irFee);
+				response.of("0000", "交易成功", fPCusterAccR.getData());
+			}
+		}
+		catch (Exception e) {
+			log.debug("e = {}",e);
+			response.of("9999", "交易失敗，請重新輸入", null);
+		}
+
+		return response;
+	}
+
+	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
+	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款FPC")
+	public Response<FPCuster> depositChargeOur(@Parameter(example = "S1NHA00003")@PathVariable("irNo") String irNo) {
+		Response<FPCuster> response = new Response<FPCuster>();
+
+		try {
+			IR ir = irPaymentService.queryIRmasterData(irNo);
+			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
+				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
+			}else {
+				Response<FPCuster> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+				response.of("0000", "交易成功", fPCusterAccR.getData());
+			}
+		}
+		catch (Exception e) {
+			log.debug("e = {}",e);
+			response.of("9999", "交易失敗，請重新輸入", null);
+		}
+
 		return response;
 	}
 	
