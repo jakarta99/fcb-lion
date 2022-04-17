@@ -43,7 +43,7 @@ public class FPCuster {
 	private String fpcStatus;
 
 	@Column(name = "FPC_VALID_CRCY_CNT")
-	private Integer fpcValidCrcyCnt;
+	private Integer validCrcyCnt;
 	
 	@Column(name = "FPC_BOOK_TYPE")
 	private String bookType;

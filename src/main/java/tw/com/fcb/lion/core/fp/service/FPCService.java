@@ -81,39 +81,37 @@ public class FPCService {
 	// 新增帳號資訊
 	public FPAccountVo createFpc(FPAccountCreateCmd createCmd) {
 		log.info("createCmd: {}" , createCmd);
-//		FPCuster fpcentity = new FPCuster();
 
-//		mapper怪怪的 先註解掉!!!
 		FPCuster fpcentity = fpAccountVoMapper.toEntity(createCmd);
-		fpcentity.setFpcAccount(createCmd.getAccountNo());
-		fpcentity.setFpcCustomerId(createCmd.getCustomerIdno());
-//		fpcentity.setFpcStatus("00");
-		fpcentity.setFpcStatus(String.valueOf(createCmd.getStatus()));
-		fpcentity.setFpcValidCrcyCnt(0);
-		System.out.println("test = "+ createCmd.getBookType());
-		fpcentity.setBookType(String.valueOf(createCmd.getBookType()));
+		fpcentity.setFpcStatus("00");
+		fpcentity.setValidCrcyCnt(0);
+//		fpAccountVoMapper等同以下註解!!!
+// 		FPCuster fpcentity = new FPCuster();
+//		fpcentity.setFpcAccount(createCmd.getAccountNo());
+//		fpcentity.setFpcCustomerId(createCmd.getCustomerIdno());
+//		fpcentity.setBookType(String.valueOf(createCmd.getBookType()));
 		fPCustomerRepository.save(fpcentity);
 		log.info("fpcentity: {}" , fpcentity);
-		
-//		mapper怪怪的 先註解掉!!!	
+
 		FPAccountVo vo = fpAccountVoMapper.toVo(fpcentity);
+//		fpAccountVoMapper等同以下註解!!!
 //		FPAccountVo vo = new FPAccountVo();
-		vo.setId(fpcentity.getId());
-		vo.setAccountNo(fpcentity.getFpcAccount());
-		vo.setCustomerIdno(fpcentity.getFpcCustomerId());
-		vo.setStatus(fpcentity.getFpcStatus());
-		vo.setValidCrcyCnt(fpcentity.getFpcValidCrcyCnt());
+//		vo.setId(fpcentity.getId());
+//		vo.setAccountNo(fpcentity.getFpcAccount());
+//		vo.setCustomerIdno(fpcentity.getFpcCustomerId());
+//		vo.setStatus(fpcentity.getFpcStatus());
+//		vo.setValidCrcyCnt(fpcentity.getFpcValidCrcyCnt());
 		log.info("FPAccountVo: {}" , vo);
 		
 		return vo;
 	}
 
 	// 新增幣別資訊
-		public FPAccountVo createFpm(FPAccountCreateRequest createRequest) {
-//			log.info("createCmd: {}" , createCmd);
-			FPCuster fpcuster = fPCustomerRepository.findByfpcAccount(createRequest.getAccountNo());
+		public FPAccountVo createFpm(FPAccountCreateCmd createCmd) {
+			log.info("createCmd: {}" , createCmd);
+			FPCuster fpcuster = fPCustomerRepository.findByfpcAccount(createCmd.getAccountNo());
 			FPMaster fpMaster  = new FPMaster();
-			fpMaster.setFpmCurrency(String.valueOf(createRequest.getCrcyCode()));
+			fpMaster.setFpmCurrency(String.valueOf(createCmd.getCrcyCode()));
 			fpMaster.setFpmStatus("00");
 			fpMaster.setFpmBalance(new BigDecimal(0.00));
 			
@@ -128,18 +126,11 @@ public class FPCService {
 				fpcuster.setFpmasters(fpmArry);
 			}
 			
-			fpcuster.setFpcValidCrcyCnt(createRequest.getValidCrcyCnt() + 1 );
+			fpcuster.setValidCrcyCnt(fpcuster.getValidCrcyCnt() + 1 );
 			fPCustomerRepository.save(fpcuster);
 			log.info("fpcentity: {}" , fpcuster);
-			
-//			mapper怪怪的 先註解掉!!!	
-//			FPAccountVo vo = fpAccountVoMapper.toVo(fpcentity);
-			FPAccountVo vo = new FPAccountVo();
-			vo.setId(fpcuster.getId());
-			vo.setAccountNo(fpcuster.getFpcAccount());
-			vo.setCustomerIdno(fpcuster.getFpcCustomerId());
-			vo.setStatus(fpcuster.getFpcStatus());
-			vo.setValidCrcyCnt(fpcuster.getFpcValidCrcyCnt());
+
+			FPAccountVo vo = fpAccountVoMapper.toVo(fpcuster);
 			log.info("FPAccountVo: {}" , vo);
 
 			return vo;

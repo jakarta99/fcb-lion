@@ -14,18 +14,11 @@ public class FPAccountCreateRequest {
 	
 	@Schema(description = "客戶統編customer's idno")
 	private String customerIdno;
-	
-	@Schema(description = "存戶狀態")
-	private Status status;
 
-	@Schema(description = "有效幣別數")
-	private Integer validCrcyCnt;
-	
-	@Schema(description = "幣別")
-	private CrcyCode crcyCode;
-	
 	@Schema(description = "存摺種類")
-	private BookType bookType;
-	
+	private String bookType;
+
+	@Schema(description = "幣別")
+	private String crcyCode;
 
 }

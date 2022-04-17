@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Parameter;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.fp.common.enums.BookType;
+import tw.com.fcb.lion.core.fp.common.enums.CrcyCode;
 import tw.com.fcb.lion.core.fp.service.FPCService;
 import tw.com.fcb.lion.core.fp.service.vo.FPAccountVo;
 import tw.com.fcb.lion.core.fp.web.dto.FPAccountDto;
@@ -28,7 +29,7 @@ public class FPController implements FPAccountApi {
 	FPCService fpcService;
 
 	@Autowired
-	FpAccountDtoMapper mapper;
+	FpAccountDtoMapper fpAccountDtoMapper;
 
 	Logger log = LoggerFactory.getLogger(getClass());
 
@@ -90,16 +91,31 @@ public class FPController implements FPAccountApi {
 	public Response<FPAccountDto> create(FPAccountCreateRequest createRequest) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 		try {
-
 			log.info("createRequest:{}", createRequest);
 			// 1. 接值
 
 			// 2. 驗證 Request
 			String accountNoStr = createRequest.getAccountNo();
+			String bookTypeStr  = createRequest.getBookType();
+			String crcyCodeStr  = createRequest.getCrcyCode();
 			try {
 				Double.parseDouble(accountNoStr);
+				BookType.valueOf(bookTypeStr);
+				CrcyCode.valueOf(crcyCodeStr);
 			} catch (NumberFormatException e) {
 				response.of("M501", "帳號=" + accountNoStr + "非數值請重新輸入", null);
+				return response;
+			} catch (IllegalArgumentException e) {
+				response.of("M502", "存摺種類" + bookTypeStr + "或幣別"+ crcyCodeStr+"輸入錯誤", null);
+				return response;
+			}
+			if(bookTypeStr.equals("MULTI") && crcyCodeStr.equals("ALL")){
+				response.of("M503", "存摺種類為MULTI【多本存摺(單幣別)】之幣別欄位不得輸入ALL", null);
+				return response;
+			}
+			if(!bookTypeStr.equals("MULTI") && !crcyCodeStr.equals("ALL")){
+				System.out.println("@@@"  + bookTypeStr + "!!! " + crcyCodeStr);
+				response.of("M504", "存摺種類為ONE【一本存摺(多幣別)】或NONE【無摺】之幣別欄位限輸入ALL", null);
 				return response;
 			}
 			FPCuster fpCusterAcc = fpcService.getByfpcAccount(createRequest.getAccountNo());
@@ -108,33 +124,23 @@ public class FPController implements FPAccountApi {
 				return response;
 			}
 
-			// 3. 呼叫服務
-//********* status 、validCrcyCnt、crcyCode、bookType未傳入 QQ 
-			System.out.println("@@@@!!! test = " + createRequest);
-			FPAccountVo accountVo = fpcService.createFpc(mapper.toCreateCmd(createRequest));
-
-//			多本存摺(單幣別)須新增幣別資訊
-			if (createRequest.getBookType() == BookType.MULTI) {
-				FPAccountVo crcyVo = fpcService.createFpm(createRequest);
-				log.info("crcyVo: {}" , crcyVo);
+			// 3. 呼叫服務Request -> Cmd -> Vo  (新增帳號層資訊)
+			FPAccountVo accountVo = fpcService.createFpc(fpAccountDtoMapper.toCreateCmd(createRequest));
+			//	  多本存摺(單幣別)須新增幣別資訊
+			if (createRequest.getBookType().equals("MULTI")) {
+				fpcService.createFpm(fpAccountDtoMapper.toCreateCmd(createRequest));
 			}
-			System.out.println("@@@  vo=" + accountVo);
-//			FPAccountCreateCmd createCmd = new FPAccountCreateCmd();
-//			createCmd.setAccountNo(createRequest.getAccountNo());
-//			createCmd.setCustomerIdno(createRequest.getCustomerIdno());
-//			FPAccountVo vo = fPCService.create(createCmd);
 
 			// 4. 設值
-			FPAccountDto dto = new FPAccountDto();
-			dto.setId(accountVo.getId());
-			dto.setAccountNo(accountVo.getAccountNo());
-			dto.setCustomerIdno(accountVo.getCustomerIdno());
-			dto.setStatus(String.valueOf(accountVo.getStatus()));
-			dto.setValidCrcyCnt(accountVo.getValidCrcyCnt());
-			// 5. 訊息
-//			response.of("0000", "交易成功", mapper.fromVo(vo));
-			response.of("0000", "交易成功", dto);
 
+			// 5. 回傳訊息訊息Vo -> Dto
+			FPAccountDto dto = fpAccountDtoMapper.fromVo(accountVo);
+			if (createRequest.getBookType().equals("MULTI")) {
+				dto.setCrcyCode(String.valueOf(createRequest.getCrcyCode()));
+			}
+//			response.of("0000", "交易成功", fpAccountDtoMapper.fromVo(vo));
+			log.info("FPAccountDto:{}", dto);
+			response.of("0000", "交易成功", dto);
 
 		} catch (Exception e) {
 			System.out.println("err=" + e);

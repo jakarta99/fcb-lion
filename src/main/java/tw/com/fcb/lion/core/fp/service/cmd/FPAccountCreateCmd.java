@@ -11,11 +11,7 @@ public class FPAccountCreateCmd {
 	
 	private String customerIdno;
 
-	private String status;
-
-	private Integer validCrcyCnt;
-	
-	private CrcyCode crcyCode;
-	
 	private BookType bookType;
+
+	private CrcyCode crcyCode;
 }
