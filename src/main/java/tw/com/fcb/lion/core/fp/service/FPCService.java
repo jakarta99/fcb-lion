@@ -12,13 +12,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tw.com.fcb.lion.core.fp.respository.FPCustomerRepository;
+import tw.com.fcb.lion.core.fp.respository.entity.FPCuster;
+import tw.com.fcb.lion.core.fp.respository.entity.FPMaster;
 import tw.com.fcb.lion.core.fp.service.cmd.FPAccountCreateCmd;
 import tw.com.fcb.lion.core.fp.service.mapper.FpAccountVoMapper;
 import tw.com.fcb.lion.core.fp.service.vo.FPAccountVo;
 import tw.com.fcb.lion.core.fp.web.request.FPAccountCreateRequest;
-import tw.com.fcb.lion.core.ir.repository.FPCustomerRepository;
-import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
-import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
 
 @Transactional
 @Service

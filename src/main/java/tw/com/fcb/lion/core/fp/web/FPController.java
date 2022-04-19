@@ -13,13 +13,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import tw.com.fcb.lion.core.commons.http.Response;
 import tw.com.fcb.lion.core.fp.common.enums.BookType;
 import tw.com.fcb.lion.core.fp.common.enums.CrcyCode;
+import tw.com.fcb.lion.core.fp.respository.entity.FPCuster;
+import tw.com.fcb.lion.core.fp.respository.entity.FPMaster;
 import tw.com.fcb.lion.core.fp.service.FPCService;
 import tw.com.fcb.lion.core.fp.service.vo.FPAccountVo;
 import tw.com.fcb.lion.core.fp.web.dto.FPAccountDto;
 import tw.com.fcb.lion.core.fp.web.mapper.FpAccountDtoMapper;
 import tw.com.fcb.lion.core.fp.web.request.FPAccountCreateRequest;
-import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
-import tw.com.fcb.lion.core.ir.repository.entity.FPMaster;
 
 @RestController
 @RequestMapping("/fp/accounts")

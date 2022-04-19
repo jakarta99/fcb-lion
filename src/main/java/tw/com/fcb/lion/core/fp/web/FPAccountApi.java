@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import tw.com.fcb.lion.core.commons.http.Response;
+import tw.com.fcb.lion.core.fp.respository.entity.FPCuster;
 import tw.com.fcb.lion.core.fp.web.dto.FPAccountDto;
 import tw.com.fcb.lion.core.fp.web.request.FPAccountCreateRequest;
-import tw.com.fcb.lion.core.ir.repository.entity.FPCuster;
 
 
 public interface FPAccountApi {

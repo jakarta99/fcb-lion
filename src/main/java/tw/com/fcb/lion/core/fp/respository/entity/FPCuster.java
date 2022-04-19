@@ -1,4 +1,4 @@
-package tw.com.fcb.lion.core.ir.repository.entity;
+package tw.com.fcb.lion.core.fp.respository.entity;
 
 import java.util.List;
 
