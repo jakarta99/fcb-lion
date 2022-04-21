@@ -86,7 +86,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		
+		<dependency>
+			<groupId>tw.com.fcb.fp.core.api</groupId>
+			<artifactId>fp-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -23,9 +23,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.RequiredArgsConstructor;
-import tw.com.fcb.lion.core.commons.http.Response;
-import tw.com.fcb.lion.core.fp.respository.entity.FPCuster;
-import tw.com.fcb.lion.core.fp.web.FPClient;
+import tw.com.fcb.fp.core.commons.http.Response;
+import tw.com.fcb.fp.core.fp.web.FPClient;
+import tw.com.fcb.fp.core.fp.web.dto.FPAccountDto;
 import tw.com.fcb.lion.core.ir.config.IRConfig;
 import tw.com.fcb.lion.core.ir.service.IRPaymentService;
 import tw.com.fcb.lion.core.ir.service.IRSwiftMessageCheckService;
@@ -281,8 +281,8 @@ public class IRController {
 
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
 	@Operation(description = "S211匯入解款內扣原幣手續費", summary="匯入解款FPC")
-	public Response<FPCuster> depositOriginalCurrencyFee(@Parameter(example = "S1NHA00001")@PathVariable("irNo") String irNo) {
-		Response<FPCuster> response = new Response<FPCuster>();
+	public Response<FPAccountDto> depositOriginalCurrencyFee(@Parameter(example = "S1NHA00001")@PathVariable("irNo") String irNo) {
+		Response<FPAccountDto> response = new Response<FPAccountDto>();
 		
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
@@ -290,7 +290,7 @@ public class IRController {
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-				Response<FPCuster> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),irFee);
+				Response<FPAccountDto> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),irFee);
 				response.of("0000", "交易成功", fPCusterAccR.getData());
 			}			 
         } 
@@ -304,8 +304,8 @@ public class IRController {
 
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-TWD-fee")
 	@Operation(description = "S211匯入解款外收台幣手續費", summary="匯入解款FPC")
-	public Response<FPCuster> depositTWDFee(@Parameter(example = "S1NHA00002")@PathVariable("irNo") String irNo) {
-		Response<FPCuster> response = new Response<FPCuster>();
+	public Response<FPAccountDto> depositTWDFee(@Parameter(example = "S1NHA00002")@PathVariable("irNo") String irNo) {
+		Response<FPAccountDto> response = new Response<FPAccountDto>();
 
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
@@ -313,8 +313,8 @@ public class IRController {
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-				Response<FPCuster> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
-				Response<FPCuster> fPCusterAccTWDFee = fPClient.updfpmBal(ir.getTWDFeeAccount(),"TWD",BigDecimal.ZERO,irFee);
+				Response<FPAccountDto> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.updfpmBal(ir.getTWDFeeAccount(),"TWD",BigDecimal.ZERO,irFee);
 				response.of("0000", "交易成功", fPCusterAccR.getData());
 			}
 		}
@@ -328,15 +328,15 @@ public class IRController {
 
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-charge-our")
 	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款FPC")
-	public Response<FPCuster> depositChargeOur(@Parameter(example = "S1NHA00003")@PathVariable("irNo") String irNo) {
-		Response<FPCuster> response = new Response<FPCuster>();
+	public Response<FPAccountDto> depositChargeOur(@Parameter(example = "S1NHA00003")@PathVariable("irNo") String irNo) {
+		Response<FPAccountDto> response = new Response<FPAccountDto>();
 
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-				Response<FPCuster> fPCusterAccX = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+				Response<FPAccountDto> fPCusterAccX = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
 				response.of("0000", "交易成功", fPCusterAccX.getData());
 			}
 		}
