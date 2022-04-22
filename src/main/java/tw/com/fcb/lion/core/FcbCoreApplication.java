@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = {"tw.com.fcb.fp.core.fp"})
+@EnableFeignClients(basePackages = {"tw.com.fcb.lion.core","tw.com.fcb.fp.core.fp"})
 //@ComponentScan({"tw.com.fcb.fp.core.fp.web.FPClient"})
 public class FcbCoreApplication {
 
