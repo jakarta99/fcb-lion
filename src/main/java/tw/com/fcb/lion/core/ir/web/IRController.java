@@ -42,21 +42,21 @@ public class IRController {
 
 	@Autowired
 	IRSwiftMessageCheckService irSwiftMessageCheckservice;
-	
+
 	@Autowired
 	IRPaymentService irPaymentService;
-	
+
 	@Autowired
 	IRConfig irConfig;
-	
+
 	@Value("${tw.com.fcb.lion.core.ir.web.file-path}")
 	String filePath;
 
-	final FPClient fPClient;	
+	final FPClient fPClient;
 //	final IRMapper irMapper;
-	
+
 	Logger log = LoggerFactory.getLogger(getClass());
-	
+
 	@PostMapping("/swift")
 	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="CASE 1：接收 swift 電文儲存 swift")
 	public Response<List<SwiftMessageSaveCmd>> receiveSwift() {
@@ -236,14 +236,19 @@ public class IRController {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
 		BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		try {
-			irSaveCmd.setCommCharge(irFee);
-			irPaymentService.settle(irSaveCmd);
-			response.of("0000", "交易成功", irSaveCmd); 
-        } 
-		catch (Exception e) {
-            response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
-        }
-		
+				if (irPaymentService.checkBeneficiaryKind(irSaveCmd.getCustomerId(), irSaveCmd.getBeneficiaryKind())){
+					irSaveCmd.setCommCharge(irFee);
+					irPaymentService.settle(irSaveCmd);
+					response.of("0000", "交易成功", irSaveCmd);
+				}else {
+					response.of("ED01", "交易失敗，身份別檢核有誤", irSaveCmd);
+				}
+
+			}
+			catch (Exception e) {
+				response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
+			}
+
 		return response;
 	}
 
@@ -253,13 +258,19 @@ public class IRController {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
 		BigDecimal irFee = irPaymentService.calculateTWDFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		try {
-			irSaveCmd.setCommCharge(irFee);
-			irPaymentService.settle(irSaveCmd);
-			response.of("0000", "交易成功", irSaveCmd);
+			if (irPaymentService.checkBeneficiaryKind(irSaveCmd.getCustomerId(), irSaveCmd.getBeneficiaryKind())) {
+				irSaveCmd.setCommCharge(irFee);
+				irPaymentService.settle(irSaveCmd);
+				response.of("0000", "交易成功", irSaveCmd);
+			} else {
+				response.of("ED01", "交易失敗，身份別檢核有誤", irSaveCmd);
+			}
 		}
-		catch (Exception e) {
-			response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
+			catch (Exception e){
+				response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
 		}
+
+
 
 		return response;
 	}
@@ -268,13 +279,18 @@ public class IRController {
 	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款")
 	public Response<IRSaveCmd> settleChargeOur(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
-		try {
-			irPaymentService.settle(irSaveCmd);
-			response.of("0000", "交易成功", irSaveCmd);
-		}
-		catch (Exception e) {
-			response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
-		}
+			try {
+				if (irPaymentService.checkBeneficiaryKind(irSaveCmd.getCustomerId(), irSaveCmd.getBeneficiaryKind())) {
+				irPaymentService.checkBeneficiaryKind(irSaveCmd.getCustomerId(),irSaveCmd.getBeneficiaryKind());
+				irPaymentService.settle(irSaveCmd);
+				response.of("0000", "交易成功", irSaveCmd);
+			} else {
+				response.of("ED01", "交易失敗，身份別檢核有誤", irSaveCmd);
+				}
+			}
+			catch (Exception e) {
+				response.of("9999", "交易失敗，請重新輸入", irSaveCmd);
+			}
 
 		return response;
 	}
