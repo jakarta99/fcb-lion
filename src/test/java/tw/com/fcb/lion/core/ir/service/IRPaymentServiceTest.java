@@ -72,4 +72,17 @@ class IRPaymentServiceTest {
 		log.info("expectValue2: {}",expectValue2);
 
 	}
+
+    @Test
+    void checkBeneficiaryKind() {
+		boolean actualBooleanPersonal = irPaymentService.checkBeneficiaryKind("A234567893","03");
+		assertTrue(actualBooleanPersonal);
+		boolean actualBooleanCompany = irPaymentService.checkBeneficiaryKind("84149786","01");
+		assertTrue(actualBooleanCompany);
+		boolean actualBooleanBeneficiaryKindError = irPaymentService.checkBeneficiaryKind("A234567893","01");
+		assertFalse(actualBooleanBeneficiaryKindError);
+	}
+
+
+
 }
