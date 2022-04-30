@@ -297,9 +297,8 @@ public class IRController {
 
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
 	@Operation(description = "S211匯入解款內扣原幣手續費", summary="匯入解款FPC")
-	public Response<FPAccountDto> depositOriginalCurrencyFee(@Parameter(example = "S1NHA00001")@PathVariable("irNo") String irNo) {
+	public Response<FPAccountDto> depositOriginalCurrencyFee(@Parameter(example = "S1NHA00113")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
-		
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
 			BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(ir.getIrAmt(),ir.getCurrency());
@@ -320,7 +319,7 @@ public class IRController {
 
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-TWD-fee")
 	@Operation(description = "S211匯入解款外收台幣手續費", summary="匯入解款FPC")
-	public Response<FPAccountDto> depositTWDFee(@Parameter(example = "S1NHA00002")@PathVariable("irNo") String irNo) {
+	public Response<FPAccountDto> depositTWDFee(@Parameter(example = "S1NHA00114")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 
 		try {
@@ -344,7 +343,7 @@ public class IRController {
 
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-charge-our")
 	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款FPC")
-	public Response<FPAccountDto> depositChargeOur(@Parameter(example = "S1NHA00003")@PathVariable("irNo") String irNo) {
+	public Response<FPAccountDto> depositChargeOur(@Parameter(example = "S1NHA00115")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 
 		try {
