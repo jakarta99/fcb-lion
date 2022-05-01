@@ -302,10 +302,12 @@ public class IRController {
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
 			BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(ir.getIrAmt(),ir.getCurrency());
+			BigDecimal txnAmt = ir.getIrAmt().subtract(irFee);
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-				Response<FPAccountDto> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),irFee);
+//				Response<FPAccountDto> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),irFee);
+				Response<FPAccountDto> fPCusterAccR = fPClient.depositFpm(ir.getBeneficiaryAccount(),ir.getCurrency(),txnAmt,"匯入匯款");
 				response.of("0000", "交易成功", fPCusterAccR.getData());
 			}			 
         } 
