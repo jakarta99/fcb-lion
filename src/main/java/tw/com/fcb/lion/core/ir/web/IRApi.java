@@ -77,11 +77,11 @@ public interface IRApi {
 	
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
 	@Operation(description = "S211匯入解款內扣原幣手續費", summary="匯入解款FPC")
-	public Response<FPAccountDto> depositOriginalCurrencyFee(@Parameter(example = "S1NHA00113")@PathVariable("irNo") String irNo);
+	public Response<FPAccountDto> depositOriginalCurrencyFeeOriginalCurrency(@Parameter(example = "S1NHA00113")@PathVariable("irNo") String irNo);
 	
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-TWD-fee")
 	@Operation(description = "S211匯入解款外收台幣手續費", summary="匯入解款FPC")
-	public Response<FPAccountDto> depositTWDFee(@Parameter(example = "S1NHA00114")@PathVariable("irNo") String irNo);
+	public Response<FPAccountDto> depositOriginalCurrencyFeeTWD(@Parameter(example = "S1NHA00114")@PathVariable("irNo") String irNo);
 	
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-charge-our")
 	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款FPC")

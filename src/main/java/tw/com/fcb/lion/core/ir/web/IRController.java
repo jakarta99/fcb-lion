@@ -215,7 +215,8 @@ public class IRController implements IRApi{
 		BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		try {
 				if (irPaymentService.checkBeneficiaryKind(irSaveCmd.getCustomerId(), irSaveCmd.getBeneficiaryKind())){
-					irSaveCmd.setCommCharge(irFee);
+//					irSaveCmd.setCommCharge(irFee);
+					irSaveCmd.setCommCharge(irPaymentService.calculateOriginalCurrencyFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency()));
 					irPaymentService.settle(irSaveCmd);
 					response.of("0000", "交易成功", irSaveCmd);
 				}else {
@@ -235,7 +236,8 @@ public class IRController implements IRApi{
 		BigDecimal irFee = irPaymentService.calculateTWDFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
 		try {
 			if (irPaymentService.checkBeneficiaryKind(irSaveCmd.getCustomerId(), irSaveCmd.getBeneficiaryKind())) {
-				irSaveCmd.setCommCharge(irFee);
+//				irSaveCmd.setCommCharge(irFee);
+				irSaveCmd.setCommCharge(irPaymentService.calculateTWDFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency()));
 				irPaymentService.settle(irSaveCmd);
 				response.of("0000", "交易成功", irSaveCmd);
 			} else {
@@ -269,7 +271,8 @@ public class IRController implements IRApi{
 		return response;
 	}
 
-	public Response<FPAccountDto> depositOriginalCurrencyFee(@Parameter(example = "S1NHA00113")@PathVariable("irNo") String irNo) {
+	//入外存原幣 手續費內扣
+	public Response<FPAccountDto> depositOriginalCurrencyFeeOriginalCurrency(@Parameter(example = "S1NHA00113")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
@@ -291,7 +294,7 @@ public class IRController implements IRApi{
 		return response;
 	}
 
-	public Response<FPAccountDto> depositTWDFee(@Parameter(example = "S1NHA00114")@PathVariable("irNo") String irNo) {
+	public Response<FPAccountDto> depositOriginalCurrencyFeeTWD(@Parameter(example = "S1NHA00114")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 
 		try {
@@ -300,8 +303,34 @@ public class IRController implements IRApi{
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-				Response<FPAccountDto> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
-				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.updfpmBal(ir.getTWDFeeAccount(),"TWD",BigDecimal.ZERO,irFee);
+//				Response<FPAccountDto> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+				Response<FPAccountDto> fPCusterAccR = fPClient.depositFpm(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),"匯入匯款");
+//				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.updfpmBal(ir.getTWDFeeAccount(),"TWD",BigDecimal.ZERO,irFee);
+                //TODO 待修正withdraw
+//				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.withdraw(ir.getTWDFeeAccount(),"TWD",irFee,"匯入匯款手續費");
+				response.of("0000", "交易成功", fPCusterAccR.getData());
+			}
+		}
+		catch (Exception e) {
+			log.debug("e = {}",e);
+			response.of("9999", "交易失敗，請重新輸入", null);
+		}
+
+		return response;
+	}
+
+
+	public Response<FPAccountDto> depositTWDFeeTWD(@Parameter(example = "S1NHA00117")@PathVariable("irNo") String irNo) {
+		Response<FPAccountDto> response = new Response<FPAccountDto>();
+
+		try {
+			IR ir = irPaymentService.queryIRmasterData(irNo);
+			BigDecimal irFee = irPaymentService.calculateTWDFee(ir.getIrAmt(),ir.getCurrency());
+			BigDecimal irTWDAmt = ir.getIrAmt().multiply(ir.getExchangeRate());
+			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
+				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
+			}else {
+				Response<FPAccountDto> fPCusterAccR = fPClient.depositFpm(ir.getBeneficiaryAccount(),"TWD",irTWDAmt.subtract(irFee),"匯入匯款");
 				response.of("0000", "交易成功", fPCusterAccR.getData());
 			}
 		}
@@ -321,7 +350,8 @@ public class IRController implements IRApi{
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-				Response<FPAccountDto> fPCusterAccX = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+//				Response<FPAccountDto> fPCusterAccX = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+				Response<FPAccountDto> fPCusterAccX = fPClient.depositFpm(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),"匯入匯款");
 				response.of("0000", "交易成功", fPCusterAccX.getData());
 			}
 		}
