@@ -64,13 +64,13 @@ public interface IRApi {
 	public Response<IR> queryIRmasterData(@PathVariable("irNo") String irNo);
 	
 	@PutMapping("/ir-masters/settle/original-currency-fee")
-	@Operation(description = "S211匯入解款手續費內扣原幣", summary="匯入解款")
+	@Operation(description = "S211匯入解款入原幣手續費內扣原幣", summary="匯入解款")
 	public Response<IRSaveCmd> settleOriginalCurrencyFee(@Validated @RequestBody IRSaveCmd irSaveCmd);
 	
-	@PutMapping("/ir-masters/settle/TWD-fee")
-	@Operation(description = "S211匯入解款手續費外收台幣", summary="匯入解款")
+	@PutMapping("/ir-masters/settle/original-currency-TWD-fee")
+	@Operation(description = "S211匯入解款入原幣手續費外收台幣", summary="匯入解款")
 	public Response<IRSaveCmd> settleTWDFee(@Validated @RequestBody IRSaveCmd irSaveCmd);
-	
+
 	@PutMapping("/ir-masters/settle/charge-our")
 	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款")
 	public Response<IRSaveCmd> settleChargeOur(@Validated @RequestBody IRSaveCmd irSaveCmd);
@@ -86,7 +86,11 @@ public interface IRApi {
 	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-charge-our")
 	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款FPC")
 	public Response<FPAccountDto> depositChargeOur(@Parameter(example = "S1NHA00115")@PathVariable("irNo") String irNo);
-	
+
+	@PutMapping("/fpc-masters/updfpm/{irNo}/TWD-currency-TWD-fee")
+	@Operation(description = "S211匯入解款入台幣手續費內扣台幣", summary="匯入解款FPC")
+	public Response<FPAccountDto> depositTWDFeeTWD(@Parameter(example = "S1NHA00117")@PathVariable("irNo") String irNo);
+
 	@GetMapping
 	public String getSettings();
 }
