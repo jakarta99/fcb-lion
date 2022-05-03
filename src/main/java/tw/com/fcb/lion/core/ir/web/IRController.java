@@ -38,7 +38,7 @@ import tw.com.fcb.lion.core.ir.web.dto.IRQuery;
 @RequiredArgsConstructor
 @RequestMapping("/ir")
 @OpenAPIDefinition(info = @Info(title = "獅子王's  匯入  API", version = "v1.0.0"))
-public class IRController {
+public class IRController implements IRApi{
 
 	@Autowired
 	IRSwiftMessageCheckService irSwiftMessageCheckservice;
@@ -57,8 +57,6 @@ public class IRController {
 
 	Logger log = LoggerFactory.getLogger(getClass());
 
-	@PostMapping("/swift")
-	@Operation(description = "接收 swift 電文並存到 SwiftMessage", summary="CASE 1：接收 swift 電文儲存 swift")
 	public Response<List<SwiftMessageSaveCmd>> receiveSwift() {
 
 		Response<List<SwiftMessageSaveCmd>> response = new Response<List<SwiftMessageSaveCmd>>();
@@ -80,8 +78,6 @@ public class IRController {
 		return response;
 	}
 	
-	@PostMapping("/swift/query/{seqNo}")
-	@Operation(description = "查詢 SwiftMessage", summary="查詢 swift")
 	public Response<SwiftMessageSaveCmd> querySwift(@PathVariable("seqNo") String seqNo) {
 		
 		Response<SwiftMessageSaveCmd> response = new Response<SwiftMessageSaveCmd>();
@@ -98,8 +94,6 @@ public class IRController {
 	}
 
 	
-	@PutMapping("/swift/recheck")
-	@Operation(description = "更新 SwiftMessage，並驗證電文，執行寫入匯入主檔", summary="修改 swift")
 	public Response<IR> recheckSwift(SwiftMessageSaveCmd swiftmessage) {
 		
 		Response<IR> response = new Response<IR>();
@@ -128,15 +122,11 @@ public class IRController {
 //		return true;
 //	}
 
-	@GetMapping("/branches/count")
-	@Operation(description = "傳入受通知單位查詢案件數", summary="查詢案件數")
 	public Integer getCount(@RequestParam("branchCode") String branch,@RequestParam("printAdvMk") String printAdvMk) {
 		return irSwiftMessageCheckservice.getIrCaseCount(branch, printAdvMk);
 	}
 	
 //	KAI - 驗證通過的電文，寫入匯入主檔(IRMaster)
-	@PostMapping("/ir-masters/{seqNo}")
-	@Operation(description = "驗證通過的電文，寫入匯入主檔(IRMaster)", summary="寫入匯入主檔")
 	public Response<IR> insert(@PathVariable("seqNo") String seqNo) {
 		Response<IR> response = new Response<IR>();
 		IR ir = new IR();
@@ -158,8 +148,6 @@ public class IRController {
 		return response;
 	}
 	
-	@PostMapping("/ir-masters/notify/{seqNo}")
-	@Operation(description = "通知", summary="通知")
 	public String notify(@PathVariable("seqNo") String seqNo) {
 		Response<IR> response = new Response<IR>();
 		response = insert(seqNo);
@@ -175,8 +163,6 @@ public class IRController {
 		return notifyMessage;
 	}
 	
-	@GetMapping("/ir-masters/{id}")
-	@Operation(description = "依ID查詢IRMaster資料", summary="依ID查詢IRMaster資料")
 	public Response<IR> getById(@Parameter(description = "name of ID", example = "1") @PathVariable Long id) {
 		Response<IR> response = new Response<IR>();
 		IR ir = new IR();
@@ -192,14 +178,10 @@ public class IRController {
 		return response;
 	}
 	
-	@PutMapping("/branches/{branchCode}/print-advise")
-	@Operation(description = "更新印製通知書記號", summary="更新列印通知書狀態")
 	public void printAdvise(@PathVariable("branchCode") String branch) {
 		irPaymentService.updatePrintAdviceMark(branch);
 	}
 	
-	@GetMapping("/ir-masters/list/fuzzy-search")
-	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔多筆模糊查詢")
 	public Response<List<IRQuery>> queryIRmasterDataList(@RequestParam("irNo")String irNo) {
 		Response<List<IRQuery>> response = new Response<List<IRQuery>>();
 		
@@ -214,8 +196,6 @@ public class IRController {
 		return response;
 	}
 	
-	@GetMapping("/ir-masters/ir-No/{irNo}")
-	@Operation(description = "S211端末查詢匯入主檔資料", summary="匯入主檔查詢")
 	public Response<IR> queryIRmasterData(@PathVariable("irNo") String irNo) {
 		Response<IR> response = new Response<IR>();
 		
@@ -230,8 +210,6 @@ public class IRController {
 		return response;
 	}
 	
-	@PutMapping("/ir-masters/settle/original-currency-fee")
-	@Operation(description = "S211匯入解款手續費內扣原幣", summary="匯入解款")
 	public Response<IRSaveCmd> settleOriginalCurrencyFee(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
 		BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
@@ -252,8 +230,6 @@ public class IRController {
 		return response;
 	}
 
-	@PutMapping("/ir-masters/settle/TWD-fee")
-	@Operation(description = "S211匯入解款手續費外收台幣", summary="匯入解款")
 	public Response<IRSaveCmd> settleTWDFee(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
 		BigDecimal irFee = irPaymentService.calculateTWDFee(irSaveCmd.getIrAmt(),irSaveCmd.getCurrency());
@@ -275,8 +251,6 @@ public class IRController {
 		return response;
 	}
 
-	@PutMapping("/ir-masters/settle/charge-our")
-	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款")
 	public Response<IRSaveCmd> settleChargeOur(@Validated @RequestBody IRSaveCmd irSaveCmd) {
 		Response<IRSaveCmd> response = new Response<IRSaveCmd>();
 			try {
@@ -295,8 +269,6 @@ public class IRController {
 		return response;
 	}
 
-	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-original-currency-fee")
-	@Operation(description = "S211匯入解款內扣原幣手續費", summary="匯入解款FPC")
 	public Response<FPAccountDto> depositOriginalCurrencyFee(@Parameter(example = "S1NHA00113")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 		try {
@@ -319,8 +291,6 @@ public class IRController {
 		return response;
 	}
 
-	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-TWD-fee")
-	@Operation(description = "S211匯入解款外收台幣手續費", summary="匯入解款FPC")
 	public Response<FPAccountDto> depositTWDFee(@Parameter(example = "S1NHA00114")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 
@@ -343,8 +313,6 @@ public class IRController {
 		return response;
 	}
 
-	@PutMapping("/fpc-masters/updfpm/{irNo}/balance-charge-our")
-	@Operation(description = "S211匯入解款charge our案件不收手續費", summary="匯入解款FPC")
 	public Response<FPAccountDto> depositChargeOur(@Parameter(example = "S1NHA00115")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 
@@ -365,7 +333,6 @@ public class IRController {
 		return response;
 	}
 	
-	@GetMapping
 	public String getSettings() {
 		return "FileName: " + filePath + " ENVIRONMENT: " + irConfig.getEnvType();
 	}
