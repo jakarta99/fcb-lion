@@ -306,8 +306,7 @@ public class IRController implements IRApi{
 //				Response<FPAccountDto> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
 				Response<FPAccountDto> fPCusterAccR = fPClient.depositFpm(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),"匯入匯款");
 //				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.updfpmBal(ir.getTWDFeeAccount(),"TWD",BigDecimal.ZERO,irFee);
-                //TODO 待修正withdraw
-//				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.withdraw(ir.getTWDFeeAccount(),"TWD",irFee,"匯入匯款手續費");
+				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.withdrawFpm(ir.getTWDFeeAccount(),"TWD",irFee,"匯入匯款手續費");
 				response.of("0000", "交易成功", fPCusterAccR.getData());
 			}
 		}
