@@ -343,18 +343,31 @@ public class IRController implements IRApi{
 
 	public Response<FPAccountDto> depositChargeOur(@Parameter(example = "S1NHA00115")@PathVariable("irNo") String irNo) {
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
-
+		Long txnLogId = null;
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-//				Response<FPAccountDto> fPCusterAccX = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
+				
 				Response<FPAccountDto> fPCusterAccX = fPClient.depositFpm(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),"匯入匯款");
+				txnLogId = fPCusterAccX.getData().getTxnLogId();
+//				throw new Exception(irNo);		//交易補償測試		
 				response.of("0000", "交易成功", fPCusterAccX.getData());
 			}
 		}
 		catch (Exception e) {
+//			交易補償
+			log.info("txnLogId = {}",txnLogId);
+			try {
+				if(txnLogId != null) {
+					fPClient.undoSystemFpm(txnLogId);
+				}
+			} catch (Exception e2) {
+				log.debug("e2 = {}",e2);
+				response.of("XXXX", "交易補償失敗，請重新輸入", null);
+			}
+			
 			log.debug("e = {}",e);
 			response.of("9999", "交易失敗，請重新輸入", null);
 		}
