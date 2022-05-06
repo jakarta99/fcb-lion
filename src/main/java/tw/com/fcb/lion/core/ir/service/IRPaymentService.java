@@ -142,9 +142,9 @@ public class IRPaymentService {
 	public boolean checkBeneficiaryKind(String id,String beneficiaryKind){
 		boolean idIsNumeric = StringUtils.isNumeric(id);
 		boolean firstIdCharIsNumeric = StringUtils.isNumeric(String.valueOf(id.charAt(0)));
-		if (idIsNumeric && (id.length() == 8 ) && (beneficiaryKind == "01")){
+		if (idIsNumeric && (id.length() == 8 ) && (beneficiaryKind.equals("01"))){
 			return true;
-		} else if ((!firstIdCharIsNumeric) && (id.length() == 10 ) && (beneficiaryKind == "03")){
+		} else if ((!firstIdCharIsNumeric) && (id.length() == 10 ) && (beneficiaryKind.equals("03"))){
 			return true;
 		} else {
 			return false;
