@@ -276,9 +276,9 @@ public class IRController implements IRApi{
 		Response<FPAccountDto> response = new Response<FPAccountDto>();
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
-//			BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(ir.getIrAmt(),ir.getCurrency());
-//			BigDecimal txnAmt = ir.getIrAmt().subtract(irFee);
-			BigDecimal txnAmt = ir.getIrAmt().subtract(ir.getCommCharge());
+			BigDecimal irFee = irPaymentService.calculateOriginalCurrencyFee(ir.getIrAmt(),ir.getCurrency());
+			BigDecimal txnAmt = ir.getIrAmt().subtract(irFee);
+//			BigDecimal txnAmt = ir.getIrAmt().subtract(ir.getCommCharge());
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
@@ -300,14 +300,14 @@ public class IRController implements IRApi{
 
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
-//			BigDecimal irFee = irPaymentService.calculateTWDFee(ir.getIrAmt(),ir.getCurrency());
+			BigDecimal irFee = irPaymentService.calculateTWDFee(ir.getIrAmt(),ir.getCurrency());
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
 //				Response<FPAccountDto> fPCusterAccR = fPClient.updfpmBal(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),BigDecimal.ZERO);
 				Response<FPAccountDto> fPCusterAccR = fPClient.depositFpm(ir.getBeneficiaryAccount(),ir.getCurrency(),ir.getIrAmt(),"匯入匯款");
 //				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.updfpmBal(ir.getTWDFeeAccount(),"TWD",BigDecimal.ZERO,irFee);
-				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.withdrawFpm(ir.getTWDFeeAccount(),"TWD",ir.getCommCharge(),"匯入匯款手續費");
+				Response<FPAccountDto> fPCusterAccTWDFee = fPClient.withdrawFpm(ir.getTWDFeeAccount(),"TWD",irFee,"匯入匯款手續費");
 				response.of("0000", "交易成功", fPCusterAccR.getData());
 			}
 		}
@@ -325,12 +325,12 @@ public class IRController implements IRApi{
 
 		try {
 			IR ir = irPaymentService.queryIRmasterData(irNo);
-//			BigDecimal irFee = irPaymentService.calculateTWDFee(ir.getIrAmt(),ir.getCurrency());
+			BigDecimal irFee = irPaymentService.calculateTWDFee(ir.getIrAmt(),ir.getCurrency());
 			BigDecimal irTWDAmt = ir.getIrAmt().multiply(ir.getExchangeRate());
 			if (ir.getBeneficiaryAccount() ==null || ir.getCurrency() == null) {
 				response.of("M5A6", "交易失敗，帳號、幣別不得為空值",null);
 			}else {
-				Response<FPAccountDto> fPCusterAccR = fPClient.depositFpm(ir.getBeneficiaryAccount(),"TWD",irTWDAmt.subtract(ir.getCommCharge()),"匯入匯款");
+				Response<FPAccountDto> fPCusterAccR = fPClient.depositFpm(ir.getBeneficiaryAccount(),"TWD",irTWDAmt.subtract(irFee),"匯入匯款");
 				response.of("0000", "交易成功", fPCusterAccR.getData());
 			}
 		}
